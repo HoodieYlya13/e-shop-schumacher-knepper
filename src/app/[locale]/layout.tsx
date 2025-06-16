@@ -16,20 +16,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata(
-  props: Promise<{ params: Promise<{ locale: string }> }>
-): Promise<Metadata> {
-  const resolvedProps = await props;
-  const resolvedParams = await resolvedProps.params;
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: string };
+}): Promise<Metadata> {
+  const locale = (await Promise.resolve(params)).locale;
 
   const t = await getTranslations({
-    locale: resolvedParams.locale,
-    namespace: 'HOME_PAGE',
+    locale,
+    namespace: "HOME_PAGE",
   });
 
   return {
-    title: t('META.TITLE'),
-    description: t('META.DESCRIPTION'),
+    title: t("META.TITLE"),
+    description: t("META.DESCRIPTION"),
   };
 }
 
