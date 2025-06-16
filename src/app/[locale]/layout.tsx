@@ -5,6 +5,7 @@ import { routing } from "@/i18n/routing";
 import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
 import { getTranslations } from 'next-intl/server';
+import React from 'react';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -16,14 +17,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: string };
-}): Promise<Metadata> {
-  const locale = (await Promise.resolve(params)).locale;
+export async function generateMetadata(
+  props: Parameters<typeof LocaleLayout>[0]
+): Promise<Metadata> {
+  const { locale } = await props.params;
 
-  const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
+  const t = await getTranslations({
+    locale,
+    namespace: 'HOME_PAGE',
+  });
 
   return {
     title: t('META.TITLE'),
@@ -31,14 +33,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function LocaleLayout({
-  children,
-  params,
-}: {
+interface LayoutProps {
   children: React.ReactNode;
   params: { locale: string };
-}) {
-  const locale = (await Promise.resolve(params)).locale;
+}
+
+export default async function LocaleLayout({ children, params }: LayoutProps) {
+  const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
