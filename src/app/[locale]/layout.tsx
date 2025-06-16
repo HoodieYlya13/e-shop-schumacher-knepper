@@ -17,23 +17,22 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-type LocaleParams = { locale: string };
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function generateMetadata({ params }: any): Promise<Metadata> {
-  const typed: LocaleParams = await params;
-  const t = await getTranslations({
-    locale: typed.locale,
-    namespace: "HOME_PAGE",
-  });
+  const { locale } = await params;
+
+  const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
 
   return {
-    title: t("META.TITLE"),
-    description: t("META.DESCRIPTION"),
+    title: t('META.TITLE'),
+    description: t('META.DESCRIPTION'),
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function LocaleLayout({ children, params }: any) {
   const { locale } = await params;
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
