@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// Disabling lint because of Next.js 15 nonsense
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { locale } = await params;
@@ -29,6 +30,7 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   };
 }
 
+// Disabling lint because of Next.js 15 nonsense
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function LocaleLayout({ children, params }: any) {
   const { locale } = await params;
