@@ -1,0 +1,11 @@
+{
+  "HOME_PAGE": {
+    "META": {
+      "TITLE": "Boutique en ligne - Schumacher-Knepper",
+      "DESCRIPTION": "Bienvenue dans la boutique en ligne de Schumacher-Knepper ! Découvrez nos vins ou offrez une carte cadeau à vos proches."
+    },
+    "WELCOME": "Bienvenue dans la boutique de {name} !",
+    "CART": "Panier",
+    "CHECKOUT": "Commander"
+  }
+}

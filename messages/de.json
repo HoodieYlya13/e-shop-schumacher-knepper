@@ -1,0 +1,11 @@
+{
+  "HOME_PAGE": {
+    "META": {
+      "TITLE": "Online-Shop - Schumacher-Knepper",
+      "DESCRIPTION": "Willkommen im Online-Shop von Schumacher-Knepper! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein."
+    },
+    "WELCOME": "Willkommen im Shop von {name}!",
+    "CART": "Warenkorb",
+    "CHECKOUT": "Zur Kasse"
+  }
+}

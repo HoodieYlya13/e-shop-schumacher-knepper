@@ -1,0 +1,11 @@
+{
+  "HOME_PAGE": {
+    "META": {
+      "TITLE": "Online shop - Schumacher-Knepper",
+      "DESCRIPTION": "Welcome to Schumacher-Knepper's online shop! Explore all our wines or get your loved ones a gift card."
+    },
+    "WELCOME": "Welcome to {name}'s store!",
+    "CART": "Cart",
+    "CHECKOUT": "Checkout"
+  }
+}
