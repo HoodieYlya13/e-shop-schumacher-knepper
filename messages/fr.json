@@ -1,11 +1,20 @@
 {
   "HOME_PAGE": {
     "META": {
-      "TITLE": "Boutique en ligne - Schumacher-Knepper",
-      "DESCRIPTION": "Bienvenue dans la boutique en ligne de Schumacher-Knepper ! Découvrez nos vins ou offrez une carte cadeau à vos proches."
+      "TITLE": "Boutique en ligne - {name}",
+      "DESCRIPTION": "Bienvenue dans la boutique en ligne de {name} ! Découvrez nos vins ou offrez une carte cadeau à vos proches.",
+      "NO_PRODUCTS": "No products available at the moment."
     },
     "WELCOME": "Bienvenue dans la boutique de {name} !",
     "CART": "Panier",
     "CHECKOUT": "Commander"
+  },
+  "ABOUT_PAGE": {
+    "TITLE": "À propos de nous",
+    "DESCRIPTION": "Nous sommes passionnés par le bon vin et la tradition locale."
+  },
+  "NAV": {
+    "HOME": "Accueil",
+    "ABOUT": "À propos"
   }
 }

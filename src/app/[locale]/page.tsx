@@ -1,22 +1,13 @@
-import { getTranslations } from 'next-intl/server';
-import { shopifyServerFetch } from '@/lib/shopify/server';
+import AllProducts from '@/components/AllProducts';
 
-const QUERY = `
-  query {
-    shop {
-      name
-    }
-  }
-`;
-
-export default async function HomePage() {
-  const t = await getTranslations('HOME_PAGE');
-
-  const data = await shopifyServerFetch<{ shop: { name: string } }>(QUERY);
+export default async function HomePage(props: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await props.params;
 
   return (
     <main>
-      <h1>{t('WELCOME', { name: data.shop.name })}</h1>
+      <AllProducts locale={locale} />
     </main>
   );
 }

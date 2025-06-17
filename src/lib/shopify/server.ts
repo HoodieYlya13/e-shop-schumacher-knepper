@@ -1,10 +1,16 @@
 import { shopifyClient } from './client';
 
-export async function shopifyServerFetch<T>(query: string): Promise<T> {
+export async function shopifyServerFetch<T>(
+  query: string,
+  options?: { variables?: Record<string, any> }
+): Promise<T> {
   const response = await fetch(shopifyClient.getStorefrontApiUrl(), {
-    method: 'POST',
+    method: "POST",
     headers: shopifyClient.getPrivateTokenHeaders(),
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({
+      query,
+      variables: options?.variables,
+    }),
   });
 
   if (!response.ok) {

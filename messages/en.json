@@ -1,11 +1,20 @@
 {
   "HOME_PAGE": {
     "META": {
-      "TITLE": "Online shop - Schumacher-Knepper",
-      "DESCRIPTION": "Welcome to Schumacher-Knepper's online shop! Explore all our wines or get your loved ones a gift card."
+      "TITLE": "Online shop - {name}",
+      "DESCRIPTION": "Welcome to {name}'s online shop! Explore all our wines or get your loved ones a gift card.",
+      "NO_PRODUCTS": "No products available at the moment."
     },
     "WELCOME": "Welcome to {name}'s store!",
     "CART": "Cart",
     "CHECKOUT": "Checkout"
+  },
+  "ABOUT_PAGE": {
+    "TITLE": "About Us",
+    "DESCRIPTION": "We are passionate about great wine and local tradition."
+  },
+  "NAV": {
+    "HOME": "Home",
+    "ABOUT": "About"
   }
 }

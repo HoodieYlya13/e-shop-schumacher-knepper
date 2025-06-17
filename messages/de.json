@@ -1,11 +1,20 @@
 {
   "HOME_PAGE": {
     "META": {
-      "TITLE": "Online-Shop - Schumacher-Knepper",
-      "DESCRIPTION": "Willkommen im Online-Shop von Schumacher-Knepper! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein."
+      "TITLE": "Online-Shop - {name}",
+      "DESCRIPTION": "Willkommen im Online-Shop von {name}! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein.",
+      "NO_PRODUCTS": "No products available at the moment."
     },
     "WELCOME": "Willkommen im Shop von {name}!",
     "CART": "Warenkorb",
     "CHECKOUT": "Zur Kasse"
+  },
+  "ABOUT_PAGE": {
+    "TITLE": "Über uns",
+    "DESCRIPTION": "Wir sind leidenschaftlich über großartigen Wein und lokale Tradition."
+  },
+  "NAV": {
+    "HOME": "Startseite",
+    "ABOUT": "Über uns"
   }
 }

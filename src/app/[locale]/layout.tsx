@@ -6,6 +6,17 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
+import { shopifyServerFetch } from '@/lib/shopify/server';
+import Navigation from '@/components/Navigation';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
+
+const QUERY = `
+  query {
+    shop {
+      name
+    }
+  }
+`;
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -17,20 +28,21 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Disabling lint because of Next.js 15 nonsense
+// Disabling lint because of Next.js 15 types nonsense
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function generateMetadata({ params }: any): Promise<Metadata> {
   const { locale } = await params;
 
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
+  const data = await shopifyServerFetch<{ shop: { name: string } }>(QUERY);
 
   return {
-    title: t('META.TITLE'),
-    description: t('META.DESCRIPTION'),
+    title: t('META.TITLE', { name: data.shop.name }),
+    description: t('META.DESCRIPTION', { name: data.shop.name }),
   };
 }
 
-// Disabling lint because of Next.js 15 nonsense
+// Disabling lint because of Next.js 15 types nonsense
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default async function LocaleLayout({ children, params }: any) {
   const { locale } = await params;
@@ -44,7 +56,11 @@ export default async function LocaleLayout({ children, params }: any) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <Navigation />
+          <LanguageSwitcher />
+          {children}
+        </NextIntlClientProvider>
       </body>
     </html>
   );
