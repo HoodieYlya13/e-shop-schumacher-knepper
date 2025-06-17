@@ -1,8 +1,8 @@
 import { shopifyClient } from './client';
 
-export async function shopifyServerFetch<T>(
+export async function shopifyServerFetch<T, V = unknown>(
   query: string,
-  options?: { variables?: Record<string, any> }
+  options?: { variables?: V }
 ): Promise<T> {
   const response = await fetch(shopifyClient.getStorefrontApiUrl(), {
     method: "POST",

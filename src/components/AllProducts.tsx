@@ -1,6 +1,7 @@
 import React from 'react';
 import { getTranslations } from 'next-intl/server';
 import { shopifyServerFetch } from '@/lib/shopify/server';
+import Image from 'next/image';
 
 type ShopifyProduct = {
     id: string;
@@ -77,11 +78,11 @@ export default async function AllProducts({ locale }: { locale: string }) {
     variables: { language: languageCode },
   });
 
-  const products = data?.products?.edges?.map((edge: any) => edge.node) ?? [];
+  const products: ShopifyProduct[] = data?.products?.edges?.map((edge) => edge.node) ?? [];
 
   return (
     <section className="p-6 space-y-12">
-      {products.length === 0 && <p>{t('NO_PRODUCTS')}</p>}
+      {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
       {products.map((product) => (
         <div key={product.id} className="border rounded-lg p-4 shadow">
           <h2 className="text-2xl font-bold">{product.title}</h2>
@@ -89,11 +90,13 @@ export default async function AllProducts({ locale }: { locale: string }) {
 
           {product.images.edges.length > 0 && (
             <div className="mt-4 flex gap-4 overflow-x-auto">
-              {product.images.edges.map((img: any, i: number) => (
-                <img
+              {product.images.edges.map((imgEdge, i) => (
+                <Image
                   key={i}
-                  src={img.node.url}
-                  alt={img.node.altText ?? product.title}
+                  src={imgEdge.node.url}
+                  alt={imgEdge.node.altText ?? product.title}
+                  width={192}
+                  height={192}
                   className="w-48 h-48 object-cover rounded"
                 />
               ))}
@@ -101,7 +104,7 @@ export default async function AllProducts({ locale }: { locale: string }) {
           )}
 
           <p className="mt-4 text-lg">
-            {product.variants.edges[0]?.node.price.amount}{' '}
+            {product.variants.edges[0]?.node.price.amount}{" "}
             {product.variants.edges[0]?.node.price.currencyCode}
           </p>
         </div>
