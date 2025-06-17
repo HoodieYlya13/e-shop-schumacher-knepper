@@ -98,6 +98,7 @@ export default async function AllProducts({ locale }: { locale: string }) {
                   width={192}
                   height={192}
                   className="w-48 h-48 object-cover rounded"
+                  priority={i === 0}
                 />
               ))}
             </div>
