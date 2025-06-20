@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchCustomerData } from '@/lib/data/customer';
+import { fetchCustomerData } from '@/lib/services/customer';
 
 export async function POST(req: NextRequest) {
-  try {
-    const { token, identifiers } = await req.json();
+  const { token, identifiers } = await req.json();
 
+  try {
     if (!token) {
       return NextResponse.json({ error: 'Missing customer token' }, { status: 400 });
     }

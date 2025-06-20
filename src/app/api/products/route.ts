@@ -1,6 +1,6 @@
 
 import { NextResponse } from 'next/server';
-import { getAllProducts } from '@/lib/data/products';
+import { getAllProducts } from '@/lib/services/products';
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

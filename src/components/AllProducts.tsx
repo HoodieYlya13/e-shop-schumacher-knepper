@@ -1,6 +1,6 @@
 import React from 'react';
 import { getTranslations } from 'next-intl/server';
-import { getAllProducts } from '@/lib/data/products';
+import { getAllProducts } from '@/lib/services/products';
 import { Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
 

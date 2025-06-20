@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { registerCustomer, loginCustomer } from '@/lib/data/auth';
+import { registerCustomer, loginCustomer } from '@/lib/services/auth';
 
 export async function POST(req: NextRequest) {
-  const body = await req.json();
-  const { mode, email, password, firstName, lastName, phone, acceptsMarketing } = body;
+  const { mode, email, password, firstName, lastName, phone, acceptsMarketing } = await req.json();
 
   try {
     if (mode === 'REGISTER') {
