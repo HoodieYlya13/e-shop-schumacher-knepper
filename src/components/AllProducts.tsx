@@ -1,88 +1,22 @@
 import React from 'react';
 import { getTranslations } from 'next-intl/server';
-import { shopifyServerFetch } from '@/lib/shopify/server';
+import { getAllProducts } from '@/lib/data/products';
+import { Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
 
-type ShopifyProduct = {
-    id: string;
-    title: string;
-    description: string;
-    handle: string;
-    images: {
-      edges: {
-        node: {
-          url: string;
-          altText: string | null;
-        };
-      }[];
-    };
-    variants: {
-      edges: {
-        node: {
-          price: {
-            amount: string;
-            currencyCode: string;
-          };
-        };
-      }[];
-    };
-  };
-
-  const QUERY = `
-  query AllProducts($language: LanguageCode) @inContext(language: $language) {
-    products(first: 10) {
-      edges {
-        node {
-          id
-          title
-          description
-          handle
-          images(first: 5) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                price {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
-
 export default async function AllProducts({ locale }: { locale: string }) {
-  const languageCode = locale.startsWith("fr")
-    ? "FR"
-    : locale.startsWith("de")
-      ? "DE"
-      : "EN";
+  const languageCode = locale.startsWith('fr')
+    ? 'FR'
+    : locale.startsWith('de')
+      ? 'DE'
+      : 'EN';
 
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
-
-  const data = await shopifyServerFetch<{
-    products: {
-      edges: { node: ShopifyProduct }[];
-    };
-  }>(QUERY, {
-    variables: { language: languageCode },
-  });
-
-  const products: ShopifyProduct[] = data?.products?.edges?.map((edge) => edge.node) ?? [];
+  const products: Product[] = await getAllProducts(languageCode);
 
   return (
     <section className="p-6 space-y-12">
-      {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
+      {products.length === 0 && <p>{t('NO_PRODUCTS')}</p>}
       {products.map((product) => (
         <div key={product.id} className="border rounded-lg p-4 shadow">
           <h2 className="text-2xl font-bold">{product.title}</h2>
@@ -105,7 +39,7 @@ export default async function AllProducts({ locale }: { locale: string }) {
           )}
 
           <p className="mt-4 text-lg">
-            {product.variants.edges[0]?.node.price.amount}{" "}
+            {product.variants.edges[0]?.node.price.amount}{' '}
             {product.variants.edges[0]?.node.price.currencyCode}
           </p>
         </div>

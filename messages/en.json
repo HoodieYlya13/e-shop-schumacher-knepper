@@ -15,6 +15,25 @@
   },
   "NAV": {
     "HOME": "Home",
-    "ABOUT": "About"
+    "ABOUT": "About",
+    "ACCOUNT": "Account"
+  },
+  "AUTH": {
+    "LOGIN": "Sign in",
+    "REGISTER": "Sign up",
+    "EMAIL": "Email",
+    "FIRST_NAME": "First name",
+    "LAST_NAME": "Last name",
+    "PASSWORD": "Password",
+    "CONFIRM_PASSWORD": "Confirm password",
+    "CREATE_ACCOUNT": "Create account",
+    "ACCEPTS_MARKETING": "Accepts marketing",
+    "LOGIN_SUCCESS": "Login successful! Welcome back.",
+    "ERRORS": {
+      "PASSWORD_MISMATCH": "Passwords do not match.",
+      "GENERIC": "Something went wrong. Please try again."
+    },
+    "PHONE": "Phone",
+    "OPTIONAL": "optional"
   }
 }

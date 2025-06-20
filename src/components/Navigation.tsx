@@ -1,24 +1,45 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import clsx from 'clsx';
+import { useEffect, useState } from 'react';
 
-const navItems = [
+const navItemsBase = [
   { href: '/', labelKey: 'NAV.HOME' },
   { href: '/about', labelKey: 'NAV.ABOUT' },
 ];
 
 export default function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
   const t = useTranslations();
-  const strippedPathname = pathname.split('/').slice(2).join('/') || '/';
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('shopify_token');
+    setIsLoggedIn(!!token);
+
+    if (pathname.startsWith('/auth') && token) {
+      router.replace('/account');
+    } else if (pathname.startsWith('/account') && !token) {
+      router.replace('/auth');
+    }
+  }, [pathname, router]);
+
+  const navItems = [
+    ...navItemsBase,
+    isLoggedIn
+      ? { href: '/account', labelKey: 'NAV.ACCOUNT' }
+      : { href: '/auth', labelKey: 'NAV.ACCOUNT' },
+  ];
 
   return (
     <nav className="flex gap-4 p-4 border-b bg-white shadow-sm">
       {navItems.map(({ href, labelKey }) => {
-        const isActive = href === '/' ? strippedPathname === '/' : strippedPathname.startsWith(href.slice(1));
+        const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
 
         return (
           <Link

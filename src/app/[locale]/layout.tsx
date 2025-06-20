@@ -7,8 +7,6 @@ import '../globals.css';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
 import { shopifyServerFetch } from '@/lib/shopify/server';
-import Navigation from '@/components/Navigation';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const QUERY = `
   query {
@@ -56,11 +54,7 @@ export default async function LocaleLayout({ children, params }: any) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider>
-          <Navigation />
-          <LanguageSwitcher />
-          {children}
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

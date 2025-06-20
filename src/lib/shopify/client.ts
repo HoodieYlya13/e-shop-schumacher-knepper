@@ -1,4 +1,4 @@
-import {createStorefrontClient} from '@shopify/hydrogen-react';
+import { createStorefrontClient } from "@shopify/hydrogen-react";
 
 export const shopifyClient = createStorefrontClient({
   storeDomain: process.env.PUBLIC_STORE_DOMAIN!,

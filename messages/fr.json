@@ -15,6 +15,25 @@
   },
   "NAV": {
     "HOME": "Accueil",
-    "ABOUT": "À propos"
+    "ABOUT": "À propos",
+    "ACCOUNT": "Compte"
+  },
+  "AUTH": {
+    "LOGIN": "Se connecter",
+    "REGISTER": "S'inscrire",
+    "EMAIL": "Email",
+    "FIRST_NAME": "Prénom",
+    "LAST_NAME": "Nom de famille",
+    "PASSWORD": "Mot de passe",
+    "CONFIRM_PASSWORD": "Confirmer le mot de passe",
+    "CREATE_ACCOUNT": "Créer un compte",
+    "ACCEPTS_MARKETING": "Accepte le marketing",
+    "LOGIN_SUCCESS": "Connexion réussie ! Bon retour.",
+    "ERRORS": {
+      "PASSWORD_MISMATCH": "Les mots de passe ne correspondent pas.",
+      "GENERIC": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "PHONE": "Téléphone",
+    "OPTIONAL": "optionnel"
   }
 }
