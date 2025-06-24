@@ -6,8 +6,6 @@ export async function POST(req: NextRequest) {
   
   const forwardedFor = req.headers.get('x-forwarded-for');
   const buyerIp = forwardedFor?.split(',')[0]?.trim();
-  
-  console.log('👋 buyerIp =', buyerIp ?? 'not found');
 
   try {
     if (!token) {

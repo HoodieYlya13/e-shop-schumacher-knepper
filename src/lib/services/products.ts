@@ -45,7 +45,5 @@ export async function getAllProducts(
     buyerIp,
   });
 
-  console.log('👋 buyerIp =', buyerIp ?? 'not found');
-
   return data.products.edges.map((edge) => edge.node);
 }

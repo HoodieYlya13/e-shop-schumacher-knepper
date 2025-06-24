@@ -22,18 +22,27 @@
     "LOGIN": "Sign in",
     "REGISTER": "Sign up",
     "EMAIL": "Email",
+    "CONFIRM_EMAIL": "Confirm email",
     "FIRST_NAME": "First name",
     "LAST_NAME": "Last name",
     "PASSWORD": "Password",
     "CONFIRM_PASSWORD": "Confirm password",
     "CREATE_ACCOUNT": "Create account",
-    "ACCEPTS_MARKETING": "Accepts marketing",
+    "ACCEPTS_MARKETING": "Accept marketing",
     "LOGIN_SUCCESS": "Login successful! Welcome back.",
-    "ERRORS": {
-      "PASSWORD_MISMATCH": "Passwords do not match.",
-      "GENERIC": "Something went wrong. Please try again."
-    },
     "PHONE": "Phone",
-    "OPTIONAL": "optional"
+    "OPTIONAL": "optional",
+    "ERRORS": {
+      "GENERIC": "An unexpected error occurred.",
+      "TOO_SHORT": "Password is too short.",
+      "EMAIL_TAKEN": "Email has already been taken.",
+      "PHONE_TAKEN": "Phone has already been taken.",
+      "INVALID": "Enter a valid phone number.",
+      "EMAIL_MISMATCH": "Emails do not match.",
+      "PASSWORD_MISMATCH": "Passwords do not match.",
+      "LOGIN_ERROR": "Login failed. Please check your email or password.",
+      "AUTHENTIFICATION_PROBLEM": "Please log in again.",
+      "CORRECT_FIELDS_BEFORE_RESUBMIT": "Please correct the fields before trying again."
+    }
   }
 }
