@@ -6,8 +6,11 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const lang = url.searchParams.get('lang')?.toUpperCase() as 'EN' | 'FR' | 'DE' || 'EN';
 
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  const buyerIp = forwardedFor?.split(',')[0]?.trim();
+
   try {
-    const products = await getAllProducts(lang);
+    const products = await getAllProducts(lang, buyerIp);
     return NextResponse.json(products);
   } catch (error: unknown) {
     if (error instanceof Error) {

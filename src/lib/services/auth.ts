@@ -34,24 +34,32 @@ const LOGIN_MUTATION = `
   }
 `;
 
-export async function registerCustomer(input: {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-  phone?: string;
-  acceptsMarketing?: boolean;
-}) {
+export async function registerCustomer(
+  input: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+    acceptsMarketing?: boolean;
+  },
+  buyerIp?: string
+) {
   return shopifyServerFetch(REGISTER_MUTATION, {
     variables: { input },
+    buyerIp,
   });
 }
 
-export async function loginCustomer(input: {
-  email: string;
-  password: string;
-}) {
+export async function loginCustomer(
+  input: {
+    email: string;
+    password: string;
+  },
+  buyerIp?: string
+) {
   return shopifyServerFetch(LOGIN_MUTATION, {
     variables: { input },
+    buyerIp,
   });
 }

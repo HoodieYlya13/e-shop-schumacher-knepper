@@ -2,11 +2,17 @@ import { shopifyClient } from './client';
 
 export async function shopifyServerFetch<T, V = unknown>(
   query: string,
-  options?: { variables?: V }
+  options?: {
+    variables?: V;
+    buyerIp?: string;
+  }
 ): Promise<T> {
   const response = await fetch(shopifyClient.getStorefrontApiUrl(), {
     method: "POST",
-    headers: shopifyClient.getPrivateTokenHeaders(),
+    headers: {
+      ...shopifyClient.getPrivateTokenHeaders(),
+      "Shopify-Storefront-Buyer-IP": options?.buyerIp ?? "",
+    },
     body: JSON.stringify({
       query,
       variables: options?.variables,

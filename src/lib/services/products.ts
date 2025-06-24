@@ -34,12 +34,18 @@ const QUERY = `
   }
 `;
 
-export async function getAllProducts(language: 'EN' | 'FR' | 'DE' = 'EN') {
+export async function getAllProducts(
+  language: "EN" | "FR" | "DE" = "EN",
+  buyerIp?: string
+): Promise<Product[]> {
   const data = await shopifyServerFetch<{
     products: { edges: { node: Product }[] };
   }>(QUERY, {
     variables: { language },
+    buyerIp,
   });
+
+  console.log('👋 buyerIp =', buyerIp ?? 'not found');
 
   return data.products.edges.map((edge) => edge.node);
 }

@@ -3,13 +3,18 @@ import { fetchCustomerData } from '@/lib/services/customer';
 
 export async function POST(req: NextRequest) {
   const { token, identifiers } = await req.json();
+  
+  const forwardedFor = req.headers.get('x-forwarded-for');
+  const buyerIp = forwardedFor?.split(',')[0]?.trim();
+  
+  console.log('👋 buyerIp =', buyerIp ?? 'not found');
 
   try {
     if (!token) {
       return NextResponse.json({ error: 'Missing customer token' }, { status: 400 });
     }
 
-    const customer = await fetchCustomerData(token, identifiers);
+    const customer = await fetchCustomerData(token, identifiers, buyerIp);
     return NextResponse.json(customer);
   } catch (error: unknown) {
     if (error instanceof Error) {
