@@ -1,7 +1,7 @@
 'use client';
 
-import Navigation from '@/components/Navigation';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import LanguageSwitcher from "./LanguageSwitcher";
+import Navigation from "./Navigation";
 
 export default function NavBar() {
   return (

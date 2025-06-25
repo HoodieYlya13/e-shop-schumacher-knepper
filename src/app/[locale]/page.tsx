@@ -1,5 +1,5 @@
-import AllProducts from '@/components/AllProducts';
 import PageBuilder from '@/components/PageBuilder/PageBuilder';
+import Home from '@/components/Pages/Home/Home';
 
 export default async function HomePage(props: {
   params: Promise<{ locale: string }>;
@@ -8,15 +8,7 @@ export default async function HomePage(props: {
 
   return (
     <PageBuilder>
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
-      <AllProducts locale={locale} />
+      <Home locale={locale} />
     </PageBuilder>
   );
 }
