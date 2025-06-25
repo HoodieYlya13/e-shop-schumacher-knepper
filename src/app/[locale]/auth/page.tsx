@@ -3,6 +3,10 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import ModeSwitch from '@/components/Auth/ModeSwitch';
+import SubmitButton from '@/components/Auth/SubmitButton';
+import SignUp from '@/components/Auth/SignUp';
+import SignIn from '@/components/Auth/SignIn';
 
 export default function AuthPage() {
   const t = useTranslations('AUTH');
@@ -158,187 +162,68 @@ export default function AuthPage() {
     }
   };
 
-  const inputClass = (invalid: boolean) =>
-    `w-full p-2 border rounded ${invalid ? 'border-red-500' : ''}`;
-
   const fieldTouched = (name: string) => touched[name] || submitted;
 
   return (
     <main className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
       <h1 className="text-2xl font-bold">{t(mode)}</h1>
 
-      <div className="flex gap-4">
-        <button
-          onClick={() => {
-            setMode("REGISTER");
-            setApiErrors({});
-          }}
-          className={`px-4 py-2 rounded ${mode === "REGISTER" ? "bg-black text-white" : "bg-gray-200"}`}
-        >
-          {t("REGISTER")}
-        </button>
-        <button
-          onClick={() => {
-            setMode("LOGIN");
-            setApiErrors({});
-          }}
-          className={`px-4 py-2 rounded ${mode === "LOGIN" ? "bg-black text-white" : "bg-gray-200"}`}
-        >
-          {t("LOGIN")}
-        </button>
-      </div>
+      <ModeSwitch mode={mode} setMode={setMode} setApiErrors={setApiErrors} />
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => {
-              setEmail(e.target.value);
-            }}
-            onBlur={() => setTouched((t) => ({ ...t, email: true }))}
-            placeholder={t("EMAIL")}
-            required
-            className={inputClass(isFieldInvalid("email"))}
-          />
-          {apiErrors.email === "EMAIL_TAKEN" && email === errorValues.email && (
-            <p className="text-sm text-red-600">{t("ERRORS.EMAIL_TAKEN")}</p>
-          )}
-        </div>
-
         {mode === "REGISTER" && (
-          <div>
-            <input
-              type="email"
-              value={confirmEmail}
-              onChange={(e) => setConfirmEmail(e.target.value)}
-              onBlur={() => setTouched((t) => ({ ...t, confirmEmail: true }))}
-              placeholder={t("CONFIRM_EMAIL")}
-              required
-              className={inputClass(
-                fieldTouched("confirmEmail") && !isEmailMatch
-              )}
-            />
-            {fieldTouched("confirmEmail") && confirmEmail && !isEmailMatch && (
-              <p className="text-sm text-red-600">
-                {t("ERRORS.EMAIL_MISMATCH")}
-              </p>
-            )}
-          </div>
+          <SignUp
+            email={email}
+            setEmail={setEmail}
+            confirmEmail={confirmEmail}
+            setConfirmEmail={setConfirmEmail}
+            password={password}
+            setPassword={setPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
+            firstName={firstName}
+            setFirstName={setFirstName}
+            lastName={lastName}
+            setLastName={setLastName}
+            phone={phone}
+            setPhone={setPhone}
+            acceptsMarketing={acceptsMarketing}
+            setAcceptsMarketing={setAcceptsMarketing}
+            setTouched={setTouched}
+            isFieldInvalid={isFieldInvalid}
+            fieldTouched={fieldTouched}
+            isPhoneValid={isPhoneValid}
+            isPasswordValid={isPasswordValid}
+            isEmailMatch={isEmailMatch}
+            isPasswordMatch={isPasswordMatch}
+            apiErrors={apiErrors}
+            errorValues={errorValues}
+          />
         )}
 
-        <div>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onBlur={() => setTouched((t) => ({ ...t, password: true }))}
-            placeholder={t("PASSWORD")}
-            required
-            className={inputClass(fieldTouched("password") && !isPasswordValid)}
+        {mode === "LOGIN" && (
+          <SignIn
+            email={email}
+            setEmail={setEmail}
+            password={password}
+            setPassword={setPassword}
           />
-          {fieldTouched("password") && !isPasswordValid && (
-            <p className="text-sm text-red-600">{t("ERRORS.TOO_SHORT")}</p>
-          )}
-        </div>
-
-        {mode === "REGISTER" && (
-          <>
-            <div>
-              <input
-                type="password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                onBlur={() =>
-                  setTouched((t) => ({ ...t, confirmPassword: true }))
-                }
-                placeholder={t("CONFIRM_PASSWORD")}
-                required
-                className={inputClass(
-                  fieldTouched("confirmPassword") && !isPasswordMatch
-                )}
-              />
-              {fieldTouched("confirmPassword") &&
-                confirmPassword &&
-                !isPasswordMatch && (
-                  <p className="text-sm text-red-600">
-                    {t("ERRORS.PASSWORD_MISMATCH")}
-                  </p>
-                )}
-            </div>
-
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder={t("FIRST_NAME")}
-              required
-              className={inputClass(firstName.trim() === "" && submitted)}
-            />
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder={t("LAST_NAME")}
-              required
-              className={inputClass(lastName.trim() === "" && submitted)}
-            />
-
-            <div>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => {
-                  setPhone(e.target.value);
-                }}
-                onBlur={() => setTouched((t) => ({ ...t, phone: true }))}
-                placeholder={`${t("PHONE")} (${t("OPTIONAL")})`}
-                className={inputClass(isFieldInvalid("phone"))}
-              />
-              {apiErrors.phone === "PHONE_TAKEN" &&
-                phone === errorValues.phone && (
-                  <p className="text-sm text-red-600">
-                    {t("ERRORS.PHONE_TAKEN")}
-                  </p>
-                )}
-              {fieldTouched("phone") && !isPhoneValid && (
-                <p className="text-sm text-red-600">{t("ERRORS.INVALID")}</p>
-              )}
-            </div>
-
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={acceptsMarketing}
-                onChange={(e) => setAcceptsMarketing(e.target.checked)}
-              />
-              <span>{t("ACCEPTS_MARKETING")}</span>
-            </label>
-          </>
         )}
 
-        <button
-          type="submit"
+        <SubmitButton
           disabled={!isFormValid || isBlockedByApiError}
-          className={`w-full py-2 rounded ${
-            !isFormValid || isBlockedByApiError
-              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "bg-black text-white"
-          }`}
-        >
-          {mode === "REGISTER" ? t("CREATE_ACCOUNT") : t("LOGIN")}
-        </button>
+          label={mode === "REGISTER" ? t("CREATE_ACCOUNT") : t("LOGIN")}
+          isBlockedByApiError={isBlockedByApiError}
+        />
 
-        {isBlockedByApiError && (
-          <p className="text-sm text-red-500">
-            {t("ERRORS.CORRECT_FIELDS_BEFORE_RESUBMIT")}
-          </p>
+        {apiErrors.loginErrorMessage && (
+          <p className="text-red-600">{t(`ERRORS.${apiErrors.loginErrorMessage}`)}</p>
+        )}
+
+        {apiErrors.generic && (
+          <p className="text-red-600">{t(`ERRORS.${apiErrors.generic}`)}</p>
         )}
       </form>
-
-      {apiErrors.generic && (
-        <p className="text-red-600">{t(`ERRORS.${apiErrors.generic}`)}</p>
-      )}
     </main>
   );
 }
