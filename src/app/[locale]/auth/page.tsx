@@ -1,85 +1,33 @@
 'use client';
 
-import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import ModeSwitch from '@/components/Auth/ModeSwitch';
 import SubmitButton from '@/components/Auth/SubmitButton';
 import SignUp from '@/components/Auth/SignUp';
 import SignIn from '@/components/Auth/SignIn';
+import { useAuthForm } from '@/hooks/useAuthForm';
 
 export default function AuthPage() {
   const t = useTranslations('AUTH');
   const router = useRouter();
-
-  const [apiErrors, setApiErrors] = useState<Record<string, string>>({});
-  const [errorValues, setErrorValues] = useState<Record<string, string>>({});
-  const [mode, setMode] = useState<'REGISTER' | 'LOGIN'>('REGISTER');
-  const [submitted, setSubmitted] = useState(false);
-
-  const [email, setEmail] = useState('');
-  const [confirmEmail, setConfirmEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [acceptsMarketing, setAcceptsMarketing] = useState(true);
-
-  const [touched, setTouched] = useState<Record<string, boolean>>({});
-
-  const isPhoneValid = phone.trim() === '' || /^\+?[0-9]{7,15}$/.test(phone.trim());
-  const isPasswordValid = password.length >= 5;
-  const isEmailMatch = email === confirmEmail;
-  const isPasswordMatch = password === confirmPassword;
-
-  const isFormValid = mode === 'LOGIN'
-    ? email && password
-    : email && password && firstName && lastName && isPhoneValid && isPasswordValid && isEmailMatch && isPasswordMatch;
-
-  const isFieldInvalid = (field: string): boolean => {
-    if (field === "email") {
-      return (
-        (apiErrors.email === "EMAIL_TAKEN" && email === errorValues.email) ||
-        (submitted && email.trim() === "")
-      );
-    }
-    if (field === "phone") {
-      return (
-        (apiErrors.phone === "PHONE_TAKEN" && phone === errorValues.phone) ||
-        (fieldTouched("phone") && !isPhoneValid)
-      );
-    }
-    return false;
-  };
-
-  const isBlockedByApiError =
-    (apiErrors.email === 'EMAIL_TAKEN' && email === errorValues.email) ||
-    (apiErrors.phone === 'PHONE_TAKEN' && phone === errorValues.phone);
+  const form = useAuthForm();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
-    setApiErrors({});
+    form.setSubmitted(true);
+    form.setApiErrors({});
 
-    if (!isFormValid) return;
+    if (!form.isFormValid || form.isBlockedByApiError) return;
 
-    if (
-      (apiErrors.email === 'EMAIL_TAKEN' && email === errorValues.email) ||
-      (apiErrors.phone === 'PHONE_TAKEN' && phone === errorValues.phone)
-    ) {
-      return;
-    }
-
-    const trimmedPhone = phone.trim();
     const requestBody: Record<string, any> = {
-      mode,
-      email,
-      password,
-      firstName,
-      lastName,
-      acceptsMarketing,
-      ...(trimmedPhone && { phone: trimmedPhone }),
+      mode: form.mode,
+      email: form.email,
+      password: form.password,
+      firstName: form.firstName,
+      lastName: form.lastName,
+      acceptsMarketing: form.acceptsMarketing,
+      ...(form.phone.trim() && { phone: form.phone.trim() }),
     };
 
     try {
@@ -90,60 +38,56 @@ export default function AuthPage() {
 
       const json = await res.json();
 
-      if (!res.ok) {
-        setApiErrors({ generic: 'GENERIC' });
+      if (!res.ok || (form.mode === 'REGISTER' && !json.customerCreate)) {
+        form.setApiErrors({ generic: 'GENERIC' });
         return;
       }
 
-      if (mode === 'LOGIN') {
-        const loginError = json?.customerAccessTokenCreate?.customerUserErrors?.[0]?.message;
+      if (form.mode === 'LOGIN') {
         const token = json?.customerAccessTokenCreate?.customerAccessToken?.accessToken;
+        const loginError = json?.customerAccessTokenCreate?.customerUserErrors?.[0]?.message;
 
-        if (loginError) {
-          setApiErrors({ loginErrorMessage: 'LOGIN_ERROR' });
-        } else if (token) {
+        if (token) {
           localStorage.setItem('shopify_token', token);
           router.push('/account');
         } else {
-          setApiErrors({ generic: 'GENERIC' });
+          form.setApiErrors({
+            loginErrorMessage: loginError ? "LOGIN_ERROR" : "GENERIC",
+          });
         }
 
         return;
       }
 
-      if (!json.customerCreate) {
-        setApiErrors({ generic: 'GENERIC' });
-        return;
-      }
-      
       const regErrors = json.customerCreate.customerUserErrors as {
-        field: string[]; code: string;
+        field: string[];
+        code: string;
       }[];
-    
+
       const newErrors: Record<string, string> = {};
       const newValues: Record<string, string> = {};
-    
+
       regErrors?.forEach(({ field, code }) => {
         const key = field?.[1];
         if (key === 'email') {
           newErrors.email = 'EMAIL_TAKEN';
-          newValues.email = email;
+          newValues.email = form.email;
         } else if (key === 'phone' && code === 'TAKEN') {
           newErrors.phone = 'PHONE_TAKEN';
-          newValues.phone = phone;
+          newValues.phone = form.phone;
         } else if (code) {
           newErrors.generic = code;
         }
       });
-    
-      setApiErrors(newErrors);
-      setErrorValues(newValues);
-    
+
+      form.setApiErrors(newErrors);
+      form.setErrorValues(newValues);
+
       if (Object.keys(newErrors).length > 0) return;
 
       const loginRes = await fetch('/api/auth', {
         method: 'POST',
-        body: JSON.stringify({ mode: 'LOGIN', email, password }),
+        body: JSON.stringify({ mode: 'LOGIN', email: form.email, password: form.password }),
       });
 
       const loginJson = await loginRes.json();
@@ -153,75 +97,38 @@ export default function AuthPage() {
         localStorage.setItem('shopify_token', loginToken);
         router.push('/account');
       } else {
-        setMode('LOGIN');
-        setApiErrors({ authentificationProblem: 'AUTHENTIFICATION_PROBLEM' });
+        form.setMode('LOGIN');
+        form.setApiErrors({ authentificationProblem: 'AUTHENTIFICATION_PROBLEM' });
       }
 
     } catch (err) {
-      setApiErrors(err instanceof Error ? { generic: err.message } : { generic: 'GENERIC' });
+      form.setApiErrors(err instanceof Error ? { generic: err.message } : { generic: 'GENERIC' });
     }
   };
 
-  const fieldTouched = (name: string) => touched[name] || submitted;
-
   return (
     <main className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
-      <h1 className="text-2xl font-bold">{t(mode)}</h1>
+      <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 
-      <ModeSwitch mode={mode} setMode={setMode} setApiErrors={setApiErrors} />
+      <ModeSwitch mode={form.mode} setMode={form.setMode} setApiErrors={form.setApiErrors} />
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {mode === "REGISTER" && (
-          <SignUp
-            email={email}
-            setEmail={setEmail}
-            confirmEmail={confirmEmail}
-            setConfirmEmail={setConfirmEmail}
-            password={password}
-            setPassword={setPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-            firstName={firstName}
-            setFirstName={setFirstName}
-            lastName={lastName}
-            setLastName={setLastName}
-            phone={phone}
-            setPhone={setPhone}
-            acceptsMarketing={acceptsMarketing}
-            setAcceptsMarketing={setAcceptsMarketing}
-            setTouched={setTouched}
-            isFieldInvalid={isFieldInvalid}
-            fieldTouched={fieldTouched}
-            isPhoneValid={isPhoneValid}
-            isPasswordValid={isPasswordValid}
-            isEmailMatch={isEmailMatch}
-            isPasswordMatch={isPasswordMatch}
-            apiErrors={apiErrors}
-            errorValues={errorValues}
-          />
-        )}
-
-        {mode === "LOGIN" && (
-          <SignIn
-            email={email}
-            setEmail={setEmail}
-            password={password}
-            setPassword={setPassword}
-          />
-        )}
+        {form.mode === "REGISTER" ? <SignUp {...form} /> : <SignIn {...form} />}
 
         <SubmitButton
-          disabled={!isFormValid || isBlockedByApiError}
-          label={mode === "REGISTER" ? t("CREATE_ACCOUNT") : t("LOGIN")}
-          isBlockedByApiError={isBlockedByApiError}
+          disabled={!form.isFormValid || form.isBlockedByApiError}
+          label={form.mode === "REGISTER" ? t("CREATE_ACCOUNT") : t("LOGIN")}
+          isBlockedByApiError={form.isBlockedByApiError}
         />
 
-        {apiErrors.loginErrorMessage && (
-          <p className="text-red-600">{t(`ERRORS.${apiErrors.loginErrorMessage}`)}</p>
+        {form.apiErrors.loginErrorMessage && (
+          <p className="text-red-600">
+            {t(`ERRORS.${form.apiErrors.loginErrorMessage}`)}
+          </p>
         )}
 
-        {apiErrors.generic && (
-          <p className="text-red-600">{t(`ERRORS.${apiErrors.generic}`)}</p>
+        {form.apiErrors.generic && (
+          <p className="text-red-600">{t(`ERRORS.${form.apiErrors.generic}`)}</p>
         )}
       </form>
     </main>
