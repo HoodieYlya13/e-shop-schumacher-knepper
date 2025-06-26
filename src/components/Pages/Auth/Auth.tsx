@@ -1,33 +1,58 @@
-'use client';
+"use client";
 
-import { useTranslations } from 'next-intl';
-import ModeSwitch from '@/components/Pages/Auth/Shared/ModeSwitch';
-import SubmitButton from '@/components/Pages/Auth/Shared/SubmitButton';
-import SignUp from '@/components/Pages/Auth/Shared/SignUp';
-import SignIn from '@/components/Pages/Auth/Shared/SignIn';
-import { useAuthForm } from '@/hooks/useAuthForm';
-import NonFieldErrors from '@/components/Pages/Auth/Shared/NonFieldErrors';
+import { useTranslations } from "next-intl";
+import React from "react";
+import ModeSwitch from "./Shared/ModeSwitch";
+import SignUp from "./Shared/SignUp";
+import SignIn from "./Shared/SignIn";
+import SubmitButton from "./Shared/SubmitButton";
+import { UseFormRegister } from "react-hook-form";
+import { LoginValues, RegisterValues } from "@/schemas/authSchema";
+import { useAuthForm } from "@/hooks/auth/useAuthForm";
+import NonFieldErrors from "./Shared/NonFieldErrors";
 
 export default function Auth() {
   const t = useTranslations('AUTH');
-  const form = useAuthForm();
+  const [mode, setMode] = React.useState<'REGISTER' | 'LOGIN'>('LOGIN');
+  const form = useAuthForm(mode);
 
   return (
     <section className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
-      <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
+      <h1 className="text-2xl font-bold">{t(mode)}</h1>
 
-      <ModeSwitch mode={form.mode} setMode={form.setMode} setApiErrors={form.setApiErrors} />
+      <ModeSwitch
+        mode={mode}
+        setMode={setMode}
+        clearErrors={form.clearErrors}
+      />
 
       <form onSubmit={form.handleSubmit} className="space-y-4">
-        {form.mode === "REGISTER" ? <SignUp {...form} /> : <SignIn {...form} />}
+        {mode === "REGISTER" ? (
+          <SignUp
+            register={form.register as UseFormRegister<RegisterValues>}
+            errors={form.errors}
+          />
+        ) : (
+          <SignIn
+            register={form.register as UseFormRegister<LoginValues>}
+            errors={form.isSubmitted ? form.errors : {}}
+          />
+        )}
 
         <SubmitButton
-          disabled={!form.isFormValid || form.isBlockedByApiError}
-          label={form.mode === "REGISTER" ? t("CREATE_ACCOUNT") : t("LOGIN")}
-          isBlockedByApiError={form.isBlockedByApiError}
+          label={
+            form.isSubmitting
+              ? t("LOADING")
+              : t(mode === "REGISTER" ? "CREATE_ACCOUNT" : "LOGIN")
+          }
+          errors={
+            form.isSubmitted &&
+            Object.keys(form.errors).some((key) => key !== "root")
+          }
+          disabled={form.isSubmitting}
         />
 
-        <NonFieldErrors apiErrors={form.apiErrors} />
+        {form.errors.root && <NonFieldErrors errors={form.errors.root} />}
       </form>
     </section>
   );

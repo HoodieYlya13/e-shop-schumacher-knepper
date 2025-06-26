@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Customer, Metafield } from '@shopify/hydrogen-react/storefront-api-types';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Customer, Metafield } from "@shopify/hydrogen-react/storefront-api-types";
+import { logout } from "@/utils/account/logoutHandler";
+import { fetchCustomerData } from "@/utils/account/fetchCustomer";
 
 export default function Account() {
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -11,68 +13,34 @@ export default function Account() {
 
   const router = useRouter();
 
-  const handleLogout = () => {
-    localStorage.removeItem('shopify_token');
-    router.push('/');
-  };
-
   useEffect(() => {
-    const token = localStorage.getItem('shopify_token');
+    const token = localStorage.getItem("shopify_token");
     if (!token) {
-      setError('Not logged in');
+      setError("Not logged in");
       setLoading(false);
       return;
     }
 
-    async function fetchCustomer() {
-      try {
-        const response = await fetch("/api/customer", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            token,
-            identifiers: [
-              { namespace: "Membership", key: "VIP level" },
-              { namespace: "Membership", key: "startDate" },
-              { namespace: "note", key: "preference" },
-            ],
-          }),
-        });
-
-        const json = await response.json();
-
-        if (!response.ok || json.error) {
-          setError(json.error || 'Failed to fetch customer');
-          return;
-        }
-
-        setCustomer(json);
-      } catch (err: unknown) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError('Unknown error');
-        }
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchCustomer();
+    fetchCustomerData(token)
+      .then(setCustomer)
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <p>Loading customer data...</p>;
   if (error) return <p className="text-red-600">Error: {error}</p>;
   if (!customer) return <p>No customer information available.</p>;
 
-  const validMetafields = customer.metafields.filter((mf): mf is Exclude<Metafield, null> => mf !== null);
+  const validMetafields = customer.metafields.filter(
+    (mf): mf is Exclude<Metafield, null> => mf !== null
+  );
 
   return (
     <section className="max-w-lg mx-auto p-6 border rounded shadow space-y-4">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold">Account Information</h1>
         <button
-          onClick={handleLogout}
+          onClick={() => logout(router)}
           className="text-sm text-red-600 underline hover:text-red-800"
         >
           Log out

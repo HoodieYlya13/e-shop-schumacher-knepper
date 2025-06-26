@@ -1,19 +1,22 @@
 import { useTranslations } from "next-intl";
 
 interface NonFieldErrorsProps {
-  apiErrors: Record<string, string>;
+  errors: Partial<{
+    type: string | number;
+
+    message: string;
+  }> &
+    Record<string, Partial<{ type: string | number; message: string }>>;
 }
 
-export default function NonFieldErrors({ apiErrors }: NonFieldErrorsProps) {
+export default function NonFieldErrors({ errors }: NonFieldErrorsProps) {
   const t = useTranslations("AUTH");
 
-  return (
-    <>
-      {Object.entries(apiErrors).map(([key, value]) => (
-        <p key={key} className="text-red-600">
-          {t(`ERRORS.${value}`)}
-        </p>
-      ))}
-    </>
-  );
+  if (!errors?.message) return null;
+
+  if (errors.message === "LOGIN_ERROR" || errors.message === "GENERIC") {
+    return <p className="text-red-600">{t(`ERRORS.${errors.message}`)}</p>;
+  }
+
+  return null;
 }

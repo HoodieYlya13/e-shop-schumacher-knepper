@@ -1,36 +1,32 @@
 import { useTranslations } from "next-intl";
 import InputField from "./InputField";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { LoginValues } from "@/schemas/authSchema";
 
 interface SignInProps {
-  email: string;
-  setEmail: (value: string) => void;
-  password: string;
-  setPassword: (value: string) => void;
+  register: UseFormRegister<LoginValues>;
+  errors: FieldErrors<LoginValues>;
 }
 
-export default function SignIn({
-  email,
-  setEmail,
-  password,
-  setPassword
-}: SignInProps) {
-  const t = useTranslations('AUTH');
+export default function SignIn({ register, errors }: SignInProps) {
+  const t = useTranslations("AUTH");
 
-    return (
-      <>
-        <InputField
-          type="email"
-          value={email}
-          setter={setEmail}
-          placeholder={t("EMAIL")}
-        />
+  return (
+    <>
+      <InputField
+        type="email"
+        placeholder={t("EMAIL")}
+        {...register("email")}
+        errorText={errors.email && t(`ERRORS.${errors.email.message}`)}
+        focusOnMount
+      />
 
-        <InputField
-          type="password"
-          value={password}
-          setter={setPassword}
-          placeholder={t("PASSWORD")}
-        />
-      </>
-    );
+      <InputField
+        type="password"
+        placeholder={t("PASSWORD")}
+        {...register("password")}
+        errorText={errors.password && t(`ERRORS.${errors.password.message}`)}
+      />
+    </>
+  );
 }

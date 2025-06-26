@@ -21,6 +21,7 @@
   "AUTH": {
     "LOGIN": "Se connecter",
     "REGISTER": "S'inscrire",
+    "LOADING": "Loading...",
     "EMAIL": "Email",
     "CONFIRM_EMAIL": "Confirm email",
     "FIRST_NAME": "Prénom",
@@ -42,7 +43,7 @@
       "PASSWORD_MISMATCH": "Les mots de passe ne correspondent pas.",
       "LOGIN_ERROR": "Login failed. Please check your email or password.",
       "AUTHENTIFICATION_PROBLEM": "Veuillez vous reconnecter.",
-      "CORRECT_FIELDS_BEFORE_RESUBMIT": "Please correct the fields before trying again."
+      "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting."
     }
   }
 }
