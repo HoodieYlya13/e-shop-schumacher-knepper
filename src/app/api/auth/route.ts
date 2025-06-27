@@ -36,6 +36,10 @@ export async function POST(req: NextRequest) {
       response = await recoverCustomerAccount(email, buyerIp);
     }
 
+    if (mode === 'NEW_PASSWORD') {
+      response = { message: 'Password update will soon be available' };
+    }
+
     return NextResponse.json(response);
   } catch (error: unknown) {
     if (error instanceof Error) {

@@ -3,7 +3,7 @@
     "META": {
       "TITLE": "Boutique en ligne - {name}",
       "DESCRIPTION": "Bienvenue dans la boutique en ligne de {name} ! Découvrez nos vins ou offrez une carte cadeau à vos proches.",
-      "NO_PRODUCTS": "No products available at the moment."
+      "NO_PRODUCTS": "Aucun produit disponible pour le moment."
     },
     "WELCOME": "Bienvenue dans la boutique de {name} !",
     "CART": "Panier",
@@ -21,29 +21,37 @@
   "AUTH": {
     "LOGIN": "Se connecter",
     "REGISTER": "S'inscrire",
-    "LOADING": "Loading...",
+    "PASSWORD_RECOVERY": "Récupération de mot de passe",
+    "LOADING": "Chargement...",
     "EMAIL": "Email",
-    "CONFIRM_EMAIL": "Confirm email",
+    "CONFIRM_EMAIL": "Confirmer l'email",
     "FIRST_NAME": "Prénom",
     "LAST_NAME": "Nom de famille",
     "PASSWORD": "Mot de passe",
     "CONFIRM_PASSWORD": "Confirmer le mot de passe",
     "CREATE_ACCOUNT": "Créer un compte",
+    "RESET_PASSWORD": "Réinitialiser le mot de passe",
+    "CHECK_YOUR_EMAIL": "Vérifiez votre boîte de réception sur",
+    "SET_NEW_PASSWORD": "Définir un nouveau mot de passe",
     "ACCEPTS_MARKETING": "Accepter le marketing",
     "LOGIN_SUCCESS": "Connexion réussie ! Bon retour.",
     "PHONE": "Téléphone",
     "OPTIONAL": "optionnel",
+    "FORGOT_PASSWORD": "Mot de passe oublié ?",
+    "PASSWORD_RESET_SENT": "Lien de réinitialisation envoyé !",
     "ERRORS": {
-      "GENERIC": "An unexpected error occurred.",
-      "TOO_SHORT": "Password is too short.",
-      "EMAIL_TAKEN": "Email has already been taken.",
-      "PHONE_TAKEN": "Phone has already been taken.",
-      "INVALID": "Enter a valid phone number.",
-      "EMAIL_MISMATCH": "Emails do not match.",
+      "GENERIC": "Une erreur inattendue est survenue.",
+      "TOO_SHORT": "Le mot de passe est trop court.",
+      "INVALID_EMAIL": "Adresse email invalide.",
+      "EMAIL_TAKEN": "L'adresse email est déjà utilisée.",
+      "PHONE_TAKEN": "Le numéro de téléphone est déjà utilisé.",
+      "INVALID": "Veuillez entrer un numéro de téléphone valide.",
+      "EMAIL_MISMATCH": "Les adresses email ne correspondent pas.",
       "PASSWORD_MISMATCH": "Les mots de passe ne correspondent pas.",
-      "LOGIN_ERROR": "Login failed. Please check your email or password.",
-      "AUTHENTIFICATION_PROBLEM": "Veuillez vous reconnecter.",
-      "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting."
+      "LOGIN_ERROR": "Échec de la connexion. Veuillez vérifier votre email ou mot de passe.",
+      "AUTHENTICATION_PROBLEM": "Veuillez vous reconnecter.",
+      "CORRECT_FIELDS_BEFORE_SUBMIT": "Veuillez corriger les champs avant de soumettre.",
+      "UNIDENTIFIED_CUSTOMER": "Client non identifié. Veuillez vous inscrire."
     }
   }
 }

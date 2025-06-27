@@ -3,7 +3,7 @@
     "META": {
       "TITLE": "Online-Shop - {name}",
       "DESCRIPTION": "Willkommen im Online-Shop von {name}! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein.",
-      "NO_PRODUCTS": "No products available at the moment."
+      "NO_PRODUCTS": "Zurzeit sind keine Produkte verfügbar."
     },
     "WELCOME": "Willkommen im Shop von {name}!",
     "CART": "Warenkorb",
@@ -11,7 +11,7 @@
   },
   "ABOUT_PAGE": {
     "TITLE": "Über uns",
-    "DESCRIPTION": "Wir sind leidenschaftlich über großartigen Wein und lokale Tradition."
+    "DESCRIPTION": "Wir lieben großartigen Wein und lokale Traditionen."
   },
   "NAV": {
     "HOME": "Startseite",
@@ -21,29 +21,37 @@
   "AUTH": {
     "LOGIN": "Anmelden",
     "REGISTER": "Registrieren",
-    "LOADING": "Loading...",
+    "PASSWORD_RECOVERY": "Passwort-Wiederherstellung",
+    "LOADING": "Lade...",
     "EMAIL": "E-Mail",
-    "CONFIRM_EMAIL": "Confirm email",
+    "CONFIRM_EMAIL": "E-Mail bestätigen",
     "FIRST_NAME": "Vorname",
     "LAST_NAME": "Nachname",
     "PASSWORD": "Passwort",
     "CONFIRM_PASSWORD": "Passwort bestätigen",
     "CREATE_ACCOUNT": "Konto erstellen",
-    "ACCEPTS_MARKETING": "Accept marketing",
-    "LOGIN_SUCCESS": "Erfolgreich angemeldet! Willkommen zurück.",
+    "RESET_PASSWORD": "Passwort zurücksetzen",
+    "CHECK_YOUR_EMAIL": "Überprüfen Sie Ihr Postfach bei",
+    "SET_NEW_PASSWORD": "Neues Passwort festlegen",
+    "ACCEPTS_MARKETING": "Marketing akzeptieren",
+    "LOGIN_SUCCESS": "Anmeldung erfolgreich! Willkommen zurück.",
     "PHONE": "Telefon",
     "OPTIONAL": "optional",
+    "FORGOT_PASSWORD": "Passwort vergessen?",
+    "PASSWORD_RESET_SENT": "Link zum Zurücksetzen des Passworts wurde gesendet!",
     "ERRORS": {
-      "GENERIC": "An unexpected error occurred.",
-      "TOO_SHORT": "Password is too short.",
-      "EMAIL_TAKEN": "Email has already been taken.",
-      "PHONE_TAKEN": "Phone has already been taken.",
-      "INVALID": "Enter a valid phone number.",
-      "EMAIL_MISMATCH": "Emails do not match.",
+      "GENERIC": "Ein unerwarteter Fehler ist aufgetreten.",
+      "TOO_SHORT": "Das Passwort ist zu kurz.",
+      "INVALID_EMAIL": "Ungültige E-Mail-Adresse.",
+      "EMAIL_TAKEN": "Diese E-Mail-Adresse wird bereits verwendet.",
+      "PHONE_TAKEN": "Diese Telefonnummer wird bereits verwendet.",
+      "INVALID": "Bitte geben Sie eine gültige Telefonnummer ein.",
+      "EMAIL_MISMATCH": "Die E-Mail-Adressen stimmen nicht überein.",
       "PASSWORD_MISMATCH": "Passwörter stimmen nicht überein.",
-      "LOGIN_ERROR": "Login failed. Please check your email or password.",
-      "AUTHENTIFICATION_PROBLEM": "Veuillez vous reconnecter.",
-      "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting."
+      "LOGIN_ERROR": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre E-Mail oder Ihr Passwort.",
+      "AUTHENTICATION_PROBLEM": "Bitte melden Sie sich erneut an.",
+      "CORRECT_FIELDS_BEFORE_SUBMIT": "Bitte korrigieren Sie die Felder vor dem Absenden.",
+      "UNIDENTIFIED_CUSTOMER": "Unbekannter Kunde. Bitte registrieren Sie sich."
     }
   }
 }

@@ -19,7 +19,7 @@ export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue;
 
 export function useAuthForm() {
   const router = useRouter();
-  const [mode, setMode] = React.useState<'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY'>('LOGIN');
+  const [mode, setMode] = React.useState<'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY' | 'NEW_PASSWORD'>('LOGIN');
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -74,25 +74,25 @@ export function useAuthForm() {
     setValidateOnChangeFields(new Set());
   }, [mode]);
 
-  function triggerVerification(
+  function useTriggerVerification(
     watchedField: unknown,
     confirmField: keyof RegisterValues
   ) {
     useEffect(() => {
       if (
-        mode === "REGISTER" &&
-        (touchedFields as Partial<RegisterValues>)[confirmField]
+        (mode === "REGISTER" &&
+          (touchedFields as Partial<RegisterValues>)[confirmField])
       ) {
         trigger(confirmField);
       }
-    }, [mode, watchedField, touchedFields, trigger]);
+    }, [watchedField, confirmField]);
   }
   
   const email = watch("email");
-  triggerVerification(email, "confirmEmail");
+  useTriggerVerification(email, "confirmEmail");
   
   const password = watch("password");
-  triggerVerification(password, "confirmPassword");
+  useTriggerVerification(password, "confirmPassword");
 
   return {
     register: customRegister,

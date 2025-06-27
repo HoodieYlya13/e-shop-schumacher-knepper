@@ -1,4 +1,4 @@
-import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
+import { FormValues } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";

@@ -2,8 +2,16 @@ import { z } from 'zod';
 
 export const RegisterSchema = z
   .object({
-    email: z.string().email({ message: "INVALID_EMAIL" }).trim(),
-    confirmEmail: z.string().email({ message: "INVALID_EMAIL" }).trim(),
+    email: z
+      .string()
+      .email({ message: "INVALID_EMAIL" })
+      .trim()
+      .transform((val) => val.toLowerCase()),
+    confirmEmail: z
+      .string()
+      .email({ message: "INVALID_EMAIL" })
+      .trim()
+      .transform((val) => val.toLowerCase()),
     password: z.string().min(5, { message: "TOO_SHORT" }),
     confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
     firstName: z.string().trim().optional(),
@@ -37,6 +45,18 @@ export const PasswordRecoverySchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
 });
 
+export const NewPasswordSchema = z.object({
+  password: z.string().min(5, { message: "TOO_SHORT" }),
+  confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
+  customerId: z.string().uuid(),
+  resetToken: z.string(),
+})
+.refine((data) => data.password === data.confirmPassword, {
+  path: ["confirmPassword"],
+  message: "PASSWORD_MISMATCH",
+});
+
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 export type LoginValues = z.infer<typeof LoginSchema>;
 export type PasswordRecoveryValue = z.infer<typeof PasswordRecoverySchema>;
+export type NewPasswordValues = z.infer<typeof NewPasswordSchema>;

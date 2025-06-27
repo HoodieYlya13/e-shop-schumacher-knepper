@@ -31,6 +31,8 @@
     "CONFIRM_PASSWORD": "Confirm password",
     "CREATE_ACCOUNT": "Create account",
     "RESET_PASSWORD": "Reset password",
+    "CHECK_YOUR_EMAIL": "Check your inbox at",
+    "SET_NEW_PASSWORD": "Set new password",
     "ACCEPTS_MARKETING": "Accept marketing",
     "LOGIN_SUCCESS": "Login successful! Welcome back.",
     "PHONE": "Phone",
