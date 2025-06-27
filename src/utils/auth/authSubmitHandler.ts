@@ -2,9 +2,9 @@ import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
-import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
-import { loginHandler } from "./shared/loginHandler";
-import { registerHandler } from "./shared/registerHandler";
+import { passwordRecoveryHandler } from "./sharedGit/passwordRecoveryHandler";
+import { loginHandler } from "./sharedGit/loginHandler";
+import { registerHandler } from "./sharedGit/registerHandler";
 
 export async function authSubmitHandler(
   data: FormValues,
