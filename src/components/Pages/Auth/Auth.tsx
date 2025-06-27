@@ -2,15 +2,15 @@
 
 import { useTranslations } from "next-intl";
 import React from "react";
-import ModeSwitch from "./sharedGit/ModeSwitch";
-import SignUp from "./sharedGit/SignUp";
-import SignIn from "./sharedGit/SignIn";
-import SubmitButton from "../../UI/sharedGit/SubmitButton";
+import ModeSwitch from "./shared/ModeSwitch";
+import SignUp from "./shared/SignUp";
+import SignIn from "./shared/SignIn";
+import SubmitButton from "../../UI/shared/SubmitButton";
 import { UseFormRegister } from "react-hook-form";
 import { LoginValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
-import NonFieldErrors from "./sharedGit/NonFieldErrors";
-import PasswordRecovery from "./sharedGit/PasswordRecovery";
+import NonFieldErrors from "./shared/NonFieldErrors";
+import PasswordRecovery from "./shared/PasswordRecovery";
 
 export default function Auth() {
   const t = useTranslations('AUTH');
