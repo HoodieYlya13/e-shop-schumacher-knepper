@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import InputField from "../../../UI/shared/InputField";
+import InputField from "../../../UI/sharedGit/InputField";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { LoginValues } from "@/schemas/authSchema";
 

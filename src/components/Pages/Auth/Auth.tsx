@@ -5,7 +5,7 @@ import React from "react";
 import ModeSwitch from "./sharedGit/ModeSwitch";
 import SignUp from "./sharedGit/SignUp";
 import SignIn from "./sharedGit/SignIn";
-import SubmitButton from "../../UI/shared/SubmitButton";
+import SubmitButton from "../../UI/sharedGit/SubmitButton";
 import { UseFormRegister } from "react-hook-form";
 import { LoginValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";

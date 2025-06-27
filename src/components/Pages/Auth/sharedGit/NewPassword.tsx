@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import InputField from "../../../UI/shared/InputField";
+import InputField from "../../../UI/sharedGit/InputField";
 import { NewPasswordValues } from "@/schemas/authSchema";
 
 interface NewPasswordProps {
