@@ -20,6 +20,7 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
         {...register("email")}
         errorText={errors.email && t(`ERRORS.${errors.email.message}`)}
         focusOnMount
+        autoComplete="email"
       />
 
       <InputField
@@ -27,6 +28,7 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
         placeholder={t("PASSWORD")}
         {...register("password")}
         errorText={errors.password && t(`ERRORS.${errors.password.message}`)}
+        autoComplete="current-password"
       />
 
       <div className="flex justify-end text-sm">

@@ -19,6 +19,7 @@ export default function PasswordRecovery({ register, errors, successText }: Pass
       {...register("email")}
       successText={successText ? t(successText) : undefined}
       errorText={errors.email && t(`ERRORS.${errors.email.message}`)}
+      autoComplete="email"
       focusOnMount
     />
   );

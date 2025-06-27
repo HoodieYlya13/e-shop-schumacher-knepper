@@ -18,6 +18,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         placeholder={t("EMAIL")}
         {...register("email")}
         errorText={errors.email && t(`ERRORS.${errors.email.message}`)}
+        autoComplete="email"
         focusOnMount
       />
 
@@ -28,6 +29,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         errorText={
           errors.confirmEmail && t(`ERRORS.${errors.confirmEmail.message}`)
         }
+        autoComplete="email"
       />
 
       <InputField
@@ -35,6 +37,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         placeholder={t("PASSWORD")}
         {...register("password")}
         errorText={errors.password && t(`ERRORS.${errors.password.message}`)}
+        autoComplete="new-password"
       />
 
       <InputField
@@ -45,6 +48,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
           errors.confirmPassword &&
           t(`ERRORS.${errors.confirmPassword.message}`)
         }
+        autoComplete="new-password"
       />
 
       <InputField
@@ -53,6 +57,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         {...register("firstName")}
         errorText={errors.firstName && t(`ERRORS.${errors.firstName.message}`)}
         required={false}
+        autoComplete="given-name"
       />
 
       <InputField
@@ -61,6 +66,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         {...register("lastName")}
         errorText={errors.lastName && t(`ERRORS.${errors.lastName.message}`)}
         required={false}
+        autoComplete="family-name"
       />
 
       <InputField
@@ -69,6 +75,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         {...register("phone")}
         errorText={errors.phone && t(`ERRORS.${errors.phone.message}`)}
         required={false}
+        autoComplete="tel"
       />
 
       <label className="flex items-center gap-2">

@@ -55,6 +55,7 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
         required={required}
         className={`w-full p-2 border rounded ${!!errorText ? "border-red-500" : ""}`}
         ref={combinedRef}
+        autoComplete={rest.autoComplete}
         {...rest}
       />
       {successText && (
