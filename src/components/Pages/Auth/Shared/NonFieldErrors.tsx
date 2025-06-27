@@ -17,7 +17,8 @@ export default function NonFieldErrors({ errors }: NonFieldErrorsProps) {
   if (
     errors.message === "LOGIN_ERROR" ||
     errors.message === "GENERIC" ||
-    errors.message === "UNIDENTIFIED_CUSTOMER"
+    errors.message === "UNIDENTIFIED_CUSTOMER" ||
+    errors.message === "AUTHENTICATION_PROBLEM"
   ) {
     return <p className="text-red-600">{t(`ERRORS.${errors.message}`)}</p>;
   }

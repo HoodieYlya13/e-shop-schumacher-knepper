@@ -1,4 +1,4 @@
-import AllProducts from '@/components/Pages/Home/Shared/AllProducts';
+import AllProducts from '@/components/Pages/Home/shared/AllProducts';
 
 export default async function Home({ locale }: { locale: string }) {
   return (

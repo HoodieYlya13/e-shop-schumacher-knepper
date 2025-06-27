@@ -5,7 +5,7 @@ import React from "react";
 
 interface ModeSwitchProps {
   mode: string;
-  handleModeChange: (newMode: "LOGIN" | "REGISTER" | "PASSWORD_RECOVER") => void;
+  handleModeChange: (newMode: "LOGIN" | "REGISTER" | "PASSWORD_RECOVERY") => void;
 }
 
 export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) {

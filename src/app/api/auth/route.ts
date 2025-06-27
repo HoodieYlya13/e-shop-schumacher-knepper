@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { registerCustomer, loginCustomer, recoverCustomer } from '@/lib/services/auth';
+import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount } from '@/lib/services/auth';
 
 export async function POST(req: NextRequest) {
   const { mode, email, password, firstName, lastName, phone, acceptsMarketing } = await req.json();
@@ -8,8 +8,14 @@ export async function POST(req: NextRequest) {
   const buyerIp = forwardedFor?.split(',')[0]?.trim();
 
   try {
+    let response;
+    
+    if (!mode || !['REGISTER', 'LOGIN', 'PASSWORD_RECOVERY'].includes(mode)) {
+      return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
+    }
+
     if (mode === 'REGISTER') {
-      const response = await registerCustomer(
+      response = await createCustomerAccount(
         {
           email,
           password,
@@ -20,20 +26,17 @@ export async function POST(req: NextRequest) {
         },
         buyerIp
       );
-      return NextResponse.json(response);
     }
 
     if (mode === 'LOGIN') {
-      const response = await loginCustomer({ email, password }, buyerIp);
-      return NextResponse.json(response);
+      response = await createCustomerAccessToken({ email, password }, buyerIp);
     }
 
-    if (mode === 'PASSWORD_RECOVER') {
-      const response = await recoverCustomer(email, buyerIp);
-      return NextResponse.json(response);
+    if (mode === 'PASSWORD_RECOVERY') {
+      response = await recoverCustomerAccount(email, buyerIp);
     }
 
-    return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
+    return NextResponse.json(response);
   } catch (error: unknown) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

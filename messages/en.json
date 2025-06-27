@@ -21,7 +21,7 @@
   "AUTH": {
     "LOGIN": "Sign in",
     "REGISTER": "Sign up",
-    "PASSWORD_RECOVER": "Password recovery",
+    "PASSWORD_RECOVERY": "Password recovery",
     "LOADING": "Loading...",
     "EMAIL": "Email",
     "CONFIRM_EMAIL": "Confirm email",
@@ -41,14 +41,13 @@
       "GENERIC": "An unexpected error occurred.",
       "TOO_SHORT": "Password is too short.",
       "INVALID_EMAIL": "Invalid email address.",
-      "REQUIRED": "This field is required.",
       "EMAIL_TAKEN": "Email has already been taken.",
       "PHONE_TAKEN": "Phone has already been taken.",
       "INVALID": "Enter a valid phone number.",
       "EMAIL_MISMATCH": "Emails do not match.",
       "PASSWORD_MISMATCH": "Passwords do not match.",
       "LOGIN_ERROR": "Login failed. Please check your email or password.",
-      "AUTHENTIFICATION_PROBLEM": "Please log in again.",
+      "AUTHENTICATION_PROBLEM": "Please log in again.",
       "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting.",
       "UNIDENTIFIED_CUSTOMER": "Unidentified customer. Please sign up."
     }

@@ -34,7 +34,7 @@ const LOGIN_MUTATION = `
   }
 `;
 
-const RECOVER_MUTATION = `
+const PASSWORD_RECOVERY_MUTATION = `
   mutation customerRecover($email: String!) {
     customerRecover(email: $email) {
       customerUserErrors {
@@ -46,7 +46,7 @@ const RECOVER_MUTATION = `
   }
 `;
 
-export async function registerCustomer(
+export async function createCustomerAccount(
   input: {
     email: string;
     password: string;
@@ -63,7 +63,7 @@ export async function registerCustomer(
   });
 }
 
-export async function loginCustomer(
+export async function createCustomerAccessToken(
   input: {
     email: string;
     password: string;
@@ -76,8 +76,8 @@ export async function loginCustomer(
   });
 }
 
-export async function recoverCustomer(email: string, buyerIp?: string) {
-  return shopifyServerFetch(RECOVER_MUTATION, {
+export async function recoverCustomerAccount(email: string, buyerIp?: string) {
+  return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, {
     variables: { email },
     buyerIp,
   });

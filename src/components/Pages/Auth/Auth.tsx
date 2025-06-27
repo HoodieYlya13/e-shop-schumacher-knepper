@@ -2,34 +2,33 @@
 
 import { useTranslations } from "next-intl";
 import React from "react";
-import ModeSwitch from "./Shared/ModeSwitch";
-import SignUp from "./Shared/SignUp";
-import SignIn from "./Shared/SignIn";
-import SubmitButton from "../../UI/Shared/SubmitButton";
+import ModeSwitch from "./shared/ModeSwitch";
+import SignUp from "./shared/SignUp";
+import SignIn from "./shared/SignIn";
+import SubmitButton from "../../UI/shared/SubmitButton";
 import { UseFormRegister } from "react-hook-form";
-import { LoginValues, PasswordRecoverValue, RegisterValues } from "@/schemas/authSchema";
+import { LoginValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
-import NonFieldErrors from "./Shared/NonFieldErrors";
-import PasswordRecover from "./Shared/PasswordRecover";
+import NonFieldErrors from "./shared/NonFieldErrors";
+import PasswordRecovery from "./shared/PasswordRecovery";
 
 export default function Auth() {
   const t = useTranslations('AUTH');
-  const [mode, setMode] = React.useState<'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVER'>('LOGIN');
-  const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVER') => {
+  const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY') => {
     form.reset(form.getValues());
-    setMode(newMode);
+    form.setMode(newMode);
   }
-  const form = useAuthForm(mode);
+  const form = useAuthForm();
 
   return (
     <section className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
-      <h1 className="text-2xl font-bold">{t(mode)}</h1>
+      <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 
-      <ModeSwitch mode={mode} handleModeChange={handleModeChange} />
+      <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
 
       <form onSubmit={form.handleSubmit} className="space-y-4">
         {(() => {
-          switch (mode) {
+          switch (form.mode) {
             case "REGISTER":
               return (
                 <SignUp
@@ -47,9 +46,9 @@ export default function Auth() {
               );
             default:
               return (
-                <PasswordRecover
+                <PasswordRecovery
                   register={
-                    form.register as UseFormRegister<PasswordRecoverValue>
+                    form.register as UseFormRegister<PasswordRecoveryValue>
                   }
                   errors={form.isSubmitted ? form.errors : {}}
                   successText={form.successMessage}
@@ -65,8 +64,8 @@ export default function Auth() {
               : {
                   REGISTER: "CREATE_ACCOUNT",
                   LOGIN: "LOGIN",
-                  PASSWORD_RECOVER: "RESET_PASSWORD",
-                }[mode]
+                  PASSWORD_RECOVERY: "RESET_PASSWORD",
+                }[form.mode]
           )}
           error={
             form.isSubmitted &&

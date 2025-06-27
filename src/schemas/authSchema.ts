@@ -6,8 +6,8 @@ export const RegisterSchema = z
     confirmEmail: z.string().email({ message: "INVALID_EMAIL" }).trim(),
     password: z.string().min(5, { message: "TOO_SHORT" }),
     confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
-    firstName: z.string().min(1, { message: "REQUIRED" }).trim(),
-    lastName: z.string().min(1, { message: "REQUIRED" }).trim(),
+    firstName: z.string().trim().optional(),
+    lastName: z.string().trim().optional(),
     phone: z
       .string()
       .trim()
@@ -33,10 +33,10 @@ export const LoginSchema = z.object({
   password: z.string().min(5, { message: "TOO_SHORT" }),
 });
 
-export const PasswordRecoverSchema = z.object({
+export const PasswordRecoverySchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
 });
 
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 export type LoginValues = z.infer<typeof LoginSchema>;
-export type PasswordRecoverValue = z.infer<typeof PasswordRecoverSchema>;
+export type PasswordRecoveryValue = z.infer<typeof PasswordRecoverySchema>;

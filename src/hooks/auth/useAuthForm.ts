@@ -8,17 +8,18 @@ import {
   LoginSchema,
   RegisterValues,
   LoginValues,
-  PasswordRecoverValue,
-  PasswordRecoverSchema,
+  PasswordRecoveryValue,
+  PasswordRecoverySchema,
 } from "@/schemas/authSchema";
-import { useEffect, useState } from "react";
-import { handleAuthSubmit } from "@/utils/auth/authSubmitHandler";
+import React, { useEffect, useState } from "react";
+import { authSubmitHandler } from "@/utils/auth/authSubmitHandler";
 
-export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVER";
-export type FormValues = RegisterValues | LoginValues | PasswordRecoverValue;
+export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY";
+export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue;
 
-export function useAuthForm(mode: Mode) {
+export function useAuthForm() {
   const router = useRouter();
+  const [mode, setMode] = React.useState<'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY'>('LOGIN');
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -28,8 +29,8 @@ export function useAuthForm(mode: Mode) {
         return RegisterSchema;
       case "LOGIN":
         return LoginSchema;
-      case "PASSWORD_RECOVER":
-        return PasswordRecoverSchema;
+      case "PASSWORD_RECOVERY":
+        return PasswordRecoverySchema;
       default:
         throw new Error("Invalid mode");
     }
@@ -69,42 +70,41 @@ export function useAuthForm(mode: Mode) {
     };
   };
 
-  const email = watch("email");
-  useEffect(() => {
-    if (
-      mode === "REGISTER" &&
-      "confirmEmail" in touchedFields &&
-      touchedFields.confirmEmail
-    ) {
-      trigger("confirmEmail");
-    }
-  }, [mode, email, touchedFields, trigger]);
-
-  const password = watch("password");
-  useEffect(() => {
-    if (
-      mode === "REGISTER" &&
-      "confirmPassword" in touchedFields &&
-      touchedFields.confirmPassword
-    ) {
-      trigger("confirmPassword");
-    }
-  }, [mode, password, touchedFields, trigger]);
-
   useEffect(() => {
     setValidateOnChangeFields(new Set());
   }, [mode]);
 
+  function triggerVerification(
+    watchedField: unknown,
+    confirmField: keyof RegisterValues
+  ) {
+    useEffect(() => {
+      if (
+        mode === "REGISTER" &&
+        (touchedFields as Partial<RegisterValues>)[confirmField]
+      ) {
+        trigger(confirmField);
+      }
+    }, [mode, watchedField, touchedFields, trigger]);
+  }
+  
+  const email = watch("email");
+  triggerVerification(email, "confirmEmail");
+  
+  const password = watch("password");
+  triggerVerification(password, "confirmPassword");
+
   return {
     register: customRegister,
     handleSubmit: handleSubmit((data) =>
-      handleAuthSubmit(
+      authSubmitHandler(
         data,
         mode,
         clearErrors,
         setError,
         router,
-        setSuccessMessage
+        setSuccessMessage,
+        setMode
       )
     ),
     watch,
@@ -117,5 +117,7 @@ export function useAuthForm(mode: Mode) {
     reset,
     getValues,
     successMessage,
+    mode,
+    setMode,
   };
 }

@@ -57,10 +57,10 @@ export default function Account() {
         <strong>Email:</strong> {customer.email}
       </p>
       <p>
-        <strong>First Name:</strong> {customer.firstName}
+        <strong>First Name:</strong> {customer.firstName ? customer.firstName : "Not provided"}
       </p>
       <p>
-        <strong>Last Name:</strong> {customer.lastName}
+        <strong>Last Name:</strong> {customer.lastName ? customer.firstName : "Not provided"}
       </p>
       <p>
         <strong>Phone:</strong> {customer.phone ?? "Not provided"}

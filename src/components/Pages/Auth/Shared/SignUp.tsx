@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import InputField from "../../../UI/Shared/InputField";
+import InputField from "../../../UI/shared/InputField";
 import { RegisterValues } from "@/schemas/authSchema";
 
 interface SignUpProps {
@@ -49,16 +49,18 @@ export default function SignUp({ register, errors }: SignUpProps) {
 
       <InputField
         type="text"
-        placeholder={t("FIRST_NAME")}
+        placeholder={`${t("FIRST_NAME")} (${t("OPTIONAL")})`}
         {...register("firstName")}
         errorText={errors.firstName && t(`ERRORS.${errors.firstName.message}`)}
+        required={false}
       />
 
       <InputField
         type="text"
-        placeholder={t("LAST_NAME")}
+        placeholder={`${t("LAST_NAME")} (${t("OPTIONAL")})`}
         {...register("lastName")}
         errorText={errors.lastName && t(`ERRORS.${errors.lastName.message}`)}
+        required={false}
       />
 
       <InputField
