@@ -1,4 +1,4 @@
-import PageBuilder from '@/components/PageBuilder/PageBuilder';
+import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
 import About from '@/components/Pages/About/About';
 
 export default async function AboutPage({

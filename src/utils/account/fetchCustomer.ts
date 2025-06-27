@@ -16,10 +16,10 @@ export async function fetchCustomerData(token: string): Promise<Customer> {
     }),
   });
 
-  const json = await response.json();
+  const json = await response.json();  
 
-  if (!response.ok || json.error) {
-    throw new Error(json.error || "Failed to fetch customer");
+  if (!response.ok || !json) {
+    throw new Error("Failed to fetch customer");
   }
 
   return json;

@@ -34,6 +34,18 @@ const LOGIN_MUTATION = `
   }
 `;
 
+const RECOVER_MUTATION = `
+  mutation customerRecover($email: String!) {
+    customerRecover(email: $email) {
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
 export async function registerCustomer(
   input: {
     email: string;
@@ -60,6 +72,13 @@ export async function loginCustomer(
 ) {
   return shopifyServerFetch(LOGIN_MUTATION, {
     variables: { input },
+    buyerIp,
+  });
+}
+
+export async function recoverCustomer(email: string, buyerIp?: string) {
+  return shopifyServerFetch(RECOVER_MUTATION, {
+    variables: { email },
     buyerIp,
   });
 }

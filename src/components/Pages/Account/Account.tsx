@@ -5,8 +5,11 @@ import { useRouter } from "next/navigation";
 import { Customer, Metafield } from "@shopify/hydrogen-react/storefront-api-types";
 import { logout } from "@/utils/account/logoutHandler";
 import { fetchCustomerData } from "@/utils/account/fetchCustomer";
+import { useTranslations } from "next-intl";
 
 export default function Account() {
+  const t = useTranslations("AUTH");
+
   const [customer, setCustomer] = useState<Customer | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -23,12 +26,12 @@ export default function Account() {
 
     fetchCustomerData(token)
       .then(setCustomer)
-      .catch((err) => setError(err.message))
+      .catch(() => setError("GENERIC"))
       .finally(() => setLoading(false));
   }, []);
 
   if (loading) return <p>Loading customer data...</p>;
-  if (error) return <p className="text-red-600">Error: {error}</p>;
+  if (error) return <p className="text-red-600">{t("ERRORS." + error)}</p>;
   if (!customer) return <p>No customer information available.</p>;
 
   const validMetafields = customer.metafields.filter(

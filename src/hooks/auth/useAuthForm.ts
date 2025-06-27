@@ -8,18 +8,32 @@ import {
   LoginSchema,
   RegisterValues,
   LoginValues,
+  PasswordRecoverValue,
+  PasswordRecoverSchema,
 } from "@/schemas/authSchema";
 import { useEffect, useState } from "react";
 import { handleAuthSubmit } from "@/utils/auth/authSubmitHandler";
 
-export type Mode = "REGISTER" | "LOGIN";
-export type FormValues = RegisterValues | LoginValues;
+export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVER";
+export type FormValues = RegisterValues | LoginValues | PasswordRecoverValue;
 
 export function useAuthForm(mode: Mode) {
   const router = useRouter();
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const schema = mode === "REGISTER" ? RegisterSchema : LoginSchema;
+  const schema = (() => {
+    switch (mode) {
+      case "REGISTER":
+        return RegisterSchema;
+      case "LOGIN":
+        return LoginSchema;
+      case "PASSWORD_RECOVER":
+        return PasswordRecoverSchema;
+      default:
+        throw new Error("Invalid mode");
+    }
+  })();
 
   const {
     register,
@@ -27,8 +41,10 @@ export function useAuthForm(mode: Mode) {
     watch,
     trigger,
     formState: { errors, isSubmitting, isSubmitted, isValid, touchedFields },
+    reset,
     setError,
     clearErrors,
+    getValues,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
     mode: "onBlur",
@@ -82,12 +98,24 @@ export function useAuthForm(mode: Mode) {
   return {
     register: customRegister,
     handleSubmit: handleSubmit((data) =>
-      handleAuthSubmit(data, mode, clearErrors, setError, router)
+      handleAuthSubmit(
+        data,
+        mode,
+        clearErrors,
+        setError,
+        router,
+        setSuccessMessage
+      )
     ),
+    watch,
     errors,
     isSubmitting,
     isSubmitted,
     isValid,
+    setError,
     clearErrors,
+    reset,
+    getValues,
+    successMessage,
   };
 }

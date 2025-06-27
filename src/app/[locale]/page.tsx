@@ -1,4 +1,4 @@
-import PageBuilder from '@/components/PageBuilder/PageBuilder';
+import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
 import Home from '@/components/Pages/Home/Home';
 
 export default async function HomePage(props: {

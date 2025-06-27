@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { registerCustomer, loginCustomer } from '@/lib/services/auth';
+import { registerCustomer, loginCustomer, recoverCustomer } from '@/lib/services/auth';
 
 export async function POST(req: NextRequest) {
   const { mode, email, password, firstName, lastName, phone, acceptsMarketing } = await req.json();
@@ -25,6 +25,11 @@ export async function POST(req: NextRequest) {
 
     if (mode === 'LOGIN') {
       const response = await loginCustomer({ email, password }, buyerIp);
+      return NextResponse.json(response);
+    }
+
+    if (mode === 'PASSWORD_RECOVER') {
+      const response = await recoverCustomer(email, buyerIp);
       return NextResponse.json(response);
     }
 

@@ -21,6 +21,7 @@
   "AUTH": {
     "LOGIN": "Sign in",
     "REGISTER": "Sign up",
+    "PASSWORD_RECOVER": "Password recovery",
     "LOADING": "Loading...",
     "EMAIL": "Email",
     "CONFIRM_EMAIL": "Confirm email",
@@ -29,10 +30,13 @@
     "PASSWORD": "Password",
     "CONFIRM_PASSWORD": "Confirm password",
     "CREATE_ACCOUNT": "Create account",
+    "RESET_PASSWORD": "Reset password",
     "ACCEPTS_MARKETING": "Accept marketing",
     "LOGIN_SUCCESS": "Login successful! Welcome back.",
     "PHONE": "Phone",
     "OPTIONAL": "optional",
+    "FORGOT_PASSWORD": "Forgot password?",
+    "PASSWORD_RESET_SENT": "Password reset link sent!",
     "ERRORS": {
       "GENERIC": "An unexpected error occurred.",
       "TOO_SHORT": "Password is too short.",
@@ -45,7 +49,8 @@
       "PASSWORD_MISMATCH": "Passwords do not match.",
       "LOGIN_ERROR": "Login failed. Please check your email or password.",
       "AUTHENTIFICATION_PROBLEM": "Please log in again.",
-      "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting."
+      "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting.",
+      "UNIDENTIFIED_CUSTOMER": "Unidentified customer. Please sign up."
     }
   }
 }

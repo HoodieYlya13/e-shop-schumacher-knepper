@@ -1,6 +1,6 @@
 import { useTranslations } from "next-intl";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
-import InputField from "./InputField";
+import InputField from "../../../UI/Shared/InputField";
 import { RegisterValues } from "@/schemas/authSchema";
 
 interface SignUpProps {

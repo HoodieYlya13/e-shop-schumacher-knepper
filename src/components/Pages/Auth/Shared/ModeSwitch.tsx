@@ -5,21 +5,16 @@ import React from "react";
 
 interface ModeSwitchProps {
   mode: string;
-  setMode: React.Dispatch<React.SetStateAction<"LOGIN" | "REGISTER">>;
-  clearErrors: () => void;
+  handleModeChange: (newMode: "LOGIN" | "REGISTER" | "PASSWORD_RECOVER") => void;
 }
 
-export default function ModeSwitch({ mode, setMode, clearErrors }: ModeSwitchProps) {
+export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) {
   const t = useTranslations('AUTH');
-  const switchMode = (newMode: "LOGIN" | "REGISTER") => {
-    setMode(newMode);
-    clearErrors();
-  };
 
   return (
     <div className="flex gap-4">
       <button
-        onClick={() => switchMode("LOGIN")}
+        onClick={() => handleModeChange("LOGIN")}
         className={`px-4 py-2 rounded ${
           mode === "LOGIN" ? "bg-black text-white" : "bg-gray-200"
         }`}
@@ -27,7 +22,7 @@ export default function ModeSwitch({ mode, setMode, clearErrors }: ModeSwitchPro
         {t("LOGIN")}
       </button>
       <button
-        onClick={() => switchMode("REGISTER")}
+        onClick={() => handleModeChange("REGISTER")}
         className={`px-4 py-2 rounded ${
           mode === "REGISTER" ? "bg-black text-white" : "bg-gray-200"
         }`}

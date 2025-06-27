@@ -3,14 +3,19 @@
 import React, { useEffect, useRef, useState } from "react";
 
 interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  type: "text" | "email" | "password" | "number" | "tel";
+  placeholder?: string;
+  successText?: string;
   errorText?: string;
+  required?: boolean;
   focusOnMount?: boolean;
 }
 
 const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
   type,
   placeholder,
-  errorText = undefined,
+  successText,
+  errorText,
   required = true,
   focusOnMount = false,
   ...rest
@@ -52,6 +57,9 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
         ref={combinedRef}
         {...rest}
       />
+      {successText && (
+        <p className="text-sm text-green-600">{successText}</p>
+      )}
       {showError && errorText && (
         <p className="text-sm text-red-600">{errorText}</p>
       )}

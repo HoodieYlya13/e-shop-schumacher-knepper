@@ -33,5 +33,10 @@ export const LoginSchema = z.object({
   password: z.string().min(5, { message: "TOO_SHORT" }),
 });
 
+export const PasswordRecoverSchema = z.object({
+  email: z.string().email({ message: "INVALID_EMAIL" }),
+});
+
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 export type LoginValues = z.infer<typeof LoginSchema>;
+export type PasswordRecoverValue = z.infer<typeof PasswordRecoverSchema>;
