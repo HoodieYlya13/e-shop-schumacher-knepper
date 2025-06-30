@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -18,7 +17,6 @@ export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY";
 export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue;
 
 export function useAuthForm() {
-  const router = useRouter();
   const [mode, setMode] = React.useState<'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY' | 'NEW_PASSWORD'>('LOGIN');
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -102,7 +100,6 @@ export function useAuthForm() {
         mode,
         clearErrors,
         setError,
-        router,
         setSuccessMessage,
         setMode
       )

@@ -1,13 +1,15 @@
 import { NewPasswordValues } from "@/schemas/authSchema";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { useRouter } from "next/navigation";
 import { UseFormSetError } from "react-hook-form";
 
 export async function resetPasswordHandler(
   data: NewPasswordValues,
   clearErrors: () => void,
   setError: UseFormSetError<NewPasswordValues>,
-  router: AppRouterInstance,
 ) {
+  // const router = useRouter();
+  console.log("called resetPasswordHandler");
+
   try {
     clearErrors();
     const response = await fetch("/api/auth", {
@@ -18,7 +20,6 @@ export async function resetPasswordHandler(
     const json = await response.json();
 
     if (!response.ok || !json) {
-      router.push("/");
       setError("root", { message: "GENERIC" });
       return;
     }

@@ -5,12 +5,11 @@ import React from "react";
 import ModeSwitch from "./shared/ModeSwitch";
 import SignUp from "./shared/SignUp";
 import SignIn from "./shared/SignIn";
-import SubmitButton from "../../UI/shared/SubmitButton";
 import { UseFormRegister } from "react-hook-form";
 import { LoginValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
-import NonFieldErrors from "./shared/NonFieldErrors";
 import PasswordRecovery from "./shared/PasswordRecovery";
+import Form from "@/components/UI/shared/components/Form";
 
 export default function Auth() {
   const t = useTranslations('AUTH');
@@ -26,7 +25,28 @@ export default function Auth() {
 
       <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
 
-      <form onSubmit={form.handleSubmit} className="space-y-4">
+      <Form
+        handleSubmit={form.handleSubmit}
+        buttonProps={{
+          label: t(
+            form.isSubmitting
+              ? "LOADING"
+              : {
+                  REGISTER: "CREATE_ACCOUNT",
+                  LOGIN: "LOGIN",
+                  PASSWORD_RECOVERY: "RESET_PASSWORD",
+                  NEW_PASSWORD: "SET_NEW_PASSWORD",
+                }[form.mode]
+          ),
+          error:
+            form.isSubmitted &&
+            Object.keys(form.errors).some((key) => key !== "root")
+              ? t("ERRORS.CORRECT_FIELDS_BEFORE_SUBMIT")
+              : undefined,
+          disabled: form.isSubmitting,
+        }}
+        errors={form.errors.root}
+      >
         {(() => {
           switch (form.mode) {
             case "REGISTER":
@@ -39,7 +59,9 @@ export default function Auth() {
             case "PASSWORD_RECOVERY":
               return (
                 <PasswordRecovery
-                  register={form.register as UseFormRegister<PasswordRecoveryValue>}
+                  register={
+                    form.register as UseFormRegister<PasswordRecoveryValue>
+                  }
                   errors={form.isSubmitted ? form.errors : {}}
                   successText={form.successMessage}
                   email={form.getValues("email")}
@@ -55,29 +77,7 @@ export default function Auth() {
               );
           }
         })()}
-
-        <SubmitButton
-          label={t(
-            form.isSubmitting
-              ? "LOADING"
-              : {
-                  REGISTER: "CREATE_ACCOUNT",
-                  LOGIN: "LOGIN",
-                  PASSWORD_RECOVERY: "RESET_PASSWORD",
-                  NEW_PASSWORD: "SET_NEW_PASSWORD",
-                }[form.mode]
-          )}
-          error={
-            form.isSubmitted &&
-            Object.keys(form.errors).some((key) => key !== "root")
-              ? t("ERRORS.CORRECT_FIELDS_BEFORE_SUBMIT")
-              : undefined
-          }
-          disabled={form.isSubmitting}
-        />
-
-        {form.errors.root && <NonFieldErrors errors={form.errors.root} />}
-      </form>
+      </Form>
     </section>
   );
 }

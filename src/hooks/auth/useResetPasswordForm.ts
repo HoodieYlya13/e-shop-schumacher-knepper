@@ -1,14 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { NewPasswordSchema, NewPasswordValues } from "@/schemas/authSchema";
 import { useEffect, useState } from "react";
 import { resetPasswordHandler } from "@/utils/auth/resetPasswordHandler";
 
-export function useResetPasswordForm(customerId: string, resetToken: string) {
-  const router = useRouter();
+export function useResetPasswordForm() {
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
 
   const {
@@ -20,6 +18,7 @@ export function useResetPasswordForm(customerId: string, resetToken: string) {
     reset,
     setError,
     clearErrors,
+    setValue,
     getValues,
   } = useForm<NewPasswordValues>({
     resolver: zodResolver(NewPasswordSchema),
@@ -62,14 +61,9 @@ export function useResetPasswordForm(customerId: string, resetToken: string) {
     register: customRegister,
     handleSubmit: handleSubmit((data) =>
       resetPasswordHandler(
-        {
-          ...data,
-          customerId,
-          resetToken,
-        },
+        data,
         clearErrors,
-        setError,
-        router
+        setError
       )
     ),
     watch,
@@ -80,6 +74,7 @@ export function useResetPasswordForm(customerId: string, resetToken: string) {
     setError,
     clearErrors,
     reset,
-    getValues,
+    setValue,
+    getValues
   };
 }

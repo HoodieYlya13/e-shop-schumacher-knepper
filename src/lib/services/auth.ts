@@ -46,6 +46,29 @@ const PASSWORD_RECOVERY_MUTATION = `
   }
 `;
 
+const PASSWORD_RESET_MUTATION = `
+  mutation resetCustomerAccount($id: ID!, $input: CustomerResetInput!) {
+    customerReset(id: $id, input: $input) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+        phone
+      }
+      customerAccessToken {
+        accessToken
+        expiresAt
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
+
 export async function createCustomerAccount(
   input: {
     email: string;
@@ -79,6 +102,20 @@ export async function createCustomerAccessToken(
 export async function recoverCustomerAccount(email: string, buyerIp?: string) {
   return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, {
     variables: { email },
+    buyerIp,
+  });
+}
+
+export async function resetCustomerPassword(
+  id: string,
+  input: {
+    password: string;
+    resetToken: string;
+  },
+  buyerIp?: string
+) {
+  return shopifyServerFetch(PASSWORD_RESET_MUTATION, {
+    variables: { id: `gid://shopify/Customer/${id}`, input },
     buyerIp,
   });
 }

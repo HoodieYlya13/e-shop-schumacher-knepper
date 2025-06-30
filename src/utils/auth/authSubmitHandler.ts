@@ -1,17 +1,16 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
 import { loginHandler } from "./shared/loginHandler";
 import { registerHandler } from "./shared/registerHandler";
+import { useRouter } from "next/navigation";
 
 export async function authSubmitHandler(
   data: FormValues,
   mode: Mode,
   clearErrors: () => void,
   setError: UseFormSetError<FormValues>,
-  router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: (mode: "LOGIN") => void,
   afterRegister: boolean = false
@@ -19,14 +18,14 @@ export async function authSubmitHandler(
   try {
     clearErrors();
     setSuccessMessage(null);
-
+    
     const response = await fetch("/api/auth", {
       method: "POST",
       body: JSON.stringify({ mode, ...data }),
     });
-
+    
     const json = await response.json();
-
+    
     if (
       !response.ok ||
       (mode === "REGISTER" && !json.customerCreate) ||
@@ -37,6 +36,8 @@ export async function authSubmitHandler(
       return;
     }
 
+    const router = useRouter();
+    
     if (mode === "REGISTER") {
       registerHandler(
         data as RegisterValues,
