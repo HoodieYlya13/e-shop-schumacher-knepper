@@ -14,12 +14,13 @@ export async function passwordRecoveryHandler(
     };
   },
 ) {
-  const message = json.customerRecover?.customerUserErrors?.[0]?.code;
+  const errorMessage = json.customerRecover?.customerUserErrors?.[0]?.code;
 
-  if (message) {
-    setError("root", { message: message });
+  if (errorMessage) {
+    const message =
+      errorMessage === "UNIDENTIFIED_CUSTORMER" ? errorMessage : "GENERIC";
+    setError("root", { message });
     return;
   }
   setSuccessMessage("PASSWORD_RESET_SENT");
-  return;
 }

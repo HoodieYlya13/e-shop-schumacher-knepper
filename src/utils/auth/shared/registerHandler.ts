@@ -1,4 +1,4 @@
-import { FormValues } from "@/hooks/auth/useAuthForm";
+import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
 import { UseFormSetError } from "react-hook-form";
 import { authSubmitHandler } from "../authSubmitHandler";
@@ -10,7 +10,8 @@ export async function registerHandler(
   setError: UseFormSetError<FormValues>,
   router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
-  setMode: (mode: "LOGIN") => void,
+  setMode: React.Dispatch<React.SetStateAction<Mode>>,
+  setValue: (name: keyof FormValues, value: string) => void,
   json: {
     customerCreate: {
       customer?: {
@@ -37,8 +38,8 @@ export async function registerHandler(
         setError(key, { message: "EMAIL_TAKEN" });
       } else if (key === "phone" && code === "TAKEN") {
         setError(key, { message: "PHONE_TAKEN" });
-      } else if (code) {
-        setError("root", { message: code });
+      } else {
+        setError("root", { message: "GENERIC" });
       }
     });
     return;
@@ -52,7 +53,7 @@ export async function registerHandler(
     router,
     setSuccessMessage,
     setMode,
+    setValue,
     true
   );
-  return;
 }

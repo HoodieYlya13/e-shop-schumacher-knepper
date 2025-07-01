@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import InputField from "../../../UI/shared/elements/InputField";
+import InputField from "../../../UI/shared/elements/Input";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { PasswordRecoveryValue } from "@/schemas/authSchema";
 import { useMemo } from "react";

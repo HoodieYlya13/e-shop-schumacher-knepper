@@ -22,6 +22,7 @@
     "LOGIN": "Sign in",
     "REGISTER": "Sign up",
     "PASSWORD_RECOVERY": "Password recovery",
+    "NEW_PASSWORD": "Reset password",
     "LOADING": "Loading...",
     "EMAIL": "Email",
     "CONFIRM_EMAIL": "Confirm email",
@@ -51,7 +52,9 @@
       "LOGIN_ERROR": "Login failed. Please check your email or password.",
       "AUTHENTICATION_PROBLEM": "Please log in again.",
       "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting.",
-      "UNIDENTIFIED_CUSTOMER": "Unidentified customer. Please sign up."
+      "UNIDENTIFIED_CUSTOMER": "Unidentified customer. Please sign up.",
+      "LINK_UNAVAILABLE": "Link unavailable. Please try your request again.",
+      "TOKEN_INVALID": "Invalid token. Please request a new password reset."
     }
   }
 }

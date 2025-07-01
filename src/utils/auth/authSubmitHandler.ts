@@ -5,6 +5,7 @@ import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
 import { loginHandler } from "./shared/loginHandler";
 import { registerHandler } from "./shared/registerHandler";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { resetPasswordHandler } from "./shared/resetPasswordHandler";
 
 export async function authSubmitHandler(
   data: FormValues,
@@ -13,7 +14,8 @@ export async function authSubmitHandler(
   setError: UseFormSetError<FormValues>,
   router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
-  setMode: (mode: "LOGIN") => void,
+  setMode: React.Dispatch<React.SetStateAction<Mode>>,
+  setValue: (name: keyof FormValues, value: string) => void,
   afterRegister: boolean = false
 ) {
   try {
@@ -31,30 +33,36 @@ export async function authSubmitHandler(
       !response.ok ||
       (mode === "REGISTER" && !json.customerCreate) ||
       (mode === "LOGIN" && !json.customerAccessTokenCreate) ||
-      (mode === "PASSWORD_RECOVERY" && !json.customerRecover)
+      (mode === "PASSWORD_RECOVERY" && !json.customerRecover) ||
+      (mode === "NEW_PASSWORD" && !json.customerReset)
     ) {
       setError("root", { message: "GENERIC" });
       return;
     }
     
     if (mode === "REGISTER") {
-      registerHandler(
+      return registerHandler(
         data as RegisterValues,
         clearErrors,
         setError,
         router,
         setSuccessMessage,
         setMode,
+        setValue,
         json
       );
     }
 
     if (mode === "LOGIN") {
-      loginHandler(setError, router, json, setMode, afterRegister);
+      return loginHandler(setError, router, json, setMode, afterRegister);
     }
 
     if (mode === "PASSWORD_RECOVERY") {
-      passwordRecoveryHandler(setError, setSuccessMessage, json);
+      return passwordRecoveryHandler(setError, setSuccessMessage, json);
+    }
+
+    if (mode === "NEW_PASSWORD") {
+      return resetPasswordHandler(router, setError, setMode, setValue, json);
     }
   } catch {
     setError("root", { message: "GENERIC" });

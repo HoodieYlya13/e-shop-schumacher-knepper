@@ -2,7 +2,7 @@
 
 import React from "react";
 import SubmitButton from "../elements/SubmitButton";
-import NonFieldErrors from "@/components/Pages/Auth/shared/NonFieldErrors";
+import RootErrors from "@/components/Pages/Auth/shared/RootErrors";
 
 interface FormProps {
   children: React.ReactNode;
@@ -36,7 +36,7 @@ export default function Form({
         disabled={buttonProps.disabled}
       />
 
-      {errors && <NonFieldErrors errors={errors} />}
+      {errors && <RootErrors errors={errors} />}
     </form>
   );
 }

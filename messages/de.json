@@ -22,6 +22,7 @@
     "LOGIN": "Anmelden",
     "REGISTER": "Registrieren",
     "PASSWORD_RECOVERY": "Passwort-Wiederherstellung",
+    "NEW_PASSWORD": "Passwort zurücksetzen",
     "LOADING": "Lade...",
     "EMAIL": "E-Mail",
     "CONFIRM_EMAIL": "E-Mail bestätigen",
@@ -51,7 +52,8 @@
       "LOGIN_ERROR": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre E-Mail oder Ihr Passwort.",
       "AUTHENTICATION_PROBLEM": "Bitte melden Sie sich erneut an.",
       "CORRECT_FIELDS_BEFORE_SUBMIT": "Bitte korrigieren Sie die Felder vor dem Absenden.",
-      "UNIDENTIFIED_CUSTOMER": "Unbekannter Kunde. Bitte registrieren Sie sich."
+      "UNIDENTIFIED_CUSTOMER": "Unbekannter Kunde. Bitte registrieren Sie sich.",
+      "LINK_UNAVAILABLE": "Link nicht verfügbar. Bitte versuchen Sie Ihre Anfrage erneut."
     }
   }
 }

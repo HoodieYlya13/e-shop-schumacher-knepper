@@ -22,8 +22,10 @@ export async function loginHandler(
 ) {
   const token =
     json?.customerAccessTokenCreate?.customerAccessToken?.accessToken;
-  const loginError =
-    json?.customerAccessTokenCreate?.customerUserErrors?.[0]?.message;
+  const loginError = json?.customerAccessTokenCreate?.customerUserErrors?.[0]
+    ?.message
+    ? "UNIDENTIFIED_CUSTOMER"
+    : null;
 
   if (!token) {
     const errorMessage = afterRegister ? "AUTHENTICATION_PROBLEM" : (loginError || "GENERIC");
@@ -34,6 +36,4 @@ export async function loginHandler(
   
   localStorage.setItem("shopify_token", token);
   router.push("/account");
-    
-  return;
 }

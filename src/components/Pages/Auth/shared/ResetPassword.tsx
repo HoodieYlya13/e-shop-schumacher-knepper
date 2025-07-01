@@ -1,14 +1,20 @@
-import { useTranslations } from "next-intl";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
-import InputField from "../../../UI/shared/elements/Input";
-import { NewPasswordValues } from "@/schemas/authSchema";
+"use client";
 
-interface NewPasswordProps {
+import InputField from "@/components/UI/shared/elements/Input";
+import { NewPasswordValues } from "@/schemas/authSchema";
+import { useTranslations } from "next-intl";
+import React from "react";
+import { FieldErrors, UseFormRegister } from "react-hook-form";
+
+interface ResetPasswordProps {
   register: UseFormRegister<NewPasswordValues>;
   errors: FieldErrors<NewPasswordValues>;
 }
 
-export default function NewPassword({ register, errors }: NewPasswordProps) {
+export default function ResetPassword({
+  register,
+  errors,
+}: ResetPasswordProps) {
   const t = useTranslations("AUTH");
 
   return (
@@ -17,7 +23,9 @@ export default function NewPassword({ register, errors }: NewPasswordProps) {
         type="password"
         placeholder={t("PASSWORD")}
         {...register("password")}
-        errorText={errors.password && t(`ERRORS.${errors.password.message}`)}
+        errorText={
+          errors.password && t(`ERRORS.${errors.password.message}`)
+        }
         autoComplete="new-password"
       />
 

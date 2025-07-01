@@ -22,6 +22,7 @@
     "LOGIN": "Se connecter",
     "REGISTER": "S'inscrire",
     "PASSWORD_RECOVERY": "Récupération de mot de passe",
+    "NEW_PASSWORD": "Réinitialiser le mot de passe",
     "LOADING": "Chargement...",
     "EMAIL": "Email",
     "CONFIRM_EMAIL": "Confirmer l'email",
@@ -51,7 +52,8 @@
       "LOGIN_ERROR": "Échec de la connexion. Veuillez vérifier votre email ou mot de passe.",
       "AUTHENTICATION_PROBLEM": "Veuillez vous reconnecter.",
       "CORRECT_FIELDS_BEFORE_SUBMIT": "Veuillez corriger les champs avant de soumettre.",
-      "UNIDENTIFIED_CUSTOMER": "Client non identifié. Veuillez vous inscrire."
+      "UNIDENTIFIED_CUSTOMER": "Client non identifié. Veuillez vous inscrire.",
+      "LINK_UNAVAILABLE": "Lien indisponible. Veuillez réessayer votre demande."
     }
   }
 }

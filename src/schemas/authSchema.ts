@@ -46,6 +46,7 @@ export const PasswordRecoverySchema = z.object({
 });
 
 export const NewPasswordSchema = z.object({
+  email: z.string().email({ message: "INVALID_EMAIL" }),
   password: z.string().min(5, { message: "TOO_SHORT" }),
   confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
   customerId: z.string(),

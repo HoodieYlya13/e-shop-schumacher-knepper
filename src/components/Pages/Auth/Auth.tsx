@@ -6,15 +6,21 @@ import ModeSwitch from "./shared/ModeSwitch";
 import SignUp from "./shared/SignUp";
 import SignIn from "./shared/SignIn";
 import { UseFormRegister } from "react-hook-form";
-import { LoginValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
+import { LoginValues, NewPasswordValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
 import PasswordRecovery from "./shared/PasswordRecovery";
 import Form from "@/components/UI/shared/components/Form";
+import ResetPassword from "./shared/ResetPassword";
 
 export default function Auth() {
+  const passwordsEnabled = true;
+  
   const t = useTranslations('AUTH');
-  const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY') => {
+  const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY' | 'NEW_PASSWORD') => {
     form.reset(form.getValues());
+    if (form.mode === "NEW_PASSWORD") {
+      form.setValue("email", "");
+    };
     form.setMode(newMode);
   }
   const form = useAuthForm();
@@ -23,7 +29,9 @@ export default function Auth() {
     <section className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
       <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 
-      <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
+      {passwordsEnabled && (
+        <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
+      )}
 
       <Form
         handleSubmit={form.handleSubmit}
@@ -43,7 +51,7 @@ export default function Auth() {
             Object.keys(form.errors).some((key) => key !== "root")
               ? t("ERRORS.CORRECT_FIELDS_BEFORE_SUBMIT")
               : undefined,
-          disabled: form.isSubmitting,
+          disabled: form.isSubmitting || !!form.successMessage,
         }}
         errors={form.errors.root}
       >
@@ -67,12 +75,20 @@ export default function Auth() {
                   email={form.getValues("email")}
                 />
               );
+            case "NEW_PASSWORD":
+              return (
+                <ResetPassword
+                  register={form.register as UseFormRegister<NewPasswordValues>}
+                  errors={form.errors}
+                />
+              );
             default:
               return (
                 <SignIn
                   register={form.register as UseFormRegister<LoginValues>}
                   errors={form.isSubmitted ? form.errors : {}}
                   handleModeChange={handleModeChange}
+                  passwordsEnabled={passwordsEnabled}
                 />
               );
           }

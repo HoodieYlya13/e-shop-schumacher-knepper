@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
-interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: "text" | "email" | "password" | "number" | "tel";
   placeholder?: string;
   successText?: string;
@@ -11,7 +11,7 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   focusOnMount?: boolean;
 }
 
-const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
+const Input = React.forwardRef<HTMLInputElement, InputProps>(({
   type,
   placeholder,
   successText,
@@ -68,6 +68,6 @@ const InputField = React.forwardRef<HTMLInputElement, InputFieldProps>(({
   );
 });
 
-InputField.displayName = "InputField";
+Input.displayName = "Input";
 
-export default InputField;
+export default Input;
