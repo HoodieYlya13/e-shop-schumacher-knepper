@@ -11,8 +11,10 @@ export default function ResetPassword() {
   const router = useRouter();
   const t = useTranslations("AUTH");
 
+  let resetUrl: string | null = null;
+
   const searchParams = new URLSearchParams(window.location.search);
-  const resetUrl = searchParams.get("reset_url");
+  resetUrl = searchParams.get("reset_url");
 
   if (!resetUrl) {
     // FIXME - This should be handled more gracefully, e.g., showing an error message
@@ -29,7 +31,6 @@ export default function ResetPassword() {
       customerId = match[1];
       resetToken = match[2];
     }
-    console.log(customerId, resetToken);
   }
 
   if (!customerId || !resetToken) {

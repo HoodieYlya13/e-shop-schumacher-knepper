@@ -1,15 +1,13 @@
 import { NewPasswordValues } from "@/schemas/authSchema";
-import { useRouter } from "next/navigation";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 
 export async function resetPasswordHandler(
   data: NewPasswordValues,
+  router: AppRouterInstance,
   clearErrors: () => void,
   setError: UseFormSetError<NewPasswordValues>,
 ) {
-  // const router = useRouter();
-  console.log("called resetPasswordHandler");
-
   try {
     clearErrors();
     const response = await fetch("/api/auth", {
@@ -18,22 +16,14 @@ export async function resetPasswordHandler(
     });
 
     const json = await response.json();
+    const token = json.customerReset?.customerAccessToken?.accessToken;
 
-    if (!response.ok || !json) {
+    if (token) {
+      localStorage.setItem("shopify_token", token);
+      router.push("/account");
+    } else {
       setError("root", { message: "GENERIC" });
-      return;
     }
-    console.log("json", json);
-
-    // if (token) {
-    //   localStorage.setItem("shopify_token", token);
-    //   router.push("/account");
-    // } else if (afterRegister) {
-    //   setMode("LOGIN");
-    //   setError("root", { message: "AUTHENTICATION_PROBLEM" });
-    // } else {
-    //   setError("root", { message: loginError ? "LOGIN_ERROR" : "GENERIC" });
-    // }
   } catch {
     setError("root", { message: "GENERIC" });
   }

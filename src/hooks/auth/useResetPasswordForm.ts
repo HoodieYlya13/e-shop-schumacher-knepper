@@ -5,8 +5,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { NewPasswordSchema, NewPasswordValues } from "@/schemas/authSchema";
 import { useEffect, useState } from "react";
 import { resetPasswordHandler } from "@/utils/auth/resetPasswordHandler";
+import { useRouter } from "next/navigation";
 
 export function useResetPasswordForm() {
+  const router = useRouter();
+
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
 
   const {
@@ -62,6 +65,7 @@ export function useResetPasswordForm() {
     handleSubmit: handleSubmit((data) =>
       resetPasswordHandler(
         data,
+        router,
         clearErrors,
         setError
       )

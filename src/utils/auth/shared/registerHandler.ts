@@ -1,8 +1,8 @@
 import { FormValues } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 import { authSubmitHandler } from "../authSubmitHandler";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export async function registerHandler(
   data: FormValues,

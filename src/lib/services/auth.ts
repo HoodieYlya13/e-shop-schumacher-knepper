@@ -19,6 +19,23 @@ const REGISTER_MUTATION = `
   }
 `;
 
+export async function createCustomerAccount(
+  input: {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phone?: string;
+    acceptsMarketing?: boolean;
+  },
+  buyerIp?: string
+) {
+  return shopifyServerFetch(REGISTER_MUTATION, {
+    variables: { input },
+    buyerIp,
+  });
+}
+
 const LOGIN_MUTATION = `
   mutation customerAccessTokenCreate($input: CustomerAccessTokenCreateInput!) {
     customerAccessTokenCreate(input: $input) {
@@ -34,6 +51,19 @@ const LOGIN_MUTATION = `
   }
 `;
 
+export async function createCustomerAccessToken(
+  input: {
+    email: string;
+    password: string;
+  },
+  buyerIp?: string
+) {
+  return shopifyServerFetch(LOGIN_MUTATION, {
+    variables: { input },
+    buyerIp,
+  });
+}
+
 const PASSWORD_RECOVERY_MUTATION = `
   mutation customerRecover($email: String!) {
     customerRecover(email: $email) {
@@ -45,6 +75,13 @@ const PASSWORD_RECOVERY_MUTATION = `
     }
   }
 `;
+
+export async function recoverCustomerAccount(email: string, buyerIp?: string) {
+  return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, {
+    variables: { email },
+    buyerIp,
+  });
+}
 
 const PASSWORD_RESET_MUTATION = `
   mutation resetCustomerAccount($id: ID!, $input: CustomerResetInput!) {
@@ -68,43 +105,6 @@ const PASSWORD_RESET_MUTATION = `
     }
   }
 `;
-
-export async function createCustomerAccount(
-  input: {
-    email: string;
-    password: string;
-    firstName: string;
-    lastName: string;
-    phone?: string;
-    acceptsMarketing?: boolean;
-  },
-  buyerIp?: string
-) {
-  return shopifyServerFetch(REGISTER_MUTATION, {
-    variables: { input },
-    buyerIp,
-  });
-}
-
-export async function createCustomerAccessToken(
-  input: {
-    email: string;
-    password: string;
-  },
-  buyerIp?: string
-) {
-  return shopifyServerFetch(LOGIN_MUTATION, {
-    variables: { input },
-    buyerIp,
-  });
-}
-
-export async function recoverCustomerAccount(email: string, buyerIp?: string) {
-  return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, {
-    variables: { email },
-    buyerIp,
-  });
-}
 
 export async function resetCustomerPassword(
   id: string,

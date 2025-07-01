@@ -25,14 +25,15 @@ export async function loginHandler(
   const loginError =
     json?.customerAccessTokenCreate?.customerUserErrors?.[0]?.message;
 
-  if (token) {
-    localStorage.setItem("shopify_token", token);
-    router.push("/account");
-  } else if (afterRegister) {
-    setMode("LOGIN");
-    setError("root", { message: "AUTHENTICATION_PROBLEM" });
-  } else {
-    setError("root", { message: loginError ? "LOGIN_ERROR" : "GENERIC" });
+  if (!token) {
+    const errorMessage = afterRegister ? "AUTHENTICATION_PROBLEM" : (loginError || "GENERIC");
+    if (afterRegister) setMode("LOGIN");
+    setError("root", { message: errorMessage });
+    return;
   }
+  
+  localStorage.setItem("shopify_token", token);
+  router.push("/account");
+    
   return;
 }

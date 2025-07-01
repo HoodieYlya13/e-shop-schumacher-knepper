@@ -48,7 +48,7 @@ export const PasswordRecoverySchema = z.object({
 export const NewPasswordSchema = z.object({
   password: z.string().min(5, { message: "TOO_SHORT" }),
   confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
-  customerId: z.string().uuid(),
+  customerId: z.string(),
   resetToken: z.string(),
 })
 .refine((data) => data.password === data.confirmPassword, {

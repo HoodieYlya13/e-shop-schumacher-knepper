@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPassword } from '@/lib/services/auth';
 
 export async function POST(req: NextRequest) {
-  const { mode, email, password, firstName, lastName, phone, acceptsMarketing, id, resetToken } = await req.json();
+  const { mode, email, password, firstName, lastName, phone, acceptsMarketing, customerId, resetToken } = await req.json();
 
   const forwardedFor = req.headers.get('x-forwarded-for');
   const buyerIp = forwardedFor?.split(',')[0]?.trim();
@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
   try {
     let response;
     
-    if (!mode || !['REGISTER', 'LOGIN', 'PASSWORD_RECOVERY'].includes(mode)) {
+    if (!mode || !['REGISTER', 'LOGIN', 'PASSWORD_RECOVERY', 'NEW_PASSWORD'].includes(mode)) {
       return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
     }
 
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (mode === 'NEW_PASSWORD') {
-      response = await resetCustomerPassword(id, {password, resetToken}, buyerIp);
+      response = await resetCustomerPassword(customerId, {password, resetToken}, buyerIp);
     }
 
     return NextResponse.json(response);
