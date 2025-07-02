@@ -22,32 +22,7 @@ export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue | 
 export function useAuthForm() {
   const router = useRouter();
 
-  let resetUrl: string | null = null;
-
-  const searchParams = new URLSearchParams(window.location.search);
-  resetUrl = searchParams.get("reset_url");
-  
-  let customerId: string | null = null;
-  let resetToken: string | null = null;
-
-  if (resetUrl) {
-    const match = resetUrl.match(/\/account\/reset\/(\d+)\/([a-z0-9\-]+)/i);
-    if (match) {
-      customerId = match[1];
-      resetToken = match[2];
-    }
-  }
-
-  const isResetUrlValid = !!resetUrl && !!customerId && !!resetToken;
-  const emptyResetUrl = resetUrl !== null && !isResetUrlValid;
-
-  const [mode, setMode] = useState<Mode>(
-    isResetUrlValid
-      ? "NEW_PASSWORD"
-      : emptyResetUrl
-        ? "PASSWORD_RECOVERY"
-        : "LOGIN"
-  );
+  const [mode, setMode] = useState<Mode>("LOGIN");
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -84,18 +59,32 @@ export function useAuthForm() {
   });
 
   useEffect(() => {
-    if (mode === "NEW_PASSWORD" && customerId && resetToken) {
-      setValue("email", "dummy@example.com");
-      setValue("customerId", customerId);
-      setValue("resetToken", resetToken);
-    }
-  }, [mode, customerId, resetToken, setValue]);
+    if (typeof window === "undefined") return;
 
-  useEffect(() => {
-    if (emptyResetUrl) {
+    const searchParams = new URLSearchParams(window.location.search);
+
+    if (!searchParams.has("reset_url")) return;
+
+    const rawResetUrl = searchParams.get("reset_url");
+
+    if (!rawResetUrl || rawResetUrl.trim() === "") {
+      setMode("PASSWORD_RECOVERY");
+      setError("root", { message: "LINK_UNAVAILABLE" });
+      return;
+    }
+
+    const match = rawResetUrl.match(/\/account\/reset\/(\d+)\/([a-z0-9\-]+)/i);
+    if (match) {
+      const [, id, token] = match;
+      setMode("NEW_PASSWORD");
+      setValue("email", "dummy@example.com");
+      setValue("customerId", id);
+      setValue("resetToken", token);
+    } else {
+      setMode("PASSWORD_RECOVERY");
       setError("root", { message: "LINK_UNAVAILABLE" });
     }
-  }, [resetUrl, isResetUrlValid]);
+  }, [setError, setValue]);
 
   const customRegister = (name: keyof FormValues) => {
     const base = register(name);
