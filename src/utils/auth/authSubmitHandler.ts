@@ -34,7 +34,7 @@ export async function authSubmitHandler(
       (mode === "REGISTER" && !json.customerCreate) ||
       (mode === "LOGIN" && !json.customerAccessTokenCreate) ||
       (mode === "PASSWORD_RECOVERY" && !json.customerRecover) ||
-      (mode === "NEW_PASSWORD" && !json.customerReset)
+      (mode === "NEW_PASSWORD" && !json.customerResetByUrl)
     ) {
       setError("root", { message: "GENERIC" });
       return;

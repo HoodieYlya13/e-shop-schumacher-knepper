@@ -83,9 +83,9 @@ export async function recoverCustomerAccount(email: string, buyerIp?: string) {
   });
 }
 
-const PASSWORD_RESET_MUTATION = `
-  mutation resetCustomerAccount($id: ID!, $input: CustomerResetInput!) {
-    customerReset(id: $id, input: $input) {
+const PASSWORD_RESET_BY_URL_MUTATION = `
+  mutation customerResetByUrl($password: String!, $resetUrl: URL!) {
+    customerResetByUrl(password: $password, resetUrl: $resetUrl) {
       customer {
         id
         email
@@ -102,20 +102,21 @@ const PASSWORD_RESET_MUTATION = `
         field
         message
       }
+      userErrors {
+        field
+        message
+      }
     }
   }
 `;
 
-export async function resetCustomerPassword(
-  id: string,
-  input: {
-    password: string;
-    resetToken: string;
-  },
+export async function resetCustomerPasswordByUrl(
+  password: string,
+  resetUrl: string,
   buyerIp?: string
 ) {
-  return shopifyServerFetch(PASSWORD_RESET_MUTATION, {
-    variables: { id: `gid://shopify/Customer/${id}`, input },
+  return shopifyServerFetch(PASSWORD_RESET_BY_URL_MUTATION, {
+    variables: { password, resetUrl },
     buyerIp,
   });
 }

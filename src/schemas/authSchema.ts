@@ -49,8 +49,7 @@ export const NewPasswordSchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
   password: z.string().min(5, { message: "TOO_SHORT" }),
   confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
-  customerId: z.string(),
-  resetToken: z.string(),
+  resetUrl: z.string().url(),
 })
 .refine((data) => data.password === data.confirmPassword, {
   path: ["confirmPassword"],

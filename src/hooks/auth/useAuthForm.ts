@@ -75,11 +75,9 @@ export function useAuthForm() {
 
     const match = rawResetUrl.match(/\/account\/reset\/(\d+)\/([a-z0-9\-]+)/i);
     if (match) {
-      const [, id, token] = match;
       setMode("NEW_PASSWORD");
       setValue("email", "dummy@example.com");
-      setValue("customerId", id);
-      setValue("resetToken", token);
+      setValue("resetUrl", rawResetUrl);
     } else {
       setMode("PASSWORD_RECOVERY");
       setError("root", { message: "LINK_UNAVAILABLE" });

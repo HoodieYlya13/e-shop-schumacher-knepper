@@ -8,7 +8,7 @@ export async function resetPasswordHandler(
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   setValue: (name: keyof FormValues, value: string) => void,
   json: {
-    customerReset: {
+    customerResetByUrl: {
       customer?: {
         id?: string;
         email?: string;
@@ -28,8 +28,8 @@ export async function resetPasswordHandler(
     };
   },
 ) {
-    const token = json.customerReset?.customerAccessToken?.accessToken;
-    const message = json.customerReset?.customerUserErrors?.[0]?.code;
+    const token = json.customerResetByUrl?.customerAccessToken?.accessToken;
+    const message = json.customerResetByUrl?.customerUserErrors?.[0]?.code;
     
     if (token) {
       localStorage.setItem("shopify_token", token);

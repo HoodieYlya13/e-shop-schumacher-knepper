@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPassword } from '@/lib/services/auth';
+import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPasswordByUrl } from '@/lib/services/auth';
 
 export async function POST(req: NextRequest) {
-  const { mode, email, password, firstName, lastName, phone, acceptsMarketing, customerId, resetToken } = await req.json();
+  const { mode, email, password, firstName, lastName, phone, acceptsMarketing, resetUrl } = await req.json();
 
   const forwardedFor = req.headers.get('x-forwarded-for');
   const buyerIp = forwardedFor?.split(',')[0]?.trim();
@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (mode === 'NEW_PASSWORD') {
-      response = await resetCustomerPassword(customerId, {password, resetToken}, buyerIp);
+      response = await resetCustomerPasswordByUrl(password, resetUrl, buyerIp);
     }
 
     return NextResponse.json(response);
