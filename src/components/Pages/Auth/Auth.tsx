@@ -12,9 +12,7 @@ import PasswordRecovery from "./shared/PasswordRecovery";
 import Form from "@/components/UI/shared/components/Form";
 import ResetPassword from "./shared/ResetPassword";
 
-export default function Auth() {
-  const passwordsEnabled = true;
-  
+export default function Auth() {  
   const t = useTranslations('AUTH');
   const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY' | 'NEW_PASSWORD') => {
     form.reset(form.getValues());
@@ -29,9 +27,7 @@ export default function Auth() {
     <section className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
       <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 
-      {passwordsEnabled && (
-        <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
-      )}
+      <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
 
       <Form
         handleSubmit={form.handleSubmit}
@@ -88,7 +84,6 @@ export default function Auth() {
                   register={form.register as UseFormRegister<LoginValues>}
                   errors={form.isSubmitted ? form.errors : {}}
                   handleModeChange={handleModeChange}
-                  passwordsEnabled={passwordsEnabled}
                 />
               );
           }
