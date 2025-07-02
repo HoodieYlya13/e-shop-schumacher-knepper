@@ -14,6 +14,15 @@ import ResetPassword from "./shared/ResetPassword";
 
 export default function Auth() {  
   const t = useTranslations('AUTH');
+  const form = useAuthForm();
+  const [modeDefined, setModeDefined] = React.useState(false);
+
+  React.useEffect(() => {
+    if (form.mode) {
+      setModeDefined(true);
+    }
+  }, [form.mode]);
+
   const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY' | 'NEW_PASSWORD') => {
     form.reset(form.getValues());
     if (form.mode === "NEW_PASSWORD") {
@@ -21,10 +30,15 @@ export default function Auth() {
     };
     form.setMode(newMode);
   }
-  const form = useAuthForm();
 
   return (
-    <section className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
+    <section
+      className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow"
+      style={{
+        opacity: modeDefined ? 1 : 0,
+        transition: "opacity 0.1s ease-in",
+      }}
+    >
       <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 
       <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
