@@ -1,5 +1,8 @@
 import { z } from 'zod';
 
+const noLeadingOrTrailingWhitespace = (val: string) =>
+  val === val.trim();
+
 export const RegisterSchema = z
   .object({
     email: z
@@ -12,8 +15,20 @@ export const RegisterSchema = z
       .email({ message: "INVALID_EMAIL" })
       .trim()
       .transform((val) => val.toLowerCase()),
-    password: z.string().min(5, { message: "TOO_SHORT" }),
-    confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
+    password: z
+      .string()
+      .min(5, { message: "TOO_SHORT" })
+      .max(40, { message: "TOO_LONG" })
+      .refine(noLeadingOrTrailingWhitespace, {
+        message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
+      }),
+    confirmPassword: z
+      .string()
+      .min(5, { message: "TOO_SHORT" })
+      .max(40, { message: "TOO_LONG" })
+      .refine(noLeadingOrTrailingWhitespace, {
+        message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
+      }),
     firstName: z.string().trim().optional(),
     lastName: z.string().trim().optional(),
     phone: z
@@ -38,23 +53,42 @@ export const RegisterSchema = z
 
 export const LoginSchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
-  password: z.string().min(5, { message: "TOO_SHORT" }),
+  password: z
+    .string()
+    .min(5, { message: "TOO_SHORT" })
+    .max(40, { message: "TOO_LONG" })
+    .refine(noLeadingOrTrailingWhitespace, {
+      message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
+    }),
 });
 
 export const PasswordRecoverySchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
 });
 
-export const NewPasswordSchema = z.object({
-  email: z.string().email({ message: "INVALID_EMAIL" }),
-  password: z.string().min(5, { message: "TOO_SHORT" }),
-  confirmPassword: z.string().min(5, { message: "TOO_SHORT" }),
-  resetUrl: z.string().url(),
-})
-.refine((data) => data.password === data.confirmPassword, {
-  path: ["confirmPassword"],
-  message: "PASSWORD_MISMATCH",
-});
+export const NewPasswordSchema = z
+  .object({
+    email: z.string().email({ message: "INVALID_EMAIL" }),
+    password: z
+      .string()
+      .min(5, { message: "TOO_SHORT" })
+      .max(40, { message: "TOO_LONG" })
+      .refine(noLeadingOrTrailingWhitespace, {
+        message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
+      }),
+    confirmPassword: z
+      .string()
+      .min(5, { message: "TOO_SHORT" })
+      .max(40, { message: "TOO_LONG" })
+      .refine(noLeadingOrTrailingWhitespace, {
+        message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
+      }),
+    resetUrl: z.string().url(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "PASSWORD_MISMATCH",
+  });
 
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 export type LoginValues = z.infer<typeof LoginSchema>;

@@ -3,9 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Customer, Metafield } from "@shopify/hydrogen-react/storefront-api-types";
-import { logout } from "@/utils/account/logoutHandler";
+import { logout } from "@/utils/account/logout";
 import { fetchCustomerData } from "@/utils/account/fetchCustomer";
 import { useTranslations } from "next-intl";
+import { getAccessToken } from "@/utils/account/getAccessToken";
 
 export default function Account() {
   const t = useTranslations("AUTH");
@@ -17,7 +18,7 @@ export default function Account() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = localStorage.getItem("shopify_token");
+    const token = getAccessToken();
     if (!token) {
       setError("Not logged in");
       setLoading(false);

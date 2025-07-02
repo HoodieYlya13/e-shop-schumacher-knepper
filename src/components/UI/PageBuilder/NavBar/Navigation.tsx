@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
+import { getAccessToken } from '@/utils/account/getAccessToken';
 
 const navItemsBase = [
   { href: '/', labelKey: 'NAV.HOME' },
@@ -18,8 +19,8 @@ export default function Navigation() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem('shopify_token');
+  useEffect(() => {    
+    const token = getAccessToken();
     setIsLoggedIn(!!token);
 
     if (pathname.startsWith('/auth') && token) {

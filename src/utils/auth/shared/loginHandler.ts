@@ -22,6 +22,9 @@ export async function loginHandler(
 ) {
   const token =
     json?.customerAccessTokenCreate?.customerAccessToken?.accessToken;
+  const tokenExpiry =
+    json.customerAccessTokenCreate?.customerAccessToken?.expiresAt ||
+    new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   const loginError = json?.customerAccessTokenCreate?.customerUserErrors?.[0]
     ?.message
     ? "UNIDENTIFIED_CUSTOMER"
@@ -35,5 +38,6 @@ export async function loginHandler(
   }
   
   localStorage.setItem("shopify_token", token);
+  localStorage.setItem("shopify_token_expiry", tokenExpiry);
   router.push("/account");
 }

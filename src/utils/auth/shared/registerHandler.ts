@@ -35,6 +35,14 @@ export async function registerHandler(
       const key = field?.[1] as keyof RegisterValues;
       
       if (key === "email") {
+        if (code === "BAD_DOMAIN") {
+          setError(key, { message: code });
+          return;
+        }
+        if (code === "CUSTOMER_DISABLED") {
+          setError(key, { message: code });
+          return;
+        }
         setError(key, { message: "EMAIL_TAKEN" });
       } else if (key === "phone" && code === "TAKEN") {
         setError(key, { message: "PHONE_TAKEN" });

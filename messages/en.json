@@ -43,7 +43,11 @@
     "ERRORS": {
       "GENERIC": "An unexpected error occurred.",
       "TOO_SHORT": "Password is too short.",
+      "TOO_LONG": "Password is too long.",
+      "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE": "Password cannot start or end with whitespace.",
       "INVALID_EMAIL": "Invalid email address.",
+      "BAD_DOMAIN": "Email domain is not allowed.",
+      "CUSTOMER_DISABLED": "Customer account is disabled.",
       "EMAIL_TAKEN": "Email has already been taken.",
       "PHONE_TAKEN": "Phone has already been taken.",
       "INVALID": "Enter a valid phone number.",

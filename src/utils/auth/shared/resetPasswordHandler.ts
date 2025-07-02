@@ -29,10 +29,14 @@ export async function resetPasswordHandler(
   },
 ) {
     const token = json.customerResetByUrl?.customerAccessToken?.accessToken;
+    const expiresAt =
+      json.customerResetByUrl?.customerAccessToken?.expiresAt ||
+      new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     const message = json.customerResetByUrl?.customerUserErrors?.[0]?.code;
     
     if (token) {
       localStorage.setItem("shopify_token", token);
+      localStorage.setItem("shopify_token_expiry", expiresAt);
       router.push("/account");
     } else if (message === "TOKEN_INVALID") {
       setValue("email", "");
