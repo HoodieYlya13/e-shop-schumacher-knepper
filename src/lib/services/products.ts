@@ -45,5 +45,7 @@ export async function getAllProducts(
     buyerIp,
   });
 
+  console.log(`Buyer IP: ${buyerIp}`);
+
   return data.products.edges.map((edge) => edge.node);
 }
