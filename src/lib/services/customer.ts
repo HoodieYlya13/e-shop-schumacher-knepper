@@ -36,5 +36,7 @@ export async function fetchCustomerData(
     }
   );
 
+  console.log(`Buyer IP: ${buyerIp}`);
+
   return data.customer ?? null;
 }
