@@ -1,5 +1,5 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
-import { RegisterValues } from "@/schemas/authSchema";
+import { NewPasswordValues, RegisterValues } from "@/schemas/authSchema";
 import { UseFormSetError } from "react-hook-form";
 import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
 import { loginHandler } from "./shared/loginHandler";
@@ -15,8 +15,8 @@ export async function authSubmitHandler(
   router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
-  setValue: (name: keyof FormValues, value: string) => void,
-  afterRegister: boolean = false
+  afterRegister: boolean = false,
+  setValue?: (name: keyof NewPasswordValues, value: string) => void
 ) {
   try {
     clearErrors();
@@ -48,7 +48,6 @@ export async function authSubmitHandler(
         router,
         setSuccessMessage,
         setMode,
-        setValue,
         json
       );
     }
@@ -62,6 +61,9 @@ export async function authSubmitHandler(
     }
 
     if (mode === "NEW_PASSWORD") {
+      if (!setValue) {
+        throw new Error("setValue is required for NEW_PASSWORD mode");
+      }
       return resetPasswordHandler(router, setError, setMode, setValue, json);
     }
   } catch {

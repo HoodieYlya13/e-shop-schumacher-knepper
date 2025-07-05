@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import React from "react";
 
 interface SubmitButtonProps {
@@ -13,12 +14,13 @@ export default function SubmitButton({ label, error, disabled }: SubmitButtonPro
     <>
       <button
         type="submit"
-        disabled={disabled || !!error}
-        className={`w-full py-2 rounded cursor-pointer ${
-          disabled || !!error
+        disabled={disabled}
+        className={clsx(
+          "w-full py-2 rounded cursor-pointer",
+          disabled
             ? "bg-gray-300 text-gray-500 cursor-not-allowed"
             : "bg-black text-white"
-        }`}
+        )}
       >
         {label}
       </button>

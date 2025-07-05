@@ -1,4 +1,5 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
+import { NewPasswordValues } from "@/schemas/authSchema";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 
@@ -6,7 +7,7 @@ export async function resetPasswordHandler(
   router: AppRouterInstance,
   setError: UseFormSetError<FormValues>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
-  setValue: (name: keyof FormValues, value: string) => void,
+  setValue: (name: keyof NewPasswordValues, value: string) => void,
   json: {
     customerResetByUrl: {
       customer?: {

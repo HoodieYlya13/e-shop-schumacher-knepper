@@ -1,11 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import React from "react";
+import { useEffect, useState } from "react";
 import ModeSwitch from "./shared/ModeSwitch";
 import SignUp from "./shared/SignUp";
 import SignIn from "./shared/SignIn";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { LoginValues, NewPasswordValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { useAuthForm } from "@/hooks/auth/useAuthForm";
 import PasswordRecovery from "./shared/PasswordRecovery";
@@ -15,9 +15,9 @@ import ResetPassword from "./shared/ResetPassword";
 export default function Auth() {  
   const t = useTranslations('AUTH');
   const form = useAuthForm();
-  const [modeDefined, setModeDefined] = React.useState(false);
+  const [modeDefined, setModeDefined] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (form.mode) {
       setModeDefined(true);
     }
@@ -61,7 +61,13 @@ export default function Auth() {
             Object.keys(form.errors).some((key) => key !== "root")
               ? t("ERRORS.CORRECT_FIELDS_BEFORE_SUBMIT")
               : undefined,
-          disabled: form.isSubmitting || !!form.successMessage,
+          disabled:
+            form.isSubmitting ||
+            !!form.successMessage ||
+            Object.keys(form.errors).length > 0 ||
+            Object.entries(form.getValues())
+              .filter(([key]) => key !== "acceptsMarketing")
+              .every(([, value]) => !value),
         }}
         errors={form.errors.root}
       >
@@ -71,6 +77,7 @@ export default function Auth() {
               return (
                 <SignUp
                   register={form.register as UseFormRegister<RegisterValues>}
+                  setValue={form.setValue as UseFormSetValue<RegisterValues>}
                   errors={form.errors}
                 />
               );

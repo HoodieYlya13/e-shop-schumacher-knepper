@@ -9,6 +9,8 @@ export async function GET(req: Request) {
   const forwardedFor = req.headers.get('x-forwarded-for');
   const buyerIp = forwardedFor?.split(',')[0]?.trim();
 
+  console.log(`Buyer IP: ${buyerIp}`);
+
   try {
     const products = await getAllProducts(lang, buyerIp);
     return NextResponse.json(products);

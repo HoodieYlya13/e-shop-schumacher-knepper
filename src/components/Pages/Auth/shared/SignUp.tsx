@@ -1,19 +1,20 @@
 import { useTranslations } from "next-intl";
-import { FieldErrors, UseFormRegister } from "react-hook-form";
-import InputField from "../../../UI/shared/elements/Input";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
+import Input from "../../../UI/shared/elements/Input";
 import { RegisterValues } from "@/schemas/authSchema";
 
 interface SignUpProps {
   register: UseFormRegister<RegisterValues>;
+  setValue?: UseFormSetValue<RegisterValues>;
   errors: FieldErrors<RegisterValues>;
 }
 
-export default function SignUp({ register, errors }: SignUpProps) {
+export default function SignUp({ register, setValue, errors }: SignUpProps) {
   const t = useTranslations("AUTH");
 
   return (
     <>
-      <InputField
+      <Input
         type="email"
         placeholder={t("EMAIL")}
         {...register("email")}
@@ -22,7 +23,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         focusOnMount
       />
 
-      <InputField
+      <Input
         type="email"
         placeholder={t("CONFIRM_EMAIL")}
         {...register("confirmEmail")}
@@ -32,7 +33,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         autoComplete="email"
       />
 
-      <InputField
+      <Input
         type="password"
         placeholder={t("PASSWORD")}
         {...register("password")}
@@ -40,7 +41,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         autoComplete="new-password"
       />
 
-      <InputField
+      <Input
         type="password"
         placeholder={t("CONFIRM_PASSWORD")}
         {...register("confirmPassword")}
@@ -51,7 +52,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         autoComplete="new-password"
       />
 
-      <InputField
+      <Input
         type="text"
         placeholder={`${t("FIRST_NAME")} (${t("OPTIONAL")})`}
         {...register("firstName")}
@@ -60,7 +61,7 @@ export default function SignUp({ register, errors }: SignUpProps) {
         autoComplete="given-name"
       />
 
-      <InputField
+      <Input
         type="text"
         placeholder={`${t("LAST_NAME")} (${t("OPTIONAL")})`}
         {...register("lastName")}
@@ -69,13 +70,14 @@ export default function SignUp({ register, errors }: SignUpProps) {
         autoComplete="family-name"
       />
 
-      <InputField
+      <Input
         type="tel"
         placeholder={`${t("PHONE")} (${t("OPTIONAL")})`}
         {...register("phone")}
         errorText={errors.phone && t(`ERRORS.${errors.phone.message}`)}
         required={false}
         autoComplete="tel"
+        setValue={setValue}
       />
 
       <label className="flex items-center gap-2">

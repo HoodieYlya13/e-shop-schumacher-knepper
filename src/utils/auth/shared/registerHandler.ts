@@ -11,7 +11,6 @@ export async function registerHandler(
   router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
-  setValue: (name: keyof FormValues, value: string) => void,
   json: {
     customerCreate: {
       customer?: {
@@ -35,20 +34,14 @@ export async function registerHandler(
       const key = field?.[1] as keyof RegisterValues;
       
       if (key === "email") {
-        if (code === "BAD_DOMAIN") {
-          setError(key, { message: code });
-          return;
-        }
-        if (code === "CUSTOMER_DISABLED") {
-          setError(key, { message: code });
-          return;
-        }
-        setError(key, { message: "EMAIL_TAKEN" });
-      } else if (key === "phone" && code === "TAKEN") {
-        setError(key, { message: "PHONE_TAKEN" });
-      } else {
-        setError("root", { message: "GENERIC" });
+        if (code === "BAD_DOMAIN") return setError(key, { message: code });
+        if (code === "CUSTOMER_DISABLED") return setError(key, { message: code });
+        return setError(key, { message: "EMAIL_TAKEN" });
+      } else if (key === "phone") {
+        if (code === "INVALID") return setError(key, { message: "INVALID" });
+        if (code === "TAKEN") return setError(key, { message: "PHONE_TAKEN" });
       }
+      setError("root", { message: "GENERIC" });
     });
     return;
   }
@@ -61,7 +54,6 @@ export async function registerHandler(
     router,
     setSuccessMessage,
     setMode,
-    setValue,
     true
   );
 }

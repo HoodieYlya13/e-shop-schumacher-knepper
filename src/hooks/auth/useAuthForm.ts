@@ -15,12 +15,21 @@ import {
 import React, { useEffect, useState } from "react";
 import { authSubmitHandler } from "@/utils/auth/authSubmitHandler";
 import { useRouter } from "next/navigation";
+import { getAccessToken } from "@/utils/account/getAccessToken";
 
 export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY" | "NEW_PASSWORD";
 export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue | NewPasswordValues;
 
 export function useAuthForm() {
   const router = useRouter();
+
+  useEffect(() => {
+    const token = getAccessToken();
+    if (token) {
+      router.push("/account");
+      return;
+    }
+  }, [router]);
 
   const [mode, setMode] = useState<Mode>("LOGIN");
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
@@ -54,7 +63,7 @@ export function useAuthForm() {
     setValue,
   } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    mode: "onBlur",
+    mode: mode === "LOGIN" ? "onChange" : "onBlur",
     criteriaMode: "all",
   });
 
@@ -139,10 +148,10 @@ export function useAuthForm() {
         router,
         setSuccessMessage,
         setMode,
+        false,
         setValue
       )
     ),
-    watch,
     errors,
     isSubmitting,
     isSubmitted,
