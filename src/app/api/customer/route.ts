@@ -4,11 +4,8 @@ import { fetchCustomerData } from '@/lib/services/customer';
 export async function POST(req: NextRequest) {
   const { token, identifiers } = await req.json();
   
-  const forwardedFor =
-    req.headers.get("x-forwarded-for") ??
-    req.headers.get("x-real-ip") ??
-    req.headers.get("forwarded");
-  const buyerIp = forwardedFor?.split(",")[0]?.trim();
+  const buyerIp = req.headers.get('x-buyer-ip') ?? undefined;
+  console.log("Buyer IP:", buyerIp);
 
   try {
     if (!token) {

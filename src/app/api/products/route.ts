@@ -6,11 +6,8 @@ export async function GET(req: Request) {
   const url = new URL(req.url);
   const lang = url.searchParams.get('lang')?.toUpperCase() as 'EN' | 'FR' | 'DE' || 'EN';
 
-  const forwardedFor =
-    req.headers.get("x-forwarded-for") ??
-    req.headers.get("x-real-ip") ??
-    req.headers.get("forwarded");
-  const buyerIp = forwardedFor?.split(',')[0]?.trim();
+  const buyerIp = req.headers.get('x-buyer-ip') ?? undefined;
+  console.log("Buyer IP:", buyerIp);
 
   try {
     const products = await getAllProducts(lang, buyerIp);
