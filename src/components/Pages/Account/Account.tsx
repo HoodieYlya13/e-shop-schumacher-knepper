@@ -6,9 +6,12 @@ import { Customer, Metafield } from "@shopify/hydrogen-react/storefront-api-type
 import { logout } from "@/utils/account/logout";
 import { fetchCustomerData } from "@/utils/account/fetchCustomer";
 import { useTranslations } from "next-intl";
-import { getAccessToken } from "@/utils/account/getAccessToken";
 
-export default function Account() {
+type AccountProps = {
+  token: string;
+}
+
+export default function Account({ token }: AccountProps) {
   const t = useTranslations("AUTH");
 
   const [customer, setCustomer] = useState<Customer | null>(null);
@@ -18,18 +21,11 @@ export default function Account() {
   const router = useRouter();
 
   useEffect(() => {
-    const token = getAccessToken();
-    if (!token) {
-      setError("Not logged in");
-      setLoading(false);
-      return;
-    }
-
     fetchCustomerData(token)
       .then(setCustomer)
       .catch(() => setError("GENERIC"))
       .finally(() => setLoading(false));
-  }, []);
+  }, [token, router]);
 
   if (loading) return <p>Loading customer data...</p>;
   if (error) return <p className="text-red-600">{t("ERRORS." + error)}</p>;

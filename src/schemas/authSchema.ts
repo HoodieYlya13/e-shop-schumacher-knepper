@@ -66,7 +66,7 @@ export const PasswordRecoverySchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
 });
 
-export const NewPasswordSchema = z
+export const ResetPasswordSchema = z
   .object({
     email: z.string().email({ message: "INVALID_EMAIL" }),
     password: z
@@ -93,4 +93,4 @@ export const NewPasswordSchema = z
 export type RegisterValues = z.infer<typeof RegisterSchema>;
 export type LoginValues = z.infer<typeof LoginSchema>;
 export type PasswordRecoveryValue = z.infer<typeof PasswordRecoverySchema>;
-export type NewPasswordValues = z.infer<typeof NewPasswordSchema>;
+export type ResetPasswordValues = z.infer<typeof ResetPasswordSchema>;

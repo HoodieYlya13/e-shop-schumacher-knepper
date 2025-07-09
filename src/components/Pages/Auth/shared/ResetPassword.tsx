@@ -1,14 +1,14 @@
 "use client";
 
 import InputField from "@/components/UI/shared/elements/Input";
-import { NewPasswordValues } from "@/schemas/authSchema";
+import { ResetPasswordValues } from "@/schemas/authSchema";
 import { useTranslations } from "next-intl";
 import React from "react";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
 interface ResetPasswordProps {
-  register: UseFormRegister<NewPasswordValues>;
-  errors: FieldErrors<NewPasswordValues>;
+  register: UseFormRegister<ResetPasswordValues>;
+  errors: FieldErrors<ResetPasswordValues>;
 }
 
 export default function ResetPassword({

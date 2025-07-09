@@ -27,15 +27,9 @@ export async function createCustomerAccount(
     lastName: string;
     phone?: string;
     acceptsMarketing?: boolean;
-  },
-  buyerIp?: string
+  }
 ) {
-  console.log(`Buyer IP: ${buyerIp}`);
-
-  return shopifyServerFetch(REGISTER_MUTATION, {
-    variables: { input },
-    buyerIp,
-  });
+  return shopifyServerFetch(REGISTER_MUTATION, { input });
 }
 
 const LOGIN_MUTATION = `
@@ -53,19 +47,11 @@ const LOGIN_MUTATION = `
   }
 `;
 
-export async function createCustomerAccessToken(
-  input: {
-    email: string;
-    password: string;
-  },
-  buyerIp?: string
-) {
-  console.log(`Buyer IP: ${buyerIp}`);
-
-  return shopifyServerFetch(LOGIN_MUTATION, {
-    variables: { input },
-    buyerIp,
-  });
+export async function createCustomerAccessToken(input: {
+  email: string;
+  password: string;
+}) {
+  return shopifyServerFetch(LOGIN_MUTATION, { input });
 }
 
 const PASSWORD_RECOVERY_MUTATION = `
@@ -80,13 +66,8 @@ const PASSWORD_RECOVERY_MUTATION = `
   }
 `;
 
-export async function recoverCustomerAccount(email: string, buyerIp?: string) {
-  console.log(`Buyer IP: ${buyerIp}`);
-
-  return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, {
-    variables: { email },
-    buyerIp,
-  });
+export async function recoverCustomerAccount(email: string) {
+  return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, { email });
 }
 
 const PASSWORD_RESET_BY_URL_MUTATION = `
@@ -118,13 +99,10 @@ const PASSWORD_RESET_BY_URL_MUTATION = `
 
 export async function resetCustomerPasswordByUrl(
   password: string,
-  resetUrl: string,
-  buyerIp?: string
+  resetUrl: string
 ) {
-  console.log(`Buyer IP: ${buyerIp}`);
-
   return shopifyServerFetch(PASSWORD_RESET_BY_URL_MUTATION, {
-    variables: { password, resetUrl },
-    buyerIp,
+    password,
+    resetUrl,
   });
 }

@@ -22,21 +22,14 @@ const CUSTOMER_METAFIELDS_QUERY = `
 
 export async function fetchCustomerData(
   token: string,
-  identifiers: { namespace: string; key: string }[],
-  buyerIp?: string
+  identifiers: { namespace: string; key: string }[]
 ): Promise<Customer | null> {
   const data = await shopifyServerFetch<{ customer: Customer }>(
     CUSTOMER_METAFIELDS_QUERY,
     {
-      variables: {
-        customerAccessToken: token,
-        identifiers,
-      },
-      buyerIp,
+      customerAccessToken: token,
+      identifiers,
     }
   );
-
-  console.log(`Buyer IP: ${buyerIp}`);
-
   return data.customer ?? null;
 }

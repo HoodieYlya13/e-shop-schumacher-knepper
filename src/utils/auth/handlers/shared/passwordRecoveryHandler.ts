@@ -18,7 +18,7 @@ export async function passwordRecoveryHandler(
 
   if (errorMessage) {
     const message =
-      errorMessage === "UNIDENTIFIED_CUSTORMER" ? errorMessage : "GENERIC";
+      errorMessage === "UNIDENTIFIED_CUSTOMER" ? errorMessage : "GENERIC";
     setError("root", { message });
     return;
   }

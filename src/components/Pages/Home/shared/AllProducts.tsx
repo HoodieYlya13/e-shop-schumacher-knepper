@@ -3,13 +3,10 @@ import { getTranslations } from 'next-intl/server';
 import { getAllProducts } from '@/lib/services/products';
 import { Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
+import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 
 export default async function AllProducts({ locale }: { locale: string }) {
-  const languageCode = locale.startsWith('fr')
-    ? 'FR'
-    : locale.startsWith('de')
-      ? 'DE'
-      : 'EN';
+  const languageCode = getPreferredLocale()?.toUpperCase() as 'EN' | 'FR' | 'DE' | undefined;
 
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
   const products: Product[] = await getAllProducts(languageCode);

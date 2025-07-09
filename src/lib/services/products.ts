@@ -36,16 +36,9 @@ const QUERY = `
 
 export async function getAllProducts(
   language: "EN" | "FR" | "DE" = "EN",
-  buyerIp?: string
 ): Promise<Product[]> {
   const data = await shopifyServerFetch<{
     products: { edges: { node: Product }[] };
-  }>(QUERY, {
-    variables: { language },
-    buyerIp,
-  });
-
-  console.log(`Buyer IP: ${buyerIp}`);
-
+  }>(QUERY, { language });
   return data.products.edges.map((edge) => edge.node);
 }

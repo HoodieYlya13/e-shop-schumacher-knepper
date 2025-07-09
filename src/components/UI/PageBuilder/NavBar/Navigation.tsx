@@ -4,31 +4,31 @@ import { usePathname, useRouter } from 'next/navigation';
 import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
-import { getAccessToken } from '@/utils/account/getAccessToken';
+import { useEffect } from 'react';
 
 const navItemsBase = [
   { href: '/', labelKey: 'NAV.HOME' },
   { href: '/about', labelKey: 'NAV.ABOUT' },
 ];
 
-export default function Navigation() {
+type NavigationProps = {
+  token: string | undefined;
+};
+
+export default function Navigation({ token }: NavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations();
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isLoggedIn = !!token;
 
-  useEffect(() => {    
-    const token = getAccessToken();
-    setIsLoggedIn(!!token);
-
-    if (pathname.startsWith('/auth') && token) {
+  useEffect(() => {
+    if (pathname.startsWith('/auth') && isLoggedIn) {
       router.replace('/account');
-    } else if (pathname.startsWith('/account') && !token) {
+    } else if (pathname.startsWith('/account') && !isLoggedIn) {
       router.replace('/auth');
     }
-  }, [pathname, router]);
+  }, [pathname, router, isLoggedIn]);
 
   const navItems = [
     ...navItemsBase,

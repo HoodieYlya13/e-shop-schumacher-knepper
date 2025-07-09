@@ -1,44 +1,35 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
 import ModeSwitch from "./shared/ModeSwitch";
 import SignUp from "./shared/SignUp";
 import SignIn from "./shared/SignIn";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { LoginValues, NewPasswordValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
-import { useAuthForm } from "@/hooks/auth/useAuthForm";
+import { LoginValues, ResetPasswordValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
+import { Mode, useAuthForm } from "@/hooks/auth/useAuthForm";
 import PasswordRecovery from "./shared/PasswordRecovery";
 import Form from "@/components/UI/shared/components/Form";
 import ResetPassword from "./shared/ResetPassword";
 
-export default function Auth() {  
+type AuthProps = {
+  initialMode: Mode;
+  resetPasswordUrl?: string;
+};
+
+export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {  
   const t = useTranslations('AUTH');
-  const form = useAuthForm();
-  const [modeDefined, setModeDefined] = useState(false);
+  const form = useAuthForm({ initialMode, resetPasswordUrl });
 
-  useEffect(() => {
-    if (form.mode) {
-      setModeDefined(true);
-    }
-  }, [form.mode]);
-
-  const handleModeChange = (newMode: 'REGISTER' | 'LOGIN' | 'PASSWORD_RECOVERY' | 'NEW_PASSWORD') => {
+  const handleModeChange = (newMode: Mode) => {
     form.reset(form.getValues());
-    if (form.mode === "NEW_PASSWORD") {
+    if (form.mode === "RESET_PASSWORD") {
       form.setValue("email", "");
     };
     form.setMode(newMode);
   }
 
   return (
-    <section
-      className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow"
-      style={{
-        opacity: modeDefined ? 1 : 0,
-        transition: "opacity 0.1s ease-in",
-      }}
-    >
+    <section className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
       <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 
       <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
@@ -52,8 +43,8 @@ export default function Auth() {
               : {
                   REGISTER: "CREATE_ACCOUNT",
                   LOGIN: "LOGIN",
-                  PASSWORD_RECOVERY: "RESET_PASSWORD",
-                  NEW_PASSWORD: "SET_NEW_PASSWORD",
+                  PASSWORD_RECOVERY: "PASSWORD_RECOVERY",
+                  RESET_PASSWORD: "RESET_PASSWORD",
                 }[form.mode]
           ),
           error:
@@ -64,7 +55,9 @@ export default function Auth() {
           disabled:
             form.isSubmitting ||
             !!form.successMessage ||
-            Object.keys(form.errors).length > 0 ||
+            (form.mode !== "LOGIN" &&
+              form.mode !== "PASSWORD_RECOVERY" &&
+              Object.keys(form.errors).length > 0) ||
             Object.entries(form.getValues())
               .filter(([key]) => key !== "acceptsMarketing")
               .every(([, value]) => !value),
@@ -92,10 +85,10 @@ export default function Auth() {
                   email={form.getValues("email")}
                 />
               );
-            case "NEW_PASSWORD":
+            case "RESET_PASSWORD":
               return (
                 <ResetPassword
-                  register={form.register as UseFormRegister<NewPasswordValues>}
+                  register={form.register as UseFormRegister<ResetPasswordValues>}
                   errors={form.errors}
                 />
               );

@@ -1,4 +1,5 @@
 import { FormValues } from "@/hooks/auth/useAuthForm";
+import { login } from "@/utils/account/login";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 
@@ -37,7 +38,6 @@ export async function loginHandler(
     return;
   }
   
-  localStorage.setItem("shopify_token", token);
-  localStorage.setItem("shopify_token_expiry", tokenExpiry);
+  await login(token, tokenExpiry, router);
   router.push("/account");
 }

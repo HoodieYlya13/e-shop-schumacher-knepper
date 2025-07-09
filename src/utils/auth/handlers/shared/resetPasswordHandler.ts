@@ -1,5 +1,6 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
-import { NewPasswordValues } from "@/schemas/authSchema";
+import { ResetPasswordValues } from "@/schemas/authSchema";
+import { login } from "@/utils/account/login";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 
@@ -7,7 +8,7 @@ export async function resetPasswordHandler(
   router: AppRouterInstance,
   setError: UseFormSetError<FormValues>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
-  setValue: (name: keyof NewPasswordValues, value: string) => void,
+  setValue: (name: keyof ResetPasswordValues, value: string) => void,
   json: {
     customerResetByUrl: {
       customer?: {
@@ -30,20 +31,19 @@ export async function resetPasswordHandler(
   },
 ) {
     const token = json.customerResetByUrl?.customerAccessToken?.accessToken;
-    const expiresAt =
+    const tokenExpiry =
       json.customerResetByUrl?.customerAccessToken?.expiresAt ||
       new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     const message = json.customerResetByUrl?.customerUserErrors?.[0]?.code;
     
     if (token) {
-      localStorage.setItem("shopify_token", token);
-      localStorage.setItem("shopify_token_expiry", expiresAt);
-      router.push("/account");
-    } else if (message === "TOKEN_INVALID") {
-      setValue("email", "");
-      setMode("PASSWORD_RECOVERY");
-      setError("root", { message });
+      await login(token, tokenExpiry, router);
     } else {
-      setError("root", { message: "GENERIC" });
+      const invalidMessage = message === "INVALID"
+      setValue("email", "");
+      setMode(invalidMessage ? "PASSWORD_RECOVERY" : "LOGIN");
+      setError("root", {
+        message: invalidMessage ? "TOKEN_INVALID" : "GENERIC",
+      });
     }
 }

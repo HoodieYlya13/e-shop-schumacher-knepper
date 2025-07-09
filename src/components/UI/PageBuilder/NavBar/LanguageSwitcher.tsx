@@ -1,5 +1,6 @@
 'use client';
 
+import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -7,7 +8,7 @@ export default function LanguageSwitcher() {
   const router = useRouter();
 
   const switchTo = (locale: string) => {
-    localStorage.setItem('preferred-locale', locale);
+    document.cookie = `preferred_locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
 
     const pathname = window.location.pathname;
     const segments = pathname.split('/');
@@ -17,7 +18,7 @@ export default function LanguageSwitcher() {
   };
 
   useEffect(() => {
-    const storedLocale = localStorage.getItem('preferred-locale');
+    const storedLocale = getPreferredLocale();
     const pathname = window.location.pathname;
     const currentLocale = pathname.split('/')[1];
 

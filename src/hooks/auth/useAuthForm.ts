@@ -9,29 +9,26 @@ import {
   LoginValues,
   PasswordRecoveryValue,
   PasswordRecoverySchema,
-  NewPasswordValues,
-  NewPasswordSchema,
+  ResetPasswordValues,
+  ResetPasswordSchema,
 } from "@/schemas/authSchema";
 import React, { useEffect, useState } from "react";
-import { authSubmitHandler } from "@/utils/auth/authSubmitHandler";
+import { authSubmitHandler } from "@/utils/auth/handlers/authSubmitHandler";
 import { useRouter } from "next/navigation";
-import { getAccessToken } from "@/utils/account/getAccessToken";
 
-export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY" | "NEW_PASSWORD";
-export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue | NewPasswordValues;
+export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY" | "RESET_PASSWORD";
+export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue | ResetPasswordValues;
 
-export function useAuthForm() {
+type AuthFormProps = {
+  initialMode: Mode;
+  resetPasswordUrl?: string;
+};
+
+export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
   const router = useRouter();
 
-  useEffect(() => {
-    const token = getAccessToken();
-    if (token) {
-      router.push("/account");
-      return;
-    }
-  }, [router]);
-
-  const [mode, setMode] = useState<Mode>("LOGIN");
+  const resetMode = document.cookie.includes("resetPasswordMode=true");
+  const [mode, setMode] = useState<Mode>(initialMode);
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
@@ -43,8 +40,8 @@ export function useAuthForm() {
         return LoginSchema;
       case "PASSWORD_RECOVERY":
         return PasswordRecoverySchema;
-      case "NEW_PASSWORD":
-        return NewPasswordSchema;
+      case "RESET_PASSWORD":
+        return ResetPasswordSchema;
       default:
         throw new Error("Invalid mode");
     }
@@ -68,30 +65,13 @@ export function useAuthForm() {
   });
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    const searchParams = new URLSearchParams(window.location.search);
-
-    if (!searchParams.has("reset_url")) return;
-
-    const rawResetUrl = searchParams.get("reset_url");
-
-    if (!rawResetUrl || rawResetUrl.trim() === "") {
-      setMode("PASSWORD_RECOVERY");
-      setError("root", { message: "LINK_UNAVAILABLE" });
-      return;
-    }
-
-    const match = rawResetUrl.match(/\/account\/reset\/(\d+)\/([a-z0-9\-]+)/i);
-    if (match) {
-      setMode("NEW_PASSWORD");
+    if (mode === "RESET_PASSWORD" && resetPasswordUrl) {
       setValue("email", "dummy@example.com");
-      setValue("resetUrl", rawResetUrl);
-    } else {
-      setMode("PASSWORD_RECOVERY");
+      setValue("resetUrl", resetPasswordUrl);
+    } else if (initialMode === "PASSWORD_RECOVERY") {
       setError("root", { message: "LINK_UNAVAILABLE" });
     }
-  }, [setError, setValue]);
+  }, [mode, resetMode, resetPasswordUrl, setError, setValue]);
 
   const customRegister = (name: keyof FormValues) => {
     const base = register(name);
@@ -117,14 +97,14 @@ export function useAuthForm() {
 
   function useTriggerVerification(
     watchedField: unknown,
-    confirmField: keyof RegisterValues | keyof NewPasswordValues
+    confirmField: keyof RegisterValues | keyof ResetPasswordValues
   ) {
     useEffect(() => {
       if (
         (mode === "REGISTER" &&
           (touchedFields as Partial<RegisterValues>)[confirmField as keyof RegisterValues]) ||
-        (mode === "NEW_PASSWORD" &&
-          (touchedFields as Partial<NewPasswordValues>)[confirmField as keyof NewPasswordValues])
+        (mode === "RESET_PASSWORD" &&
+          (touchedFields as Partial<ResetPasswordValues>)[confirmField as keyof ResetPasswordValues])
       ) {
         trigger(confirmField);
       }

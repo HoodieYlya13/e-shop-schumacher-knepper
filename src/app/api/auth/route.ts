@@ -4,13 +4,10 @@ import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccoun
 export async function POST(req: NextRequest) {
   const { mode, email, password, firstName, lastName, phone, acceptsMarketing, resetUrl } = await req.json();
 
-  const buyerIp = req.headers.get('x-buyer-ip') ?? undefined;
-  console.log("Buyer IP:", buyerIp);
-
   try {
     let response;
     
-    if (!mode || !['REGISTER', 'LOGIN', 'PASSWORD_RECOVERY', 'NEW_PASSWORD'].includes(mode)) {
+    if (!mode || !['REGISTER', 'LOGIN', 'PASSWORD_RECOVERY', 'RESET_PASSWORD'].includes(mode)) {
       return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
     }
 
@@ -24,20 +21,19 @@ export async function POST(req: NextRequest) {
           phone,
           acceptsMarketing,
         },
-        buyerIp
       );
     }
 
     if (mode === 'LOGIN') {
-      response = await createCustomerAccessToken({ email, password }, buyerIp);
+      response = await createCustomerAccessToken({ email, password });
     }
 
     if (mode === 'PASSWORD_RECOVERY') {
-      response = await recoverCustomerAccount(email, buyerIp);
+      response = await recoverCustomerAccount(email);
     }
 
-    if (mode === 'NEW_PASSWORD') {
-      response = await resetCustomerPasswordByUrl(password, resetUrl, buyerIp);
+    if (mode === 'RESET_PASSWORD') {
+      response = await resetCustomerPasswordByUrl(password, resetUrl);
     }
 
     return NextResponse.json(response);

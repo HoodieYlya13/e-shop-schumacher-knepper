@@ -1,10 +1,10 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
-import { NewPasswordValues, RegisterValues } from "@/schemas/authSchema";
+import { ResetPasswordValues, RegisterValues } from "@/schemas/authSchema";
 import { UseFormSetError } from "react-hook-form";
-import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
-import { loginHandler } from "./shared/loginHandler";
-import { registerHandler } from "./shared/registerHandler";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { registerHandler } from "./shared/registerHandler";
+import { loginHandler } from "./shared/loginHandler";
+import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
 import { resetPasswordHandler } from "./shared/resetPasswordHandler";
 
 export async function authSubmitHandler(
@@ -16,7 +16,7 @@ export async function authSubmitHandler(
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   afterRegister: boolean = false,
-  setValue?: (name: keyof NewPasswordValues, value: string) => void
+  setValue?: (name: keyof ResetPasswordValues, value: string) => void
 ) {
   try {
     clearErrors();
@@ -34,7 +34,7 @@ export async function authSubmitHandler(
       (mode === "REGISTER" && !json.customerCreate) ||
       (mode === "LOGIN" && !json.customerAccessTokenCreate) ||
       (mode === "PASSWORD_RECOVERY" && !json.customerRecover) ||
-      (mode === "NEW_PASSWORD" && !json.customerResetByUrl)
+      (mode === "RESET_PASSWORD" && !json.customerResetByUrl)
     ) {
       setError("root", { message: "GENERIC" });
       return;
@@ -60,9 +60,9 @@ export async function authSubmitHandler(
       return passwordRecoveryHandler(setError, setSuccessMessage, json);
     }
 
-    if (mode === "NEW_PASSWORD") {
+    if (mode === "RESET_PASSWORD") {
       if (!setValue) {
-        throw new Error("setValue is required for NEW_PASSWORD mode");
+        throw new Error("setValue is required for RESET_PASSWORD mode");
       }
       return resetPasswordHandler(router, setError, setMode, setValue, json);
     }

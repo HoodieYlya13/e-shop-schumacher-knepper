@@ -1,16 +1,13 @@
 
 import { NextResponse } from 'next/server';
 import { getAllProducts } from '@/lib/services/products';
+import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 
 export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const lang = url.searchParams.get('lang')?.toUpperCase() as 'EN' | 'FR' | 'DE' || 'EN';
-
-  const buyerIp = req.headers.get('x-buyer-ip') ?? undefined;
-  console.log("Buyer IP:", buyerIp);
+  const languageCode = getPreferredLocale()?.toUpperCase() as 'EN' | 'FR' | 'DE' | undefined;
 
   try {
-    const products = await getAllProducts(lang, buyerIp);
+    const products = await getAllProducts(languageCode);
     return NextResponse.json(products);
   } catch (error: unknown) {
     if (error instanceof Error) {

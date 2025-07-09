@@ -1,12 +1,13 @@
 "use client";
 
+import { Mode } from "@/hooks/auth/useAuthForm";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import React from "react";
 
 interface ModeSwitchProps {
   mode: string;
-  handleModeChange: (newMode: "LOGIN" | "REGISTER" | "PASSWORD_RECOVERY" | "NEW_PASSWORD") => void;
+  handleModeChange: (newMode: Mode) => void;
 }
 
 export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) {
