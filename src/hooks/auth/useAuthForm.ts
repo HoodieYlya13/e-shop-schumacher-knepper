@@ -71,7 +71,7 @@ export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
     } else if (initialMode === "PASSWORD_RECOVERY") {
       setError("root", { message: "LINK_UNAVAILABLE" });
     }
-  }, [mode, resetMode, resetPasswordUrl, setError, setValue]);
+  }, [mode, resetMode, resetPasswordUrl, setError, setValue, initialMode]);
 
   const customRegister = (name: keyof FormValues) => {
     const base = register(name);

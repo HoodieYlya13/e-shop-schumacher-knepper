@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { getAllProducts } from '@/lib/services/products';
 import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 
-export async function GET(req: Request) {
+export async function GET() {
   const languageCode = getPreferredLocale()?.toUpperCase() as 'EN' | 'FR' | 'DE' | undefined;
 
   try {
