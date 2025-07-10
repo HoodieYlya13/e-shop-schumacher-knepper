@@ -2,6 +2,8 @@ import { useTranslations } from "next-intl";
 import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import Input from "../../../UI/shared/elements/Input";
 import { RegisterValues } from "@/schemas/authSchema";
+import { CountryCode } from "libphonenumber-js/core";
+import { getBuyerCountry } from "@/utils/shared/getters/getBuyerCountry";
 
 interface SignUpProps {
   register: UseFormRegister<RegisterValues>;
@@ -16,7 +18,7 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
     <>
       <Input
         type="email"
-        placeholder={t("EMAIL")}
+        label={t("EMAIL")}
         {...register("email")}
         errorText={errors.email && t(`ERRORS.${errors.email.message}`)}
         autoComplete="email"
@@ -25,7 +27,7 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
 
       <Input
         type="email"
-        placeholder={t("CONFIRM_EMAIL")}
+        label={t("CONFIRM_EMAIL")}
         {...register("confirmEmail")}
         errorText={
           errors.confirmEmail && t(`ERRORS.${errors.confirmEmail.message}`)
@@ -35,7 +37,7 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
 
       <Input
         type="password"
-        placeholder={t("PASSWORD")}
+        label={t("PASSWORD")}
         {...register("password")}
         errorText={errors.password && t(`ERRORS.${errors.password.message}`)}
         autoComplete="new-password"
@@ -43,7 +45,7 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
 
       <Input
         type="password"
-        placeholder={t("CONFIRM_PASSWORD")}
+        label={t("CONFIRM_PASSWORD")}
         {...register("confirmPassword")}
         errorText={
           errors.confirmPassword &&
@@ -54,30 +56,29 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
 
       <Input
         type="text"
-        placeholder={`${t("FIRST_NAME")} (${t("OPTIONAL")})`}
+        label={`${t("FIRST_NAME")}`}
         {...register("firstName")}
         errorText={errors.firstName && t(`ERRORS.${errors.firstName.message}`)}
-        required={false}
         autoComplete="given-name"
       />
 
       <Input
         type="text"
-        placeholder={`${t("LAST_NAME")} (${t("OPTIONAL")})`}
+        label={`${t("LAST_NAME")}`}
         {...register("lastName")}
         errorText={errors.lastName && t(`ERRORS.${errors.lastName.message}`)}
-        required={false}
         autoComplete="family-name"
       />
 
       <Input
         type="tel"
-        placeholder={`${t("PHONE")} (${t("OPTIONAL")})`}
+        label={`${t("PHONE")} (${t("OPTIONAL")})`}
         {...register("phone")}
         errorText={errors.phone && t(`ERRORS.${errors.phone.message}`)}
-        required={false}
+        // required={false}
         autoComplete="tel"
         setValue={setValue}
+        defaultCountry={(getBuyerCountry() || "LU") as CountryCode}
       />
 
       <label className="flex items-center gap-2">

@@ -58,7 +58,9 @@
       "CORRECT_FIELDS_BEFORE_SUBMIT": "Please correct the fields before submitting.",
       "UNIDENTIFIED_CUSTOMER": "Unidentified customer. Please sign up.",
       "LINK_UNAVAILABLE": "Link unavailable. Please try your request again.",
-      "TOKEN_INVALID": "Invalid token. Please request a new password reset."
+      "TOKEN_INVALID": "Invalid token. Please request a new password reset.",
+      "REQUIRED": "This field is required.",
+      "TOO_MANY_CHAR": "Too many characters."
     }
   }
 }

@@ -16,7 +16,8 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
     <>
       <Input
         type="email"
-        placeholder={t("EMAIL")}
+        label={t("EMAIL")}
+        requiredTag={false}
         {...register("email")}
         errorText={errors.email && t(`ERRORS.${errors.email.message}`)}
         focusOnMount
@@ -25,7 +26,8 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
 
       <Input
         type="password"
-        placeholder={t("PASSWORD")}
+        label={t("PASSWORD")}
+        requiredTag={false}
         {...register("password")}
         errorText={errors.password && t(`ERRORS.${errors.password.message}`)}
         autoComplete="current-password"

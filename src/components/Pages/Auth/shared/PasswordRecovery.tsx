@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import InputField from "../../../UI/shared/elements/Input";
+import Input from "../../../UI/shared/elements/Input";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { PasswordRecoveryValue } from "@/schemas/authSchema";
 import { useMemo } from "react";
@@ -44,9 +44,10 @@ export default function PasswordRecovery({
 
   return (
     <>
-      <InputField
+      <Input
         type="email"
-        placeholder={t("EMAIL")}
+        label={t("EMAIL")}
+        requiredTag={false}
         {...register("email")}
         successText={successText ? t(successText) : undefined}
         errorText={errors.email && t(`ERRORS.${errors.email.message}`)}

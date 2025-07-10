@@ -1,6 +1,6 @@
 "use client";
 
-import InputField from "@/components/UI/shared/elements/Input";
+import Input from "@/components/UI/shared/elements/Input";
 import { ResetPasswordValues } from "@/schemas/authSchema";
 import { useTranslations } from "next-intl";
 import React from "react";
@@ -19,9 +19,9 @@ export default function ResetPassword({
 
   return (
     <>
-      <InputField
+      <Input
         type="password"
-        placeholder={t("PASSWORD")}
+        label={t("PASSWORD")}
         {...register("password")}
         errorText={
           errors.password && t(`ERRORS.${errors.password.message}`)
@@ -29,9 +29,9 @@ export default function ResetPassword({
         autoComplete="new-password"
       />
 
-      <InputField
+      <Input
         type="password"
-        placeholder={t("CONFIRM_PASSWORD")}
+        label={t("CONFIRM_PASSWORD")}
         {...register("confirmPassword")}
         errorText={
           errors.confirmPassword &&

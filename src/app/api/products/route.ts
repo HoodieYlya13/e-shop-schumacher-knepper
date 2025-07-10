@@ -4,7 +4,7 @@ import { getAllProducts } from '@/lib/services/products';
 import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 
 export async function GET() {
-  const languageCode = getPreferredLocale()?.toUpperCase() as 'EN' | 'FR' | 'DE' | undefined;
+  const languageCode = getPreferredLocale(true) as 'EN' | 'FR' | 'DE' | undefined;
 
   try {
     const products = await getAllProducts(languageCode);

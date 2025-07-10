@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 
 export default async function AllProducts({ locale }: { locale: string }) {
-  const languageCode = getPreferredLocale()?.toUpperCase() as 'EN' | 'FR' | 'DE' | undefined;
+  const languageCode = getPreferredLocale(true) as 'EN' | 'FR' | 'DE' | undefined;
 
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
   const products: Product[] = await getAllProducts(languageCode);

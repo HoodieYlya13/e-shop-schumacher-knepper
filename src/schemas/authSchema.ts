@@ -29,15 +29,15 @@ export const RegisterSchema = z
       .refine(noLeadingOrTrailingWhitespace, {
         message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
       }),
-    firstName: z.string().trim().optional(),
-    lastName: z.string().trim().optional(),
+    firstName: z.string().trim().min(1, { message: "REQUIRED" }).max(255, { message: "TOO_MANY_CHAR" }),
+    lastName: z.string().trim().min(1, { message: "REQUIRED" }).max(255, { message: "TOO_MANY_CHAR" }),
     phone: z
       .string()
       .trim()
       .transform((val) => (val === "" ? null : val))
       .nullable()
       .optional()
-      .refine((val) => !val || /^\+?[0-9]{7,15}$/.test(val), {
+      .refine((val) => !val || /^\+[1-9][0-9]{6,14}$/.test(val), {
         message: "INVALID",
       }),
     acceptsMarketing: z.boolean().default(true),
