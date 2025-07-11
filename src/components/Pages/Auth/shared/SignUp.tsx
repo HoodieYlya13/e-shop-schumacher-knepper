@@ -7,7 +7,7 @@ import { getBuyerCountry } from "@/utils/shared/getters/getBuyerCountry";
 
 interface SignUpProps {
   register: UseFormRegister<RegisterValues>;
-  setValue?: UseFormSetValue<RegisterValues>;
+  setValue: UseFormSetValue<RegisterValues>;
   errors: FieldErrors<RegisterValues>;
 }
 
@@ -75,7 +75,7 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
         label={`${t("PHONE")} (${t("OPTIONAL")})`}
         {...register("phone")}
         errorText={errors.phone && t(`ERRORS.${errors.phone.message}`)}
-        // required={false}
+        required={false}
         autoComplete="tel"
         setValue={setValue}
         defaultCountry={(getBuyerCountry() || "LU") as CountryCode}

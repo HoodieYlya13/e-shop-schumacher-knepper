@@ -27,7 +27,9 @@ type AuthFormProps = {
 export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
   const router = useRouter();
 
-  const resetMode = document.cookie.includes("resetPasswordMode=true");
+  const resetMode =
+    typeof window !== "undefined" &&
+    document.cookie.includes("resetPasswordMode=true");
   const [mode, setMode] = useState<Mode>(initialMode);
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);

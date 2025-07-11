@@ -59,7 +59,7 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
               form.mode !== "PASSWORD_RECOVERY" &&
               Object.keys(form.errors).length > 0) ||
             Object.entries(form.getValues())
-              .filter(([key]) => key !== "acceptsMarketing")
+              .filter(([key]) => key !== "acceptsMarketing" && key !== "phone")
               .every(([, value]) => !value),
         }}
         errors={form.errors.root}
@@ -88,7 +88,9 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
             case "RESET_PASSWORD":
               return (
                 <ResetPassword
-                  register={form.register as UseFormRegister<ResetPasswordValues>}
+                  register={
+                    form.register as UseFormRegister<ResetPasswordValues>
+                  }
                   errors={form.errors}
                 />
               );

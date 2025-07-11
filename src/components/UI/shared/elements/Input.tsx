@@ -31,7 +31,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const CustomPhoneInput = React.forwardRef<
   HTMLInputElement,
   InputProps
->(({ value, onChange, onBlur, onFocus, focusOnMount, ...rest }, ref) => {
+>(({ value, onChange, onBlur, focusOnMount, ...rest }, ref) => {
   return (
     <Input
       type="tel"
