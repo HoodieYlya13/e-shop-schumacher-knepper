@@ -12,7 +12,7 @@ import {
   ResetPasswordValues,
   ResetPasswordSchema,
 } from "@/schemas/authSchema";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { authSubmitHandler } from "@/utils/auth/handlers/authSubmitHandler";
 import { useRouter } from "next/navigation";
 
@@ -27,9 +27,12 @@ type AuthFormProps = {
 export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
   const router = useRouter();
 
-  const resetMode =
-    typeof window !== "undefined" &&
-    document.cookie.includes("resetPasswordMode=true");
+  const resetMode = useMemo(() => {
+    if (typeof window !== "undefined") {
+      return document.cookie.includes("resetPasswordMode=true");
+    }
+    return false;
+  }, []);
   const [mode, setMode] = useState<Mode>(initialMode);
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);

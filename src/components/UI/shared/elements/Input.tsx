@@ -1,20 +1,19 @@
 "use client";
 
-import { RegisterValues } from "@/schemas/authSchema";
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import 'react-phone-number-input/style.css'
 import PhoneInput from "react-phone-number-input";
-import { UseFormSetValue } from "react-hook-form";
 import { CountryCode } from "libphonenumber-js/core";
 import en from 'react-phone-number-input/locale/en'
 import fr from 'react-phone-number-input/locale/fr'
 import de from 'react-phone-number-input/locale/de'
 import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
+import { useTranslations } from "next-intl";
 
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  type: "text" | "email" | "password" | "number" | "tel";
+  type: React.HTMLInputTypeAttribute;
   label?: string;
   labelIsPlaceholder?: boolean;
   placeholder?: string;
@@ -22,29 +21,42 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   errorText?: string;
   required?: boolean;
   requiredTag?: boolean;
+  optionalTag?: boolean;
   focusOnMount?: boolean;
-  setValue?: UseFormSetValue<RegisterValues>;
   defaultCountry?: CountryCode;
   embeddedClass?: boolean;
+  setRawValue?: React.Dispatch<React.SetStateAction<string | number | readonly string[]>>;
+  setFocused?: React.Dispatch<React.SetStateAction<boolean>>;
+  requiredWarningLog?: boolean;
 }
 
 const CustomPhoneInput = React.forwardRef<
   HTMLInputElement,
   InputProps
->(({ value, onChange, onBlur, focusOnMount, ...rest }, ref) => {
+>(({ value, onChange, onBlur, focusOnMount, setRawValue, setFocused, ...rest }, ref) => {
+  useEffect(() => {
+    if (setRawValue && value !== undefined) {
+      setRawValue(value);
+    }
+  }, [value, setRawValue]);
+  
   return (
     <Input
       type="tel"
       ref={ref}
-      placeholder={rest.placeholder}
       value={value}
+      labelIsPlaceholder={false}
       onChange={onChange}
-      onBlur={onBlur}
+      onBlur={(e) => {
+        onBlur?.(e);
+        setFocused?.(false);
+      }}
       required={rest.required}
       focusOnMount={focusOnMount}
       autoComplete="tel"
       embeddedClass={true}
       name={rest.name}
+      onFocus={() => setFocused?.(true)}
     />
   );
 });
@@ -62,17 +74,21 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       errorText,
       required = true,
       requiredTag = true,
+      optionalTag = false,
       focusOnMount = false,
       embeddedClass = false,
       defaultCountry,
-      setValue,
+      requiredWarningLog = true,
       ...rest
     },
     ref
   ) => {
+    const t = useTranslations("COMMON");
+
     const [showError, setShowError] = useState(false);
-    const [value, setValueState] = useState<string | undefined>();
-    const [touched, setTouched] = useState(false);
+    const [valueState, setValueState] = useState<string | undefined>();
+    const [rawValue, setRawValue] = useState<string | undefined>();
+    const [focused, setFocused] = useState(false);
 
     const internalRef = useRef<HTMLInputElement>(null);
     const combinedRef = (node: HTMLInputElement | null) => {
@@ -101,11 +117,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     }, [focusOnMount]);
 
-    useEffect(() => {
-      if (type === "tel" && setValue) {
-        setValue("phone", value || "", { shouldValidate: true });
-      }
-    }, [value, type, setValue]);
+    if (type === "tel" && !embeddedClass && required && requiredWarningLog) {
+      console.warn(
+        "errors must be provided for tel input validation when required and required logic should be handled by zod schema. To dismiss this warning set requiredWarningLog to false in the parent."
+      );
+    }
 
     const getPhoneInputLabels = () => {
       switch (getPreferredLocale()) {
@@ -118,7 +134,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     };
 
-    const combinedPlaceholder = placeholder || (labelIsPlaceholder ? label : undefined);
+    const combinedPlaceholder =
+      placeholder || (labelIsPlaceholder ? label : "") + 
+      (optionalTag && !required ? ` (${t("OPTIONAL")})` : "");
     
     return (
       <>
@@ -126,28 +144,59 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           <label className="block mb-2 text-sm font-medium text-gray-700">
             {label}
             {required && requiredTag && <span className="text-red-500">*</span>}
+            {optionalTag && !required && (
+              <span className="text-gray-400"> ({t("OPTIONAL")})</span>
+            )}
           </label>
         )}
         {type === "tel" && !embeddedClass ? (
-          <PhoneInput
-            className={clsx("w-full p-2 border rounded", {
-              "border-red-500": !!errorText && touched,
-            })}
-            labels={getPhoneInputLabels()}
-            international
-            defaultCountry={defaultCountry}
-            inputComponent={CustomPhoneInput}
-            value={value}
-            onChange={setValueState}
-            onBlur={(e) => {
-              setTouched(true);
-              rest.onBlur?.(e as React.FocusEvent<HTMLInputElement>);
-            }}
-            autoComplete={rest.autoComplete}
-            focusOnMount={focusOnMount}
-            placeholder={combinedPlaceholder}
-            required={required}
-          />
+          <div className="relative">
+            <PhoneInput
+              type={type}
+              className={clsx(
+                "border w-full px-2 rounded absolute outline-none",
+                focused ? "border-blue-500" : "border-gray-300",
+                {
+                  "border-red-500": !!errorText && showError,
+                }
+              )}
+              labels={getPhoneInputLabels()}
+              international
+              defaultCountry={defaultCountry}
+              inputComponent={CustomPhoneInput}
+              value={valueState}
+              onChange={setValueState}
+              onBlur={(e) =>
+                rest.onBlur?.(e as React.FocusEvent<HTMLInputElement>)
+              }
+              autoComplete={rest.autoComplete}
+              focusOnMount={focusOnMount}
+              placeholder={combinedPlaceholder}
+              required={required}
+              name={rest.name}
+              setRawValue={setRawValue}
+              setFocused={setFocused}
+            />
+            <input
+              placeholder={!valueState ? combinedPlaceholder : ""}
+              className={clsx(
+                "w-full p-2 border rounded pl-14 outline-none",
+                focused ? "border-blue-500" : "border-gray-300",
+                {
+                  "pl-25": rawValue,
+                }
+              )}
+              value=""
+              readOnly
+            />
+            <input
+              type="hidden"
+              value={valueState || ""}
+              readOnly
+              ref={ref}
+              {...rest}
+            />
+          </div>
         ) : (
           <input
             type={type}
@@ -155,8 +204,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             required={required}
             className={clsx(
               embeddedClass
-                ? "flex-grow px-2 border-none outline-none"
-                : "w-full p-2 border rounded",
+                ? "flex-grow p-2 border-none outline-none"
+                : "w-full p-2 border rounded outline-none border-gray-300 focus:border-blue-500",
               {
                 "border-red-500": !embeddedClass && !!errorText,
               }

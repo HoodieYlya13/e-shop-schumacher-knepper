@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import ModeSwitch from "./shared/ModeSwitch";
 import SignUp from "./shared/SignUp";
 import SignIn from "./shared/SignIn";
-import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { UseFormRegister } from "react-hook-form";
 import { LoginValues, ResetPasswordValues, PasswordRecoveryValue, RegisterValues } from "@/schemas/authSchema";
 import { Mode, useAuthForm } from "@/hooks/auth/useAuthForm";
 import PasswordRecovery from "./shared/PasswordRecovery";
@@ -70,7 +70,6 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
               return (
                 <SignUp
                   register={form.register as UseFormRegister<RegisterValues>}
-                  setValue={form.setValue as UseFormSetValue<RegisterValues>}
                   errors={form.errors}
                 />
               );

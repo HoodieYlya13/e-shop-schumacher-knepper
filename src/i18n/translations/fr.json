@@ -1,4 +1,7 @@
 {
+  "COMMON": {
+    "OPTIONAL":"optional"
+  },
   "HOME_PAGE": {
     "META": {
       "TITLE": "Boutique en ligne - {name}",
