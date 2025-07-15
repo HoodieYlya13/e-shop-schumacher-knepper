@@ -3,14 +3,16 @@
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import 'react-phone-number-input/style.css'
-import PhoneInput from "react-phone-number-input";
 import { CountryCode } from "libphonenumber-js/core";
+import { getCountryCallingCode } from 'libphonenumber-js';
 import en from 'react-phone-number-input/locale/en'
 import fr from 'react-phone-number-input/locale/fr'
 import de from 'react-phone-number-input/locale/de'
 import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
 import { useTranslations } from "next-intl";
-
+import { getCountries } from "libphonenumber-js";
+import Image from "next/image";
+import { FieldValues, UseFormSetValue } from "react-hook-form";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: React.HTMLInputTypeAttribute;
@@ -24,44 +26,8 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   optionalTag?: boolean;
   focusOnMount?: boolean;
   defaultCountry?: CountryCode;
-  embeddedClass?: boolean;
-  setRawValue?: React.Dispatch<React.SetStateAction<string | number | readonly string[]>>;
-  setFocused?: React.Dispatch<React.SetStateAction<boolean>>;
-  requiredWarningLog?: boolean;
+  setValue?: UseFormSetValue<FieldValues>;
 }
-
-const CustomPhoneInput = React.forwardRef<
-  HTMLInputElement,
-  InputProps
->(({ value, onChange, onBlur, focusOnMount, setRawValue, setFocused, ...rest }, ref) => {
-  useEffect(() => {
-    if (setRawValue && value !== undefined) {
-      setRawValue(value);
-    }
-  }, [value, setRawValue]);
-  
-  return (
-    <Input
-      type="tel"
-      ref={ref}
-      value={value}
-      labelIsPlaceholder={false}
-      onChange={onChange}
-      onBlur={(e) => {
-        onBlur?.(e);
-        setFocused?.(false);
-      }}
-      required={rest.required}
-      focusOnMount={focusOnMount}
-      autoComplete="tel"
-      embeddedClass={true}
-      name={rest.name}
-      onFocus={() => setFocused?.(true)}
-    />
-  );
-});
-
-CustomPhoneInput.displayName = "CustomPhoneInput";
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
@@ -76,9 +42,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       requiredTag = true,
       optionalTag = false,
       focusOnMount = false,
-      embeddedClass = false,
       defaultCountry,
-      requiredWarningLog = true,
+      setValue,
       ...rest
     },
     ref
@@ -86,9 +51,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const t = useTranslations("COMMON");
 
     const [showError, setShowError] = useState(false);
-    const [valueState, setValueState] = useState<string | undefined>();
-    const [rawValue, setRawValue] = useState<string | undefined>();
+    const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
+    const [country, setCountry] = useState<CountryCode | undefined>(defaultCountry);
     const [focused, setFocused] = useState(false);
+    const [flagFocused, setFlagFocused] = useState(false);
+    const [touched, setTouched] = useState(false);
 
     const internalRef = useRef<HTMLInputElement>(null);
     const combinedRef = (node: HTMLInputElement | null) => {
@@ -117,11 +84,28 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     }, [focusOnMount]);
 
-    if (type === "tel" && !embeddedClass && required && requiredWarningLog) {
-      console.warn(
-        "errors must be provided for tel input validation when required and required logic should be handled by zod schema. To dismiss this warning set requiredWarningLog to false in the parent."
-      );
-    }
+    useEffect(() => {
+      if (type !== "tel" || !setValue) return;
+
+      if (!rest.name) {
+        return console.warn("Input name and setValue are required for phone input");
+      }
+
+      if (!country || !phoneNumber) {
+        setValue(rest.name, "", { shouldValidate: true });
+        return;
+      }
+      
+      if (touched) {
+        setValue(
+          rest.name,
+          `+${getCountryCallingCode(country)}${phoneNumber}`,
+          {
+            shouldValidate: true,
+          }
+        );
+      }
+    }, [type, country, phoneNumber, rest.name, setValue, touched]);
 
     const getPhoneInputLabels = () => {
       switch (getPreferredLocale()) {
@@ -134,6 +118,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       }
     };
 
+    const countries = getCountries().map(code => ({
+      code,
+      name: getPhoneInputLabels()[code] || code
+    }));
+    
     const combinedPlaceholder =
       placeholder || (labelIsPlaceholder ? label : "") + 
       (optionalTag && !required ? ` (${t("OPTIONAL")})` : "");
@@ -149,72 +138,105 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             )}
           </label>
         )}
-        {type === "tel" && !embeddedClass ? (
-          <div className="relative">
-            <PhoneInput
-              type={type}
-              className={clsx(
-                "border w-full px-2 rounded absolute outline-none",
-                focused ? "border-blue-500" : "border-gray-300",
-                {
-                  "border-red-500": !!errorText && showError,
-                }
-              )}
-              labels={getPhoneInputLabels()}
-              international
-              defaultCountry={defaultCountry}
-              inputComponent={CustomPhoneInput}
-              value={valueState}
-              onChange={setValueState}
-              onBlur={(e) =>
-                rest.onBlur?.(e as React.FocusEvent<HTMLInputElement>)
+
+        {type === "tel" ? (
+          <div
+            className={clsx(
+              {
+                "inline-flex items-center px-2 w-full border rounded outline-none":
+                  type === "tel",
+              },
+              focused ? "border-blue-500" : "border-gray-300",
+              {
+                "border-red-500": !!errorText,
               }
-              autoComplete={rest.autoComplete}
-              focusOnMount={focusOnMount}
+            )}
+          >
+            <div className="PhoneInputCountry">
+              <select
+                className="PhoneInputCountrySelect"
+                value={country}
+                onFocus={() => {
+                  setFlagFocused(true);
+                  setFocused(true);
+                }}
+                onBlur={() => {
+                  setFlagFocused(false);
+                  setFocused(false);
+                }}
+                onChange={(e) => {
+                  setFocused(true);
+                  setCountry(e.target.value as CountryCode);
+                  internalRef.current?.focus();
+                }}
+              >
+                {countries.map(({ code, name }) => (
+                  <option key={code} value={code}>
+                    {name}
+                  </option>
+                ))}
+              </select>
+              <Image
+                src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
+                alt={country || "Country Flag"}
+                className={clsx(
+                  "PhoneInputCountryIcon w-6 h-4 object-cover border",
+                  { "border-blue-500": flagFocused }
+                )}
+                width={24}
+                height={16}
+              />
+              <div
+                className="PhoneInputCountrySelectArrow"
+                style={{
+                  borderColor: flagFocused
+                    ? "oklch(62.3% 0.214 259.815)"
+                    : "currentColor",
+                }}
+              />
+            </div>
+            <span className="mx-2 text-gray-500">
+              {country ? `+${getCountryCallingCode(country)}` : ""}
+            </span>
+
+            <input
+              type="tel"
               placeholder={combinedPlaceholder}
               required={required}
-              name={rest.name}
-              setRawValue={setRawValue}
-              setFocused={setFocused}
-            />
-            <input
-              placeholder={!valueState ? combinedPlaceholder : ""}
-              className={clsx(
-                "w-full p-2 border rounded pl-14 outline-none",
-                focused ? "border-blue-500" : "border-gray-300",
-                {
-                  "pl-25": rawValue,
-                }
-              )}
-              value=""
-              readOnly
-            />
-            <input
-              type="hidden"
-              value={valueState || ""}
-              readOnly
-              ref={ref}
-              {...rest}
+              className="flex-grow py-2 border-none outline-none"
+              ref={combinedRef}
+              value={phoneNumber || ""}
+              autoComplete={rest.autoComplete}
+              onBlur={() => {
+                setFocused(false);
+                setTouched(true);
+              }}
+              onFocus={() => {
+                setFocused(true);
+              }}
+              onChange={(e) => {
+                setPhoneNumber(e.target.value);
+                if (touched) setPhoneNumber(e.target.value);
+              }}
             />
           </div>
         ) : (
           <input
+            {...rest}
             type={type}
             placeholder={combinedPlaceholder}
             required={required}
             className={clsx(
-              embeddedClass
-                ? "flex-grow p-2 border-none outline-none"
-                : "w-full p-2 border rounded outline-none border-gray-300 focus:border-blue-500",
+              "w-full p-2 border rounded outline-none border-gray-300 focus:border-blue-500",
               {
-                "border-red-500": !embeddedClass && !!errorText,
+                "border-red-500": !!errorText,
               }
             )}
             ref={combinedRef}
             autoComplete={rest.autoComplete}
-            {...rest}
           />
         )}
+
         {successText && <p className="text-sm text-green-600">{successText}</p>}
         {showError && errorText && (
           <p className="text-sm text-red-600">{errorText}</p>

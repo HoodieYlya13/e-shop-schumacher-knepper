@@ -1,6 +1,6 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { ResetPasswordValues, RegisterValues } from "@/schemas/authSchema";
-import { UseFormSetError } from "react-hook-form";
+import { UseFormSetError, UseFormSetValue } from "react-hook-form";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { registerHandler } from "./shared/registerHandler";
 import { loginHandler } from "./shared/loginHandler";
@@ -16,7 +16,7 @@ export async function authSubmitHandler(
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   afterRegister: boolean = false,
-  setValue?: (name: keyof ResetPasswordValues, value: string) => void
+  setValue: UseFormSetValue<ResetPasswordValues>
 ) {
   try {
     clearErrors();

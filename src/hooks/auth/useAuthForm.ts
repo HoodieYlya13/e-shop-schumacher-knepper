@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, UseFormSetValue } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   RegisterSchema,
@@ -134,7 +134,7 @@ export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
         setSuccessMessage,
         setMode,
         false,
-        setValue
+        setValue as UseFormSetValue<ResetPasswordValues>
       )
     ),
     errors,
