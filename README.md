@@ -28,6 +28,8 @@ You must modify the **redirection-theme** after importing it into Shopify for pr
 
 Replace all instances of `http://localhost:3000` with your actual app URL inside `theme.liquid` and `header.liquid`.
 
+Still on Shopify, go to "Edit Customer account password reset" and replace `{{ customer.reset_password_url }}` with `shop.website.com/auth?reset_password_url={{ customer.reset_password_url }}`.
+
 ### Recommended Subdomain Architecture
 
 - `website.com` — Main website
