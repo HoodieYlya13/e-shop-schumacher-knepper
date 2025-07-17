@@ -1,5 +1,15 @@
-import { redirect } from "next/navigation";
+"use client";
 
-export default function Error() {
-  redirect("/");
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function Error({ error }: { error: Error }) {
+  const router = useRouter();
+
+  useEffect(() => {
+    console.error(error);
+    router.replace("/");
+  }, [error, router]);
+
+  return null;
 }
