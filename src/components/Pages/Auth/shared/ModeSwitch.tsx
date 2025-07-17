@@ -1,5 +1,3 @@
-"use client";
-
 import { Mode } from "@/hooks/auth/useAuthForm";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";

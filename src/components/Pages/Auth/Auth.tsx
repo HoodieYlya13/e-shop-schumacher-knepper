@@ -11,7 +11,7 @@ import PasswordRecovery from "./shared/PasswordRecovery";
 import Form from "@/components/UI/shared/components/Form";
 import ResetPassword from "./shared/ResetPassword";
 
-type AuthProps = {
+interface AuthProps {
   initialMode: Mode;
   resetPasswordUrl?: string;
 };

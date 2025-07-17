@@ -1,16 +1,16 @@
+import { createCheckout } from '@/lib/services/checkout';
 import { NextRequest, NextResponse } from 'next/server';
-import { fetchCustomerData } from '@/lib/services/customer';
 
 export async function POST(req: NextRequest) {
-  const { token, identifiers } = await req.json();
+  const { variantId, quantity } = await req.json();
 
   try {
-    if (!token) {
-      return NextResponse.json({ error: 'Missing customer token' }, { status: 400 });
+    if (!variantId) {
+      return NextResponse.json({ error: 'Missing variantId' }, { status: 400 });
     }
 
-    const customer = await fetchCustomerData(token, identifiers);
-    return NextResponse.json(customer);
+    const checkoutUrl = await createCheckout(variantId, quantity);
+    return NextResponse.json({ url: checkoutUrl });
   } catch (error: unknown) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 });

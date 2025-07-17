@@ -1,6 +1,7 @@
 {
   "COMMON": {
-    "OPTIONAL":"optional"
+    "OPTIONAL":"optional",
+    "LOADING": "Loading..."
   },
   "HOME_PAGE": {
     "META": {

@@ -16,7 +16,7 @@ export async function authSubmitHandler(
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   afterRegister: boolean = false,
-  setValue: UseFormSetValue<ResetPasswordValues>
+  setValue?: UseFormSetValue<ResetPasswordValues>
 ) {
   try {
     clearErrors();

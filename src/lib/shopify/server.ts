@@ -6,13 +6,14 @@ export async function shopifyServerFetch<T, V = unknown>(
   variables?: V
 ): Promise<T> {
   const buyerIp = await getBuyerIp();
+  const headers = {
+    ...shopifyClient.getPrivateTokenHeaders(),
+    ...(buyerIp ? { "Shopify-Storefront-Buyer-IP": buyerIp } : {}),
+  };
 
   const response = await fetch(shopifyClient.getStorefrontApiUrl(), {
     method: "POST",
-    headers: {
-      ...shopifyClient.getPrivateTokenHeaders(),
-      "Shopify-Storefront-Buyer-IP": buyerIp ?? "",
-    },
+    headers,
     body: JSON.stringify({
       query,
       variables,

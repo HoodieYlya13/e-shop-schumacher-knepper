@@ -1,51 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Customer, Metafield } from "@shopify/hydrogen-react/storefront-api-types";
-import { logout } from "@/utils/account/logout";
-import { fetchCustomerData } from "@/utils/account/fetchCustomer";
-import { useTranslations } from "next-intl";
 
-type AccountProps = {
-  token: string;
+interface AccountProps {
+  customer: Customer;
 }
 
-export default function Account({ token }: AccountProps) {
-  const t = useTranslations("AUTH");
-
-  const [customer, setCustomer] = useState<Customer | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const router = useRouter();
-
-  useEffect(() => {
-    fetchCustomerData(token)
-      .then(setCustomer)
-      .catch(() => setError("GENERIC"))
-      .finally(() => setLoading(false));
-  }, [token, router]);
-
-  if (loading) return <p>Loading customer data...</p>;
-  if (error) return <p className="text-red-600">{t("ERRORS." + error)}</p>;
-  if (!customer) return <p>No customer information available.</p>;
-
+export default function Account({ customer }: AccountProps) {
   const validMetafields = customer.metafields.filter(
     (mf): mf is Exclude<Metafield, null> => mf !== null
   );
 
   return (
     <section className="max-w-lg mx-auto p-6 border rounded shadow space-y-4">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Account Information</h1>
-        <button
-          onClick={() => logout(router)}
-          className="text-sm text-red-600 underline hover:text-red-800"
-        >
-          Log out
-        </button>
-      </div>
+      <h1 className="text-2xl font-bold">Account Information</h1>
 
       <p>
         <strong>ID:</strong> {customer.id}

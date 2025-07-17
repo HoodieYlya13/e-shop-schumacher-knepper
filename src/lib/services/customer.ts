@@ -21,15 +21,18 @@ const CUSTOMER_METAFIELDS_QUERY = `
 `;
 
 export async function fetchCustomerData(
-  token: string,
-  identifiers: { namespace: string; key: string }[]
-): Promise<Customer | null> {
+  token: string
+): Promise<Customer> {
   const data = await shopifyServerFetch<{ customer: Customer }>(
     CUSTOMER_METAFIELDS_QUERY,
     {
       customerAccessToken: token,
-      identifiers,
+      identifiers: [
+        { namespace: "Membership", key: "VIP level" },
+        { namespace: "Membership", key: "startDate" },
+        { namespace: "note", key: "preference" },
+      ],
     }
   );
-  return data.customer ?? null;
+  return data.customer;
 }

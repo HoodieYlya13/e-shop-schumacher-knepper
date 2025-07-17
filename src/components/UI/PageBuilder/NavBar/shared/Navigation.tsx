@@ -11,7 +11,7 @@ const navItemsBase = [
   { href: '/about', labelKey: 'NAV.ABOUT' },
 ];
 
-type NavigationProps = {
+interface NavigationProps {
   token: string | undefined;
 };
 

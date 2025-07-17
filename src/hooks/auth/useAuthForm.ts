@@ -1,5 +1,3 @@
-"use client";
-
 import { useForm, UseFormSetValue } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,7 +17,7 @@ import { useRouter } from "next/navigation";
 export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY" | "RESET_PASSWORD";
 export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue | ResetPasswordValues;
 
-type AuthFormProps = {
+interface AuthFormProps {
   initialMode: Mode;
   resetPasswordUrl?: string;
 };

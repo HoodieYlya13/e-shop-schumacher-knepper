@@ -1,15 +1,15 @@
-import React from 'react';
-import { getTranslations } from 'next-intl/server';
-import { getAllProducts } from '@/lib/services/products';
+'use client';
+
 import { Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
-import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
+import { useTranslations } from 'next-intl';
 
-export default async function AllProducts({ locale }: { locale: string }) {
-  const languageCode = getPreferredLocale(true) as 'EN' | 'FR' | 'DE' | undefined;
+interface AllProductsProps {
+  products: Product[]
+};
 
-  const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
-  const products: Product[] = await getAllProducts(languageCode);
+export default function AllProducts({ products }: AllProductsProps) {
+  const t = useTranslations("HOME_PAGE");
 
   return (
     <section className="p-6 space-y-12">

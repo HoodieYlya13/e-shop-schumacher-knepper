@@ -1,5 +1,3 @@
-"use client";
-
 import Input from "@/components/UI/shared/elements/Input";
 import { ResetPasswordValues } from "@/schemas/authSchema";
 import { useTranslations } from "next-intl";

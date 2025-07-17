@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPasswordByUrl } from '@/lib/services/auth';
+import { Mode } from '@/hooks/auth/useAuthForm';
 
 export async function POST(req: NextRequest) {
   const { mode, email, password, firstName, lastName, phone, acceptsMarketing, resetUrl } = await req.json();
 
   try {
     let response;
-    
-    if (!mode || !['REGISTER', 'LOGIN', 'PASSWORD_RECOVERY', 'RESET_PASSWORD'].includes(mode)) {
+
+    if (!mode || !(mode as Mode)) {
       return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
     }
 
