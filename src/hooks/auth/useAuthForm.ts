@@ -10,9 +10,8 @@ import {
   ResetPasswordValues,
   ResetPasswordSchema,
 } from "@/schemas/authSchema";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { authSubmitHandler } from "@/utils/auth/handlers/authSubmitHandler";
-import { useRouter } from "next/navigation";
 
 export type Mode = "REGISTER" | "LOGIN" | "PASSWORD_RECOVERY" | "RESET_PASSWORD";
 export type FormValues = RegisterValues | LoginValues | PasswordRecoveryValue | ResetPasswordValues;
@@ -23,14 +22,6 @@ interface AuthFormProps {
 };
 
 export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
-  const router = useRouter();
-
-  const resetMode = useMemo(() => {
-    if (typeof window !== "undefined") {
-      return document.cookie.includes("resetPasswordMode=true");
-    }
-    return false;
-  }, []);
   const [mode, setMode] = useState<Mode>(initialMode);
   const [validateOnChangeFields, setValidateOnChangeFields] = useState<Set<string>>(new Set());
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
@@ -74,7 +65,7 @@ export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
     } else if (initialMode === "PASSWORD_RECOVERY") {
       setError("root", { message: "LINK_UNAVAILABLE" });
     }
-  }, [mode, resetMode, resetPasswordUrl, setError, setValue, initialMode]);
+  }, [mode, resetPasswordUrl, setError, setValue, initialMode]);
 
   const customRegister = (name: keyof FormValues) => {
     const base = register(name);
@@ -128,7 +119,6 @@ export function useAuthForm({ initialMode, resetPasswordUrl }: AuthFormProps) {
         mode,
         clearErrors,
         setError,
-        router,
         setSuccessMessage,
         setMode,
         false,

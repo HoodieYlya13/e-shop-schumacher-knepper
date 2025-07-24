@@ -78,13 +78,7 @@ export async function middleware(req: NextRequest) {
     sameSite: "lax",
   });
 
-  const pathname = url.pathname;
-  const checkoutUrlParam = url.searchParams.get("checkout_url");
-
-  if (
-    pathname.endsWith("/account/login") &&
-    checkoutUrlParam !== null
-  ) {
+  if (url.pathname.endsWith("/account/login")) {
     url.pathname = "/auth";
     return NextResponse.redirect(url);
   }

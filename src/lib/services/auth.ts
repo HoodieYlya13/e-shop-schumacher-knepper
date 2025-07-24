@@ -106,3 +106,22 @@ export async function resetCustomerPasswordByUrl(
     resetUrl,
   });
 }
+
+const ACCESS_TOKEN_DELETE_MUTATION = `
+  mutation customerAccessTokenDelete($customerAccessToken: String!) {
+    customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
+      deletedAccessToken
+      deletedCustomerAccessTokenId
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
+export async function deleteCustomerAccessToken(customerAccessToken: string) {
+  return shopifyServerFetch(ACCESS_TOKEN_DELETE_MUTATION, {
+    customerAccessToken
+  });
+}

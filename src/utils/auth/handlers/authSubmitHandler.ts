@@ -1,7 +1,6 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { ResetPasswordValues, RegisterValues } from "@/schemas/authSchema";
 import { UseFormSetError, UseFormSetValue } from "react-hook-form";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { registerHandler } from "./shared/registerHandler";
 import { loginHandler } from "./shared/loginHandler";
 import { passwordRecoveryHandler } from "./shared/passwordRecoveryHandler";
@@ -12,7 +11,6 @@ export async function authSubmitHandler(
   mode: Mode,
   clearErrors: () => void,
   setError: UseFormSetError<FormValues>,
-  router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   afterRegister: boolean = false,
@@ -45,7 +43,6 @@ export async function authSubmitHandler(
         data as RegisterValues,
         clearErrors,
         setError,
-        router,
         setSuccessMessage,
         setMode,
         json
@@ -53,7 +50,7 @@ export async function authSubmitHandler(
     }
 
     if (mode === "LOGIN") {
-      return loginHandler(setError, router, json, setMode, afterRegister);
+      return loginHandler(setError, json, setMode, afterRegister);
     }
 
     if (mode === "PASSWORD_RECOVERY") {
@@ -64,7 +61,7 @@ export async function authSubmitHandler(
       if (!setValue) {
         throw new Error("setValue is required for RESET_PASSWORD mode");
       }
-      return resetPasswordHandler(router, setError, setMode, setValue, json);
+      return resetPasswordHandler(setError, setMode, setValue, json);
     }
   } catch {
     setError("root", { message: "GENERIC" });

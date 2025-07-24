@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serialize } from "cookie";
+import { getCheckoutId } from "@/utils/shared/getters/getCheckoutId";
+import { updateBuyerIdentity } from "@/lib/services/checkout";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { token, tokenExpiry } = body;
+  const { token, tokenExpiry, redirectTo, checkoutUrlPath } = body;
 
   if (!token || !tokenExpiry) {
     return NextResponse.json({ error: "Missing token or expiry" }, { status: 400 });
@@ -15,7 +17,18 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Token expiry must be in the future" }, { status: 400 });
   }
 
-  const response = NextResponse.json({ success: true });
+  let checkoutUrl = null;
+  
+  if (checkoutUrlPath) {
+    checkoutUrl = `https://i621t2-yy.myshopify.com${decodeURIComponent(checkoutUrlPath)}`;
+    const checkoutId = await getCheckoutId();
+    if (checkoutId)
+      await updateBuyerIdentity(checkoutId, { customerAccessToken: token });
+  }
+  
+  const redirectUrl = checkoutUrl || redirectTo || "account";
+
+  const response = NextResponse.json({ redirectUrl });
 
   response.headers.append("Set-Cookie", serialize("shopify_token", token, {
     httpOnly: true,
@@ -24,6 +37,16 @@ export async function POST(req: NextRequest) {
     path: "/",
     expires,
   }));
+
+  if (checkoutUrl) {
+    response.headers.append("Set-Cookie", serialize("checkout_url", checkoutUrl, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 60 * 60 * 24,
+    }));
+  }
 
   return response;
 }

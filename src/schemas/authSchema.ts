@@ -17,15 +17,17 @@ export const RegisterSchema = z
       .transform((val) => val.toLowerCase()),
     password: z
       .string()
-      .min(5, { message: "TOO_SHORT" })
-      .max(40, { message: "TOO_LONG" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/, {
+        message: "WEAK_PASSWORD",
+      })
       .refine(noLeadingOrTrailingWhitespace, {
         message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
       }),
     confirmPassword: z
       .string()
-      .min(5, { message: "TOO_SHORT" })
-      .max(40, { message: "TOO_LONG" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/, {
+        message: "WEAK_PASSWORD",
+      })
       .refine(noLeadingOrTrailingWhitespace, {
         message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
       }),
@@ -55,8 +57,7 @@ export const LoginSchema = z.object({
   email: z.string().email({ message: "INVALID_EMAIL" }),
   password: z
     .string()
-    .min(5, { message: "TOO_SHORT" })
-    .max(40, { message: "TOO_LONG" })
+    .min(8, { message: "TOO_SHORT" })
     .refine(noLeadingOrTrailingWhitespace, {
       message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
     }),
@@ -71,15 +72,17 @@ export const ResetPasswordSchema = z
     email: z.string().email({ message: "INVALID_EMAIL" }),
     password: z
       .string()
-      .min(5, { message: "TOO_SHORT" })
-      .max(40, { message: "TOO_LONG" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/, {
+        message: "WEAK_PASSWORD",
+      })
       .refine(noLeadingOrTrailingWhitespace, {
         message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
       }),
     confirmPassword: z
       .string()
-      .min(5, { message: "TOO_SHORT" })
-      .max(40, { message: "TOO_LONG" })
+      .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/, {
+        message: "WEAK_PASSWORD",
+      })
       .refine(noLeadingOrTrailingWhitespace, {
         message: "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE",
       }),

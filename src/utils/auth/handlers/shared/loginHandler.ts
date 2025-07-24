@@ -1,11 +1,9 @@
 import { FormValues } from "@/hooks/auth/useAuthForm";
 import { login } from "@/utils/account/login";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError } from "react-hook-form";
 
 export async function loginHandler(
   setError: UseFormSetError<FormValues>,
-  router: AppRouterInstance,
   json: {
     customerAccessTokenCreate: {
       customerAccessToken?: {
@@ -38,6 +36,5 @@ export async function loginHandler(
     return;
   }
   
-  await login(token, tokenExpiry, router);
-  router.push("/account");
+  await login(token, tokenExpiry);
 }

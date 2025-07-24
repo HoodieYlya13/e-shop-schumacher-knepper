@@ -7,13 +7,12 @@ import { redirect } from 'next/navigation';
 
 export default async function AuthPage() {
   const token = await getAccessToken();
-  if (token) {
-    redirect("/account");
-  }
+  if (token) redirect("/account");
+  
   const initialMode = await getInitialAuthMode();
   const resetPasswordUrl = await getResetPasswordUrl();
   return (
-    <PageBuilder showFooter={false} >
+    <PageBuilder showFooter={false}>
       <Auth initialMode={initialMode} resetPasswordUrl={resetPasswordUrl} />
     </PageBuilder>
   );

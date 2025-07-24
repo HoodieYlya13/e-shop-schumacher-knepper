@@ -16,7 +16,7 @@ const CREATE_CART = `
   }
 `;
 
-export async function createCheckout(variantId: string, quantity = 1) {
+export async function createCheckout(variantId: string, customerAccessToken?: string, quantity = 3) {
   const variables = {
     cartInput: {
       lines: [
@@ -25,9 +25,14 @@ export async function createCheckout(variantId: string, quantity = 1) {
           merchandiseId: variantId,
         },
       ],
+      ...(customerAccessToken && {
+        buyerIdentity: {
+          customerAccessToken,
+        },
+      }),
     },
-    country: "FR",     // optionally detect with getBuyerCountry()
-    language: "FR",    // optionally detect with getPreferredLocale()
+    country: "FR",
+    language: "FR",
   };
 
   const data = await shopifyServerFetch<{
@@ -43,5 +48,66 @@ export async function createCheckout(variantId: string, quantity = 1) {
     };
   }>(CREATE_CART, variables);
 
-  return data.cartCreate.cart.checkoutUrl;
+  const cart = data.cartCreate.cart;
+  console.log("Checkout:", cart);
+  
+  return cart;
+}
+
+const UPDATE_BUYER_IDENTITY = `
+  mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+      cart {
+        id
+        checkoutUrl
+      }
+      userErrors {
+        code
+        message
+      }
+    }
+  }
+`;
+
+export async function updateBuyerIdentity(
+  cartId: string,
+  options: {
+    email?: string;
+    customerAccessToken?: string;
+    phone?: string;
+    countryCode?: string;
+  }
+) {
+  const buyerIdentity: Record<string, unknown> = {
+    email: null,
+    customerAccessToken: "",
+    phone: null,
+    countryCode: null,
+  };
+  if (options.email) buyerIdentity.email = options.email;
+  if (options.customerAccessToken) buyerIdentity.customerAccessToken = options.customerAccessToken;
+  if (options.phone) buyerIdentity.phone = options.phone;
+  if (options.countryCode) buyerIdentity.countryCode = options.countryCode;
+
+  const variables = {
+    cartId,
+    buyerIdentity,
+  };
+
+  const data = await shopifyServerFetch<{
+    cartBuyerIdentityUpdate: {
+      cart: {
+        id: string;
+        checkoutUrl: string;
+      };
+      userErrors: Array<{
+        code: string;
+        message: string;
+      }>;
+    };
+  }>(UPDATE_BUYER_IDENTITY, variables);
+
+  console.log("Updated checkout:", data);
+
+  return data.cartBuyerIdentityUpdate.cart.checkoutUrl;
 }

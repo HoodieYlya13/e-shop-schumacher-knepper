@@ -46,6 +46,7 @@
     "PASSWORD_RESET_SENT": "Password reset link sent!",
     "ERRORS": {
       "GENERIC": "An unexpected error occurred.",
+      "WEAK_PASSWORD": "Password must be at least 8 characters long and include uppercase, lowercase, a number, and a special character.",
       "TOO_SHORT": "Password is too short.",
       "TOO_LONG": "Password is too long.",
       "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE": "Password cannot start or end with whitespace.",
@@ -64,7 +65,8 @@
       "LINK_UNAVAILABLE": "Link unavailable. Please try your request again.",
       "TOKEN_INVALID": "Invalid token. Please request a new password reset.",
       "REQUIRED": "This field is required.",
-      "TOO_MANY_CHAR": "Too many characters."
+      "TOO_MANY_CHAR": "Too many characters.",
+      "PASSWORD_INVALID": "Password is unsafe. Please use a stronger password."
     }
   }
 }

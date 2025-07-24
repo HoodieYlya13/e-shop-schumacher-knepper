@@ -1,12 +1,10 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-
-export async function logout(router?: AppRouterInstance, redirectTo = "/") {
+export async function logout() {
   await fetch("/api/auth/logout", {
     method: "POST",
     credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    }
   });
-
-  if (router) {
-    router.push(redirectTo);
-  }
+  window.location.href = "https://i621t2-yy.myshopify.com/account/logout";
 }

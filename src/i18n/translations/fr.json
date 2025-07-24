@@ -1,6 +1,7 @@
 {
   "COMMON": {
-    "OPTIONAL":"optional"
+    "OPTIONAL":"optional",
+    "LOADING": "Chargement..."
   },
   "HOME_PAGE": {
     "META": {
@@ -45,6 +46,7 @@
     "PASSWORD_RESET_SENT": "Lien de réinitialisation envoyé !",
     "ERRORS": {
       "GENERIC": "Une erreur inattendue est survenue.",
+      "WEAK_PASSWORD": "Le mot de passe doit contenir au moins 8 caractères, incluant une majuscule, une minuscule, un chiffre et un caractère spécial.",
       "TOO_SHORT": "Le mot de passe est trop court.",
       "INVALID_EMAIL": "Adresse email invalide.",
       "EMAIL_TAKEN": "L'adresse email est déjà utilisée.",
@@ -56,7 +58,15 @@
       "AUTHENTICATION_PROBLEM": "Veuillez vous reconnecter.",
       "CORRECT_FIELDS_BEFORE_SUBMIT": "Veuillez corriger les champs avant de soumettre.",
       "UNIDENTIFIED_CUSTOMER": "Client non identifié. Veuillez vous inscrire.",
-      "LINK_UNAVAILABLE": "Lien indisponible. Veuillez réessayer votre demande."
+      "LINK_UNAVAILABLE": "Lien indisponible. Veuillez réessayer votre demande.",
+      "TOO_LONG": "Le mot de passe est trop long.",
+      "PASSWORD_STARTS_OR_ENDS_WITH_WHITESPACE": "Le mot de passe ne peut pas commencer ou se terminer par un espace.",
+      "BAD_DOMAIN": "Le domaine de l'email n'est pas autorisé.",
+      "CUSTOMER_DISABLED": "Le compte client est désactivé.",
+      "TOKEN_INVALID": "Jeton invalide. Veuillez demander une nouvelle réinitialisation de mot de passe.",
+      "REQUIRED": "Ce champ est requis.",
+      "TOO_MANY_CHAR": "Trop de caractères.",
+      "PASSWORD_INVALID": "Mot de passe non sécurisé. Veuillez utiliser un mot de passe plus fort."
     }
   }
 }

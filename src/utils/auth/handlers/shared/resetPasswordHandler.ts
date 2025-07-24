@@ -1,11 +1,9 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { ResetPasswordValues } from "@/schemas/authSchema";
 import { login } from "@/utils/account/login";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { UseFormSetError, UseFormSetValue } from "react-hook-form";
 
 export async function resetPasswordHandler(
-  router: AppRouterInstance,
   setError: UseFormSetError<FormValues>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   setValue: UseFormSetValue<ResetPasswordValues>,
@@ -37,7 +35,7 @@ export async function resetPasswordHandler(
     const message = json.customerResetByUrl?.customerUserErrors?.[0]?.code;
     
     if (token) {
-      await login(token, tokenExpiry, router);
+      await login(token, tokenExpiry);
     } else {
       const invalidMessage = message === "INVALID"
       setValue("email", "");

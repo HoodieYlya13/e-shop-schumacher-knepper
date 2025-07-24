@@ -1,15 +1,22 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-
-export async function login(token: string, tokenExpiry: string, router?: AppRouterInstance, redirectTo?: string) {
-  await fetch("/api/auth/login", {
+export async function login(token: string, tokenExpiry: string, redirectTo?: string) {
+  const res = await fetch("/api/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ token, tokenExpiry }),
+    body: JSON.stringify({
+      token,
+      tokenExpiry,
+      redirectTo,
+      checkoutUrl: new URLSearchParams(window.location.search).get(
+        "checkout_url"
+      ),
+    }),
   });
 
-  if (router) {
-    router.push(redirectTo || "/account");
+  const data = await res.json();
+
+  if (data.redirectUrl) {
+    window.location.href = data.redirectUrl;
   }
 }

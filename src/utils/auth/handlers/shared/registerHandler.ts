@@ -2,13 +2,11 @@ import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
 import { UseFormSetError } from "react-hook-form";
 import { authSubmitHandler } from "../authSubmitHandler";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 export async function registerHandler(
   data: FormValues,
   clearErrors: () => void,
   setError: UseFormSetError<FormValues>,
-  router: AppRouterInstance,
   setSuccessMessage: React.Dispatch<React.SetStateAction<string | null>>,
   setMode: React.Dispatch<React.SetStateAction<Mode>>,
   json: {
@@ -26,7 +24,7 @@ export async function registerHandler(
         message?: string;
       }[];
     };
-  },
+  }
 ) {
   const registerErrors = json.customerCreate.customerUserErrors;
   if (registerErrors?.length) {
@@ -40,7 +38,7 @@ export async function registerHandler(
       } else if (key === "phone") {
         if (code === "INVALID") return setError(key, { message: "INVALID" });
         if (code === "TAKEN") return setError(key, { message: "PHONE_TAKEN" });
-      }
+      } else if (key === "password") return setError(key, { message: "PASSWORD_INVALID" });
       setError("root", { message: "GENERIC" });
     });
     return;
@@ -51,7 +49,6 @@ export async function registerHandler(
     "LOGIN",
     clearErrors,
     setError,
-    router,
     setSuccessMessage,
     setMode,
     true
