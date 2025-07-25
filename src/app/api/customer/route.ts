@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 import { customerUpdateLocale } from '@/lib/services/admin/customer';
-import { getBuyerCountry } from '@/utils/shared/getters/getBuyerCountry';
 
 export async function POST(req: NextRequest) {
   const { id } = await req.json();

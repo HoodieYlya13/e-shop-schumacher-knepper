@@ -4,7 +4,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, add PUBLIC_STORE_DOMAIN, PUBLIC_STOREFRONT_API_TOKEN, PRIVATE_STOREFRONT_API_TOKEN, SHOPIFY_ADMIN_API_ACCESS_TOKEN and SHOPIFY_API_VERSION inside .env.local.
+First, copy `.env.example` to `.env.local` and fill in the APIs credentials:
+
+```bash
+cp .env.example .env.local
+```
+
+Make sure to update the Shopify API version (`SHOPIFY_API_VERSION`) every 9–12 months to stay compatible with Shopify’s latest changes.
 
 Then, run the development server:
 
