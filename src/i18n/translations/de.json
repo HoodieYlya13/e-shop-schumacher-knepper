@@ -5,11 +5,11 @@
   },
   "HOME_PAGE": {
     "META": {
-      "TITLE": "Online-Shop - {name}",
-      "DESCRIPTION": "Willkommen im Online-Shop von {name}! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein.",
+      "TITLE": "Online-Shop - {shopName}",
+      "DESCRIPTION": "Willkommen im Online-Shop von {shopName}! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein.",
       "NO_PRODUCTS": "Zurzeit sind keine Produkte verfügbar."
     },
-    "WELCOME": "Willkommen im Shop von {name}!",
+    "WELCOME": "Willkommen im Shop von {shopName}!",
     "CART": "Warenkorb",
     "CHECKOUT": "Zur Kasse"
   },

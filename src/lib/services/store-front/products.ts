@@ -1,7 +1,7 @@
-import { shopifyServerFetch } from '@/lib/shopify/server';
+import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
 import { Product } from '@shopify/hydrogen-react/storefront-api-types';
 
-const QUERY = `
+const GET_ALL_PRODUCTS_QUERY = `
   query AllProducts($language: LanguageCode) @inContext(language: $language) {
     products(first: 10) {
       edges {
@@ -34,11 +34,9 @@ const QUERY = `
   }
 `;
 
-export async function getAllProducts(
-  language: "EN" | "FR" | "DE" = "EN",
-): Promise<Product[]> {
+export async function getAllProducts(language: "EN" | "FR" | "DE" = "EN"): Promise<Product[]> {
   const data = await shopifyServerFetch<{
     products: { edges: { node: Product }[] };
-  }>(QUERY, { language });
+  }>(GET_ALL_PRODUCTS_QUERY, { language });
   return data.products.edges.map((edge) => edge.node);
 }

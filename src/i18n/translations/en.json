@@ -5,11 +5,11 @@
   },
   "HOME_PAGE": {
     "META": {
-      "TITLE": "Online shop - {name}",
-      "DESCRIPTION": "Welcome to {name}'s online shop! Explore all our wines or get your loved ones a gift card.",
+      "TITLE": "Online shop - {shopName}",
+      "DESCRIPTION": "Welcome to {shopName}'s online shop! Explore all our wines or get your loved ones a gift card.",
       "NO_PRODUCTS": "No products available at the moment."
     },
-    "WELCOME": "Welcome to {name}'s store!",
+    "WELCOME": "Welcome to {shopName}'s store!",
     "CART": "Cart",
     "CHECKOUT": "Checkout"
   },

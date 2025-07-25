@@ -44,6 +44,14 @@ export async function registerHandler(
     return;
   }
 
+  const id = json.customerCreate.customer?.id;
+
+  if (id)
+    await fetch("/api/customer", {
+      method: "POST",
+      body: JSON.stringify({ id }),
+    });
+
   authSubmitHandler(
     data,
     "LOGIN",

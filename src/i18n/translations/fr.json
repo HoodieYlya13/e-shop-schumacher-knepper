@@ -5,11 +5,11 @@
   },
   "HOME_PAGE": {
     "META": {
-      "TITLE": "Boutique en ligne - {name}",
-      "DESCRIPTION": "Bienvenue dans la boutique en ligne de {name} ! Découvrez nos vins ou offrez une carte cadeau à vos proches.",
+      "TITLE": "Boutique en ligne - {shopName}",
+      "DESCRIPTION": "Bienvenue dans la boutique en ligne de {shopName} ! Découvrez nos vins ou offrez une carte cadeau à vos proches.",
       "NO_PRODUCTS": "Aucun produit disponible pour le moment."
     },
-    "WELCOME": "Bienvenue dans la boutique de {name} !",
+    "WELCOME": "Bienvenue dans la boutique de {shopName} !",
     "CART": "Panier",
     "CHECKOUT": "Commander"
   },

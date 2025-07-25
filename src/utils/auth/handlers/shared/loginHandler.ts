@@ -19,7 +19,7 @@ export async function loginHandler(
   setMode: (mode: "LOGIN") => void,
   afterRegister: boolean,
 ) {
-  const token =
+  const customerAccessToken =
     json?.customerAccessTokenCreate?.customerAccessToken?.accessToken;
   const tokenExpiry =
     json.customerAccessTokenCreate?.customerAccessToken?.expiresAt ||
@@ -29,12 +29,12 @@ export async function loginHandler(
     ? "UNIDENTIFIED_CUSTOMER"
     : null;
 
-  if (!token) {
+  if (!customerAccessToken) {
     const errorMessage = afterRegister ? "AUTHENTICATION_PROBLEM" : (loginError || "GENERIC");
     if (afterRegister) setMode("LOGIN");
     setError("root", { message: errorMessage });
     return;
   }
   
-  await login(token, tokenExpiry);
+  await login(customerAccessToken, tokenExpiry);
 }

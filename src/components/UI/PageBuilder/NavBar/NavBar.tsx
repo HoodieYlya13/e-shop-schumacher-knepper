@@ -1,15 +1,15 @@
-import { getAccessToken } from "@/utils/shared/getters/getAccessToken";
+import { getCustomerAccessToken } from "@/utils/shared/getters/getCustomerAccessToken";
 import Navigation from "./shared/Navigation";
 import Logout from "./shared/Logout";
 import LanguageSwitcher from "./shared/LanguageSwitcher";
 import ShoppingCart from "./shared/ShoppingCart";
 
 export default async function NavBar() {
-  const token = await getAccessToken();
+  const customerAccessToken = await getCustomerAccessToken();
   return (
     <header className="flex items-center justify-between px-6 py-4 border-b bg-white shadow-sm">
-      <Navigation token={token} />
-      {token && <Logout />}
+      <Navigation customerAccessToken={customerAccessToken} />
+      {customerAccessToken && <Logout />}
       <LanguageSwitcher />
       <ShoppingCart />
     </header>

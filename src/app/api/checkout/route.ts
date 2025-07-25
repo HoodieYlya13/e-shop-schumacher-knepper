@@ -1,12 +1,12 @@
-import { createCheckout } from '@/lib/services/checkout';
-import { getAccessToken } from '@/utils/shared/getters/getAccessToken';
+import { createCheckout } from '@/lib/services/store-front/checkout';
+import { getCustomerAccessToken } from '@/utils/shared/getters/getCustomerAccessToken';
 import { getCheckoutUrl } from '@/utils/shared/getters/getCheckoutUrl';
 import { serialize } from 'cookie';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   const { variantId, quantity } = await req.json();
-  const token = await getAccessToken();
+  const customerAccessToken = await getCustomerAccessToken();
   const checkoutUrl = await getCheckoutUrl();
   
   if (checkoutUrl) return NextResponse.json({ url: checkoutUrl });
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
   try {
     if (!variantId) return NextResponse.json({ error: 'Missing variantId' }, { status: 400 });
 
-    const { id, checkoutUrl } = await createCheckout(variantId, token, quantity);
+    const { id, checkoutUrl } = await createCheckout({ variantId, quantity, customerAccessToken });
 
     const response = NextResponse.json({ url: checkoutUrl });
 

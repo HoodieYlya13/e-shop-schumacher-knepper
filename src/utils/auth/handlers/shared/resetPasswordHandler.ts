@@ -28,15 +28,14 @@ export async function resetPasswordHandler(
     };
   },
 ) {
-    const token = json.customerResetByUrl?.customerAccessToken?.accessToken;
+    const customerAccessToken = json.customerResetByUrl?.customerAccessToken?.accessToken;
     const tokenExpiry =
       json.customerResetByUrl?.customerAccessToken?.expiresAt ||
       new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
     const message = json.customerResetByUrl?.customerUserErrors?.[0]?.code;
     
-    if (token) {
-      await login(token, tokenExpiry);
-    } else {
+    if (customerAccessToken) await login(customerAccessToken, tokenExpiry);
+    else {
       const invalidMessage = message === "INVALID"
       setValue("email", "");
       setMode(invalidMessage ? "PASSWORD_RECOVERY" : "LOGIN");

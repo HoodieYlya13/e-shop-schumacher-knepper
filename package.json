@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "@shopify/admin-api-client": "^1.1.1",
     "@shopify/hydrogen-react": "^2025.5.0",
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",

@@ -1,4 +1,4 @@
-import { shopifyServerFetch } from '@/lib/shopify/server';
+import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
 import { Customer } from '@shopify/hydrogen-react/storefront-api-types';
 
 const CUSTOMER_METAFIELDS_QUERY = `
@@ -20,9 +20,7 @@ const CUSTOMER_METAFIELDS_QUERY = `
   }
 `;
 
-export async function fetchCustomerData(
-  token: string
-): Promise<Customer> {
+export async function fetchCustomerData(token: string): Promise<Customer> {
   const data = await shopifyServerFetch<{ customer: Customer }>(
     CUSTOMER_METAFIELDS_QUERY,
     {

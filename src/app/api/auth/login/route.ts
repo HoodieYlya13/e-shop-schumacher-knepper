@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { serialize } from "cookie";
 import { getCheckoutId } from "@/utils/shared/getters/getCheckoutId";
-import { updateBuyerIdentity } from "@/lib/services/checkout";
+import { updateBuyerIdentity } from "@/lib/services/store-front/checkout";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
-  const { token, tokenExpiry, redirectTo, checkoutUrlPath } = body;
+  const { customerAccessToken, tokenExpiry, redirectTo, checkoutUrlPath } = body;
 
-  if (!token || !tokenExpiry) {
+  if (!customerAccessToken || !tokenExpiry) {
     return NextResponse.json({ error: "Missing token or expiry" }, { status: 400 });
   }
 
@@ -23,14 +23,14 @@ export async function POST(req: NextRequest) {
     checkoutUrl = `https://i621t2-yy.myshopify.com${decodeURIComponent(checkoutUrlPath)}`;
     const checkoutId = await getCheckoutId();
     if (checkoutId)
-      await updateBuyerIdentity(checkoutId, { customerAccessToken: token });
+      await updateBuyerIdentity(checkoutId, { customerAccessToken });
   }
   
   const redirectUrl = checkoutUrl || redirectTo || "account";
 
   const response = NextResponse.json({ redirectUrl });
 
-  response.headers.append("Set-Cookie", serialize("shopify_token", token, {
+  response.headers.append("Set-Cookie", serialize("customer_access_token", customerAccessToken, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",

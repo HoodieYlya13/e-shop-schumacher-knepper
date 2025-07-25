@@ -6,10 +6,9 @@ export async function shopifyServerFetch<T, V = unknown>(
   variables?: V
 ): Promise<T> {
   const buyerIp = await getBuyerIp();
-  const headers = {
-    ...shopifyClient.getPrivateTokenHeaders(),
-    ...(buyerIp ? { "Shopify-Storefront-Buyer-IP": buyerIp } : {}),
-  };
+  const headers = shopifyClient.getPrivateTokenHeaders({
+    buyerIp: buyerIp || undefined
+  });
 
   const response = await fetch(shopifyClient.getStorefrontApiUrl(), {
     method: "POST",

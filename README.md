@@ -4,7 +4,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+First, add PUBLIC_STORE_DOMAIN, PUBLIC_STOREFRONT_API_TOKEN, PRIVATE_STOREFRONT_API_TOKEN, SHOPIFY_ADMIN_API_ACCESS_TOKEN and SHOPIFY_API_VERSION inside .env.local.
+
+Then, run the development server:
 
 ```bash
 npm run dev

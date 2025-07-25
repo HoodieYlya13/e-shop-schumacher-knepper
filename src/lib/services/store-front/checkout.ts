@@ -1,6 +1,6 @@
-import { shopifyServerFetch } from "../shopify/server";
+import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
 
-const CREATE_CART = `
+const CREATE_CART_MUTATION = `
   mutation cartCreate($cartInput: CartInput!, $country: CountryCode, $language: LanguageCode)
     @inContext(country: $country, language: $language) {
     cartCreate(input: $cartInput) {
@@ -16,18 +16,24 @@ const CREATE_CART = `
   }
 `;
 
-export async function createCheckout(variantId: string, customerAccessToken?: string, quantity = 3) {
+export async function createCheckout(
+  input: {
+    variantId: string;
+    quantity: number;
+    customerAccessToken?: string;
+  }
+) {
   const variables = {
     cartInput: {
       lines: [
         {
-          quantity,
-          merchandiseId: variantId,
+          quantity: input.quantity,
+          merchandiseId: input.variantId,
         },
       ],
-      ...(customerAccessToken && {
+      ...(input.customerAccessToken && {
         buyerIdentity: {
-          customerAccessToken,
+          customerAccessToken: input.customerAccessToken,
         },
       }),
     },
@@ -46,15 +52,15 @@ export async function createCheckout(variantId: string, customerAccessToken?: st
         message: string;
       }>;
     };
-  }>(CREATE_CART, variables);
+  }>(CREATE_CART_MUTATION, variables);
 
   const cart = data.cartCreate.cart;
   console.log("Checkout:", cart);
-  
+
   return cart;
 }
 
-const UPDATE_BUYER_IDENTITY = `
+const UPDATE_BUYER_IDENTITY_MUTATION = `
   mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
     cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
       cart {
@@ -105,7 +111,7 @@ export async function updateBuyerIdentity(
         message: string;
       }>;
     };
-  }>(UPDATE_BUYER_IDENTITY, variables);
+  }>(UPDATE_BUYER_IDENTITY_MUTATION, variables);
 
   console.log("Updated checkout:", data);
 

@@ -1,4 +1,4 @@
-import { shopifyServerFetch } from '@/lib/shopify/server';
+import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
 
 const REGISTER_MUTATION = `
   mutation createCustomerAccount($input: CustomerCreateInput!) {
@@ -47,10 +47,12 @@ const LOGIN_MUTATION = `
   }
 `;
 
-export async function createCustomerAccessToken(input: {
-  email: string;
-  password: string;
-}) {
+export async function createCustomerAccessToken(
+  input: {
+    email: string;
+    password: string;
+  }
+) {
   return shopifyServerFetch(LOGIN_MUTATION, { input });
 }
 
@@ -98,16 +100,15 @@ const PASSWORD_RESET_BY_URL_MUTATION = `
 `;
 
 export async function resetCustomerPasswordByUrl(
-  password: string,
-  resetUrl: string
+  input: {
+    password: string;
+    resetUrl: string;
+  }
 ) {
-  return shopifyServerFetch(PASSWORD_RESET_BY_URL_MUTATION, {
-    password,
-    resetUrl,
-  });
+  return shopifyServerFetch(PASSWORD_RESET_BY_URL_MUTATION, { input });
 }
 
-const ACCESS_TOKEN_DELETE_MUTATION = `
+const CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION = `
   mutation customerAccessTokenDelete($customerAccessToken: String!) {
     customerAccessTokenDelete(customerAccessToken: $customerAccessToken) {
       deletedAccessToken
@@ -121,7 +122,5 @@ const ACCESS_TOKEN_DELETE_MUTATION = `
 `;
 
 export async function deleteCustomerAccessToken(customerAccessToken: string) {
-  return shopifyServerFetch(ACCESS_TOKEN_DELETE_MUTATION, {
-    customerAccessToken
-  });
+  return shopifyServerFetch(CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION, { customerAccessToken });
 }

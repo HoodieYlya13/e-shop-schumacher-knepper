@@ -1,11 +1,11 @@
-export async function login(token: string, tokenExpiry: string, redirectTo?: string) {
+export async function login(customerAccessToken: string, tokenExpiry: string, redirectTo?: string) {
   const res = await fetch("/api/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      token,
+      customerAccessToken,
       tokenExpiry,
       redirectTo,
       checkoutUrl: new URLSearchParams(window.location.search).get(

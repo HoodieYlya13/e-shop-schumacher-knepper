@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPasswordByUrl } from '@/lib/services/auth';
+import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPasswordByUrl } from '@/lib/services/store-front/auth';
 import { Mode } from '@/hooks/auth/useAuthForm';
 
 export async function POST(req: NextRequest) {
@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
           lastName,
           phone,
           acceptsMarketing,
-        },
+        }
       );
     }
 
@@ -34,7 +34,7 @@ export async function POST(req: NextRequest) {
     }
 
     if (mode === 'RESET_PASSWORD') {
-      response = await resetCustomerPasswordByUrl(password, resetUrl);
+      response = await resetCustomerPasswordByUrl({ password, resetUrl });
     }
 
     return NextResponse.json(response);

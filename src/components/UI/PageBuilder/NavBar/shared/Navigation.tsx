@@ -12,15 +12,15 @@ const navItemsBase = [
 ];
 
 interface NavigationProps {
-  token: string | undefined;
+  customerAccessToken: string | undefined;
 };
 
-export default function Navigation({ token }: NavigationProps) {
+export default function Navigation({ customerAccessToken }: NavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations();
 
-  const isLoggedIn = !!token;
+  const isLoggedIn = !!customerAccessToken;
 
   useEffect(() => {
     if (pathname.startsWith('/auth') && isLoggedIn) {
