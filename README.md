@@ -10,7 +10,7 @@ First, copy `.env.example` to `.env.local` and fill in the APIs credentials:
 cp .env.example .env.local
 ```
 
-Make sure to update the Shopify API version (`SHOPIFY_API_VERSION`) every 9–12 months to stay compatible with Shopify’s latest changes.
+Make sure to update the Shopify API version (`SHOPIFY_API_VERSION`) every 9–12 months to stay compatible with Shopify’s latest changes, and don't forget to update it on Vercel as well.
 
 Then, run the development server:
 
