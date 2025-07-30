@@ -7,6 +7,8 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { customerAccessToken, tokenExpiry, redirectTo, checkoutUrlPath } = body;
 
+  console.log("checkoutUrlPath", checkoutUrlPath);  
+
   if (!customerAccessToken || !tokenExpiry) return NextResponse.json({ error: "Missing token or expiry" }, { status: 400 });
 
   const expires = new Date(tokenExpiry);

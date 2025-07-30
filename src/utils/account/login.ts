@@ -8,7 +8,7 @@ export async function login(customerAccessToken: string, tokenExpiry: string, re
       customerAccessToken,
       tokenExpiry,
       redirectTo,
-      checkoutUrl: new URLSearchParams(window.location.search).get(
+      checkoutUrlPath: new URLSearchParams(window.location.search).get(
         "checkout_url"
       ),
     }),
