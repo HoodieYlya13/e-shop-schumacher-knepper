@@ -1,8 +1,8 @@
 import { createCheckout } from '@/lib/services/store-front/checkout';
 import { getCustomerAccessToken } from '@/utils/shared/getters/getCustomerAccessToken';
 import { getCheckoutUrl } from '@/utils/shared/getters/getCheckoutUrl';
-import { serialize } from 'cookie';
 import { NextRequest, NextResponse } from 'next/server';
+import { setServerCookie } from '@/utils/shared/setters/setServerCookie';
 
 export async function POST(req: NextRequest) {
   const { variantId, quantity } = await req.json();
@@ -18,27 +18,23 @@ export async function POST(req: NextRequest) {
 
     const response = NextResponse.json({ url: checkoutUrl });
 
-    response.headers.append(
-      "Set-Cookie",
-      serialize("checkout_id", id, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
+    setServerCookie({
+      name: "checkout_id",
+      value: id,
+      response,
+      options: {
         expires: new Date(Date.now() + 60 * 60 * 24 * 1000),
-      })
-    );
+      },
+    });
 
-    response.headers.append(
-      "Set-Cookie",
-      serialize("checkout_url", checkoutUrl, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
+    setServerCookie({
+      name: "checkout_url",
+      value: checkoutUrl,
+      response,
+      options: {
         expires: new Date(Date.now() + 60 * 60 * 24 * 1000),
-      })
-    );
+      },
+    });
 
     return response;
   } catch (error: unknown) {

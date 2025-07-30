@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { serialize } from "cookie";
 import { getCheckoutId } from "@/utils/shared/getters/getCheckoutId";
 import { updateBuyerIdentity } from "@/lib/services/store-front/checkout";
+import { setServerCookie } from "@/utils/shared/setters/setServerCookie";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -26,22 +26,20 @@ export async function POST(req: NextRequest) {
 
   const response = NextResponse.json({ redirectUrl });
 
-  response.headers.append("Set-Cookie", serialize("customer_access_token", customerAccessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    expires,
-  }));
+  setServerCookie({
+    name: "customer_access_token",
+    value: customerAccessToken,
+    response,
+    options: { expires },
+  });
 
   if (checkoutUrl) {
-    response.headers.append("Set-Cookie", serialize("checkout_url", checkoutUrl, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 60 * 60 * 24,
-    }));
+    setServerCookie({
+      name: "checkout_url",
+      value: checkoutUrl,
+      response,
+      options: { maxAge: 60 * 60 * 24 },
+    });
   }
 
   return response;

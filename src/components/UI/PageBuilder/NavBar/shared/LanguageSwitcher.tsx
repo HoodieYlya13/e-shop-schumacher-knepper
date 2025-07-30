@@ -1,6 +1,7 @@
 'use client';
 
 import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
+import { setClientCookie } from '@/utils/shared/setters/setClientCookie';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -12,7 +13,11 @@ export default function LanguageSwitcher({ storedLocale = defaultLocale }: Langu
   const router = useRouter();
 
   const switchTo = (locale: string) => {
-    document.cookie = `preferred_locale=${locale}; path=/; max-age=${60 * 60 * 24 * 365}; SameSite=Lax`;
+    setClientCookie("preferred_locale", locale, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: "Lax",
+    });
 
     const pathname = window.location.pathname;
     const segments = pathname.split('/');
