@@ -1,4 +1,7 @@
 import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
+import { customerUpdateLocale } from '../admin/customer';
+import { CustomerCreateResponse } from '@/utils/auth/handlers/shared/registerHandler';
+import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
 
 const REGISTER_MUTATION = `
   mutation createCustomerAccount($input: CustomerCreateInput!) {
@@ -27,9 +30,15 @@ export async function createCustomerAccount(
     lastName: string;
     phone?: string;
     acceptsMarketing?: boolean;
-  }
-) {
-  return shopifyServerFetch(REGISTER_MUTATION, { input });
+  },
+  locale: LocaleLanguages = defaultLocale
+) {  
+  const response = await shopifyServerFetch(REGISTER_MUTATION, { input }) as CustomerCreateResponse;
+
+  const id = response.customerCreate?.customer?.id;
+  if (id) await customerUpdateLocale(id, locale);
+  
+  return response;
 }
 
 const LOGIN_MUTATION = `

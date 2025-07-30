@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
+import { SUPPORTED_LOCALES } from './i18n/utils';
 
 const intlMiddleware = createMiddleware(routing);
 
 export async function middleware(req: NextRequest) {
   const res = intlMiddleware(req);
-
-  const supportedLocales = ["fr", "en", "de"];
 
   const hasPreferredLocale = req.cookies.get("preferred_locale");
 
@@ -15,12 +14,14 @@ export async function middleware(req: NextRequest) {
     const acceptLang = req.headers.get("accept-language");
     const browserLocale = acceptLang?.split(",")[0]?.split("-")[0]?.trim();
 
-    if (browserLocale && supportedLocales.includes(browserLocale)) {
+    if (
+      browserLocale &&
+      (SUPPORTED_LOCALES as readonly string[]).includes(browserLocale)
+    )
       res.cookies.set("preferred_locale", browserLocale, {
         path: "/",
         maxAge: 60 * 60 * 24 * 365,
       });
-    }
   }
 
   const ipCookie = req.cookies.get("buyer_ip");

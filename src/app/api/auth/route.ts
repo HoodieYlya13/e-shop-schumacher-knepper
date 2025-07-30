@@ -1,47 +1,54 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createCustomerAccount, createCustomerAccessToken, recoverCustomerAccount, resetCustomerPasswordByUrl } from '@/lib/services/store-front/auth';
+import { createCustomerAccessToken, createCustomerAccount, recoverCustomerAccount, resetCustomerPasswordByUrl } from '@/lib/services/store-front/auth';
 import { Mode } from '@/hooks/auth/useAuthForm';
+import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
+import { LocaleLanguages } from '@/i18n/utils';
 
 export async function POST(req: NextRequest) {
   const { mode, email, password, firstName, lastName, phone, acceptsMarketing, resetUrl } = await req.json();
 
   try {
+    if (!mode || !(mode as Mode)) return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
+    
     let response;
 
-    if (!mode || !(mode as Mode)) {
-      return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
-    }
+    switch (mode as Mode) {
+      case 'REGISTER': {
+        const locale = await getPreferredLocale() as LocaleLanguages;
+        response = await createCustomerAccount(
+          {
+            email,
+            password,
+            firstName,
+            lastName,
+            phone,
+            acceptsMarketing,
+          },
+          locale
+        );
+        break;
+      }
 
-    if (mode === 'REGISTER') {
-      response = await createCustomerAccount(
-        {
-          email,
-          password,
-          firstName,
-          lastName,
-          phone,
-          acceptsMarketing,
-        }
-      );
-    }
+      case 'LOGIN':
+        response = await createCustomerAccessToken({ email, password });
+        break;
 
-    if (mode === 'LOGIN') {
-      response = await createCustomerAccessToken({ email, password });
-    }
+      case 'PASSWORD_RECOVERY':
+        response = await recoverCustomerAccount(email);
+        break;
 
-    if (mode === 'PASSWORD_RECOVERY') {
-      response = await recoverCustomerAccount(email);
-    }
+      case 'RESET_PASSWORD':
+        response = await resetCustomerPasswordByUrl({ password, resetUrl });
+        break;
 
-    if (mode === 'RESET_PASSWORD') {
-      response = await resetCustomerPasswordByUrl({ password, resetUrl });
+      default:
+        return NextResponse.json({ error: 'Unsupported mode' }, { status: 400 });
     }
 
     return NextResponse.json(response);
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
+    if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 500 });
+
     return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
   }
 }

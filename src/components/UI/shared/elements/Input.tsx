@@ -3,14 +3,11 @@ import React, { useEffect, useRef, useState } from "react";
 import 'react-phone-number-input/style.css'
 import { CountryCode } from "libphonenumber-js/core";
 import { getCountryCallingCode } from 'libphonenumber-js';
-import en from 'react-phone-number-input/locale/en'
-import fr from 'react-phone-number-input/locale/fr'
-import de from 'react-phone-number-input/locale/de'
-import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
 import { useTranslations } from "next-intl";
 import { getCountries } from "libphonenumber-js";
 import Image from "next/image";
 import { FieldValues, UseFormSetValue } from "react-hook-form";
+import { getPhoneInputLabels } from "@/i18n/utils";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: React.HTMLInputTypeAttribute;
@@ -50,7 +47,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const [showError, setShowError] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
-    const [country, setCountry] = useState<CountryCode | undefined>(defaultCountry);
+    const [country, setCountry] = useState<CountryCode | undefined>(
+      defaultCountry
+    );
     const [focused, setFocused] = useState(false);
     const [flagFocused, setFlagFocused] = useState(false);
     const [touched, setTouched] = useState(false);
@@ -85,46 +84,32 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     useEffect(() => {
       if (type !== "tel" || !setValue) return;
 
-      if (!rest.name) {
-        return console.warn("Input name and setValue are required for phone input");
-      }
+      if (!rest.name)
+        return console.warn(
+          "Input name and setValue are required for phone input"
+        );
 
-      if (!country || !phoneNumber) {
-        setValue(rest.name, "", { shouldValidate: true });
-        return;
-      }
-      
-      if (touched) {
+      if (!country || !phoneNumber)
+        return setValue(rest.name, "", { shouldValidate: true });
+
+      if (touched)
         setValue(
           rest.name,
           `+${getCountryCallingCode(country)}${phoneNumber}`,
-          {
-            shouldValidate: true,
-          }
+          { shouldValidate: true }
         );
-      }
     }, [type, country, phoneNumber, rest.name, setValue, touched]);
 
-    const getPhoneInputLabels = () => {
-      switch (getPreferredLocale()) {
-        case "fr":
-          return fr;
-        case "de":
-          return de;
-        default:
-          return en;
-      }
-    };
-
-    const countries = getCountries().map(code => ({
+    const countries = getCountries().map((code) => ({
       code,
-      name: getPhoneInputLabels()[code] || code
+      name: getPhoneInputLabels()[code] || code,
     }));
-    
+
     const combinedPlaceholder =
-      placeholder || (labelIsPlaceholder ? label : "") + 
-      (optionalTag && !required ? ` (${t("OPTIONAL")})` : "");
-    
+      placeholder ||
+      (labelIsPlaceholder ? label : "") +
+        (optionalTag && !required ? ` (${t("OPTIONAL")})` : "");
+
     return (
       <>
         {label && (

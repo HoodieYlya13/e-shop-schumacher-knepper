@@ -1,6 +1,6 @@
 import React from "react";
 import SubmitButton from "../elements/SubmitButton";
-import RootErrors from "@/components/Pages/Auth/shared/RootErrors";
+import RootErrors from "@/components/UI/shared/elements/RootErrors";
 
 interface FormProps {
   children: React.ReactNode;

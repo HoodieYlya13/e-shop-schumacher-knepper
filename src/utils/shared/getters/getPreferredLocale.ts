@@ -1,12 +1,6 @@
-export function getPreferredLocale(toUpperCase = false) {
-  if (typeof document === 'undefined') return undefined;
+import { cookies } from "next/headers";
 
-  const preferredLocale = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("preferred_locale="))
-    ?.split("=")[1];
-
-  return toUpperCase && preferredLocale
-    ? preferredLocale.toUpperCase()
-    : preferredLocale;
+export async function getPreferredLocale(toUpperCase = false) {
+  const locale = (await cookies()).get("preferred_locale")?.value;
+  return toUpperCase ? locale?.toUpperCase() : locale;
 }

@@ -1,4 +1,5 @@
 import { shopifyAdminFetch } from '@/lib/shopify/admin/server';
+import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
 
 type AdminCustomer = {
   id: string;
@@ -20,11 +21,11 @@ const CUSTOMER_UPDATE_LOCALE_MUTATION = `
   }
 `;
 
-export async function customerUpdateLocale(id: string, locale: "en" | "fr" | "de" = "en"): Promise<AdminCustomer> {
+export async function customerUpdateLocale(id: string, locale: LocaleLanguages = defaultLocale): Promise<AdminCustomer> {
   const variables = {
     input: {
       id,
-      locale,
+      locale
     },
   };
 
@@ -33,8 +34,6 @@ export async function customerUpdateLocale(id: string, locale: "en" | "fr" | "de
       customer: AdminCustomer;
     };
   }>(CUSTOMER_UPDATE_LOCALE_MUTATION, variables);
-
-  console.log("Customer Update Locale:", data);
 
   return data.customerUpdate.customer;
 }

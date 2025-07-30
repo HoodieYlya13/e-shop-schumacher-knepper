@@ -7,15 +7,11 @@ export async function POST(req: NextRequest) {
   const body = await req.json();
   const { customerAccessToken, tokenExpiry, redirectTo, checkoutUrlPath } = body;
 
-  if (!customerAccessToken || !tokenExpiry) {
-    return NextResponse.json({ error: "Missing token or expiry" }, { status: 400 });
-  }
+  if (!customerAccessToken || !tokenExpiry) return NextResponse.json({ error: "Missing token or expiry" }, { status: 400 });
 
   const expires = new Date(tokenExpiry);
 
-  if (expires.getTime() <= Date.now()) {
-    return NextResponse.json({ error: "Token expiry must be in the future" }, { status: 400 });
-  }
+  if (expires.getTime() <= Date.now()) return NextResponse.json({ error: "Token expiry must be in the future" }, { status: 400 });
 
   let checkoutUrl = null;
   

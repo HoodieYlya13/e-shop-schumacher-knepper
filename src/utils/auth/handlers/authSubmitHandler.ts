@@ -27,41 +27,38 @@ export async function authSubmitHandler(
     
     const json = await response.json();
     
-    if (
+    const failed =
       !response.ok ||
       (mode === "REGISTER" && !json.customerCreate) ||
       (mode === "LOGIN" && !json.customerAccessTokenCreate) ||
       (mode === "PASSWORD_RECOVERY" && !json.customerRecover) ||
-      (mode === "RESET_PASSWORD" && !json.customerResetByUrl)
-    ) {
-      setError("root", { message: "GENERIC" });
-      return;
-    }
-    
-    if (mode === "REGISTER") {
-      return registerHandler(
-        data as RegisterValues,
-        clearErrors,
-        setError,
-        setSuccessMessage,
-        setMode,
-        json
-      );
-    }
+      (mode === "RESET_PASSWORD" && !json.customerResetByUrl);
 
-    if (mode === "LOGIN") {
-      return loginHandler(setError, json, setMode, afterRegister);
-    }
+    if (failed) return setError("root", { message: "GENERIC" });
 
-    if (mode === "PASSWORD_RECOVERY") {
-      return passwordRecoveryHandler(setError, setSuccessMessage, json);
-    }
+    switch (mode) {
+      case "REGISTER":
+        return registerHandler(
+          data as RegisterValues,
+          clearErrors,
+          setError,
+          setSuccessMessage,
+          setMode,
+          json
+        );
 
-    if (mode === "RESET_PASSWORD") {
-      if (!setValue) {
-        throw new Error("setValue is required for RESET_PASSWORD mode");
-      }
-      return resetPasswordHandler(setError, setMode, setValue, json);
+      case "LOGIN":
+        return loginHandler(setError, json, setMode, afterRegister);
+
+      case "PASSWORD_RECOVERY":
+        return passwordRecoveryHandler(setError, setSuccessMessage, json);
+
+      case "RESET_PASSWORD":
+        if (!setValue) throw new Error("setValue is required for RESET_PASSWORD mode");
+        return resetPasswordHandler(setError, setMode, setValue, json);
+
+      default:
+        setError("root", { message: "GENERIC" });
     }
   } catch {
     setError("root", { message: "GENERIC" });

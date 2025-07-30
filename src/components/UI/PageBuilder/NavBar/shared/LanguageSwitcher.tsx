@@ -1,10 +1,14 @@
 'use client';
 
-import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
+import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
-export default function LanguageSwitcher() {
+interface LanguageSwitcherProps {
+  storedLocale?: LocaleLanguages;
+}
+
+export default function LanguageSwitcher({ storedLocale = defaultLocale }: LanguageSwitcherProps) {
   const router = useRouter();
 
   const switchTo = (locale: string) => {
@@ -18,20 +22,18 @@ export default function LanguageSwitcher() {
   };
 
   useEffect(() => {
-    const storedLocale = getPreferredLocale();
     const pathname = window.location.pathname;
     const currentLocale = pathname.split('/')[1];
 
     if (
       storedLocale &&
-      storedLocale !== currentLocale &&
-      ['fr', 'en', 'de'].includes(storedLocale)
+      storedLocale !== currentLocale
     ) {
       const segments = pathname.split('/');
       segments[1] = storedLocale;
       router.replace(segments.join('/'));
     }
-  }, [router]);
+  }, [router, storedLocale]);
 
   return (
     <div className="space-x-2">
