@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCheckoutId } from "@/utils/shared/getters/getCheckoutId";
-import { createCheckout, updateBuyerIdentity } from "@/lib/services/store-front/checkout";
-import { setServerCookie } from "@/utils/shared/setters/setServerCookie";
+import { createCheckout, updateCustomerIdentity } from "@/lib/services/store-front/checkout";
+import { setServerCookie } from "@/utils/shared/setters/shared/setServerCookie";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
   if (checkoutUrlPath) {
     const checkoutId = await getCheckoutId();
     if (checkoutId)
-      checkoutUrl = await updateBuyerIdentity(checkoutId, {
+      checkoutUrl = await updateCustomerIdentity(checkoutId, {
         customerAccessToken,
       });
     else

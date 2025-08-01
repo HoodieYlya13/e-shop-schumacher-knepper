@@ -1,6 +1,6 @@
 import Footer from './Footer';
 import NavBar from './NavBar/NavBar';
-import BuyerGeoInfo from './BuyerGeoInfo/BuyerGeoInfo';
+import CustomerGeoInfo from './CustomerGeoInfo/CustomerGeoInfo';
 
 interface PageBuilderProps {
   children: React.ReactNode;
@@ -20,7 +20,7 @@ export default function PageBuilder({
         {showFooter && <Footer />}
       </div>
 
-      <BuyerGeoInfo />
+      <CustomerGeoInfo />
     </div>
   );
 }

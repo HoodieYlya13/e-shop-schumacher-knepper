@@ -1,6 +1,6 @@
-import { getCookie } from "./getCookie";
+import { getServerCookie } from "./shared/getServerCookie";
 
 export async function getPreferredLocale(toUpperCase = false) {
-  const locale = await getCookie("preferred_locale");
+  const locale = await getServerCookie("preferred_locale");
   return toUpperCase ? locale?.toUpperCase() : locale;
 }

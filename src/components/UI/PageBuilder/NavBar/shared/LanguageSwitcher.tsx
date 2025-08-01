@@ -1,7 +1,7 @@
 'use client';
 
 import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
-import { setClientCookie } from '@/utils/shared/setters/setClientCookie';
+import { setClientCookie } from '@/utils/shared/setters/shared/setClientCookie';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 

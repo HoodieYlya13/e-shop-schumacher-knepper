@@ -2,7 +2,7 @@ import { createCheckout } from '@/lib/services/store-front/checkout';
 import { getCustomerAccessToken } from '@/utils/shared/getters/getCustomerAccessToken';
 import { getCheckoutUrl } from '@/utils/shared/getters/getCheckoutUrl';
 import { NextRequest, NextResponse } from 'next/server';
-import { setServerCookie } from '@/utils/shared/setters/setServerCookie';
+import { setServerCookie } from '@/utils/shared/setters/shared/setServerCookie';
 
 export async function POST(req: NextRequest) {
   const { variantId, quantity } = await req.json();

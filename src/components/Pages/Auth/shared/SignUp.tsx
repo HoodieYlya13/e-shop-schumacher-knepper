@@ -3,7 +3,7 @@ import { FieldErrors, FieldValues, UseFormRegister, UseFormSetValue } from "reac
 import Input from "../../../UI/shared/elements/Input";
 import { RegisterValues } from "@/schemas/authSchema";
 import { CountryCode } from "libphonenumber-js/core";
-import { getBuyerCountryClient } from "@/utils/shared/getters/getBuyerCountryClient";
+import { getCustomerCountryClient } from "@/utils/shared/getters/getCustomerCountryClient";
 
 interface SignUpProps {
   register: UseFormRegister<RegisterValues>;
@@ -79,7 +79,7 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
         errorText={errors.phone && t(`ERRORS.${errors.phone.message}`)}
         required={false}
         autoComplete="tel"
-        defaultCountry={(getBuyerCountryClient() || "LU") as CountryCode}
+        defaultCountry={(getCustomerCountryClient() || "LU") as CountryCode}
       />
 
       <label className="flex items-center gap-2">

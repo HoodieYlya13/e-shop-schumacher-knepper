@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 import { routing } from './i18n/routing';
 import { SUPPORTED_LOCALES } from './i18n/utils';
-import { setMiddlewareCookie } from './utils/shared/setters/setServerCookie';
-import { getMiddlewareCookie } from './utils/shared/getters/getServerCookie';
+import { setMiddlewareCookie } from './utils/shared/setters/shared/setServerCookie';
+import { getMiddlewareCookie } from './utils/shared/getters/shared/getServerCookie';
 
 const intlMiddleware = createMiddleware(routing);
 

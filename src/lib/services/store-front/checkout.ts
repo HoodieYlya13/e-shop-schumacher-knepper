@@ -59,7 +59,7 @@ export async function createCheckout(
   return cart;
 }
 
-const UPDATE_BUYER_IDENTITY_MUTATION = `
+const UPDATE_CUSTOMER_IDENTITY_MUTATION = `
   mutation cartBuyerIdentityUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!) {
     cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
       cart {
@@ -74,7 +74,7 @@ const UPDATE_BUYER_IDENTITY_MUTATION = `
   }
 `;
 
-export async function updateBuyerIdentity(
+export async function updateCustomerIdentity(
   cartId: string,
   options: {
     email?: string;
@@ -110,7 +110,7 @@ export async function updateBuyerIdentity(
         message: string;
       }>;
     };
-  }>(UPDATE_BUYER_IDENTITY_MUTATION, variables);
+  }>(UPDATE_CUSTOMER_IDENTITY_MUTATION, variables);
 
   return data.cartBuyerIdentityUpdate.cart.checkoutUrl;
 }

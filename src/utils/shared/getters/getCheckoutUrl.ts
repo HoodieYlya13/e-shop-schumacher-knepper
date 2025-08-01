@@ -1,5 +1,5 @@
-import { getCookie } from "./getCookie";
+import { getServerCookie } from "./shared/getServerCookie";
 
 export async function getCheckoutUrl(): Promise<string | undefined> {
-  return getCookie("checkout_url");
+  return getServerCookie("checkout_url");
 }

@@ -1,6 +1,6 @@
 import { deleteCustomerAccessToken } from "@/lib/services/store-front/auth";
 import { getCustomerAccessToken } from "@/utils/shared/getters/getCustomerAccessToken";
-import { deleteCookie } from "@/utils/shared/setters/setServerCookie";
+import { deleteCookie } from "@/utils/shared/setters/shared/setServerCookie";
 import { NextResponse } from "next/server";
 
 export async function POST() {

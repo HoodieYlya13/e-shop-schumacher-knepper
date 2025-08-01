@@ -1,13 +1,13 @@
-import { getBuyerIp } from '@/utils/shared/getters/getBuyerIp';
+import { getCustomerIp } from '@/utils/shared/getters/getCustomerIp';
 import { shopifyClient } from './client';
 
 export async function shopifyServerFetch<T, V = unknown>(
   query: string,
   variables?: V
 ): Promise<T> {
-  const buyerIp = await getBuyerIp();
+  const customerIp = await getCustomerIp();
   const headers = shopifyClient.getPrivateTokenHeaders({
-    buyerIp: buyerIp || undefined
+    buyerIp: customerIp || undefined
   });
 
   const response = await fetch(shopifyClient.getStorefrontApiUrl(), {
