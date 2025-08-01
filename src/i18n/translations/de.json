@@ -13,13 +13,13 @@
     "CART": "Warenkorb",
     "CHECKOUT": "Zur Kasse"
   },
-  "ABOUT_PAGE": {
-    "TITLE": "Über uns",
+  "PRODUCTS_PAGE": {
+    "TITLE": "All our wines",
     "DESCRIPTION": "Wir lieben großartigen Wein und lokale Traditionen."
   },
   "NAV": {
     "HOME": "Startseite",
-    "ABOUT": "Über uns",
+    "PRODUCTS": "Products",
     "ACCOUNT": "Konto"
   },
   "AUTH": {

@@ -11,7 +11,7 @@ export default async function NavBar() {
   const storedLocale = await getPreferredLocale() as LocaleLanguages;
   
   return (
-    <header className="flex items-center justify-between px-6 py-4 border-b bg-white shadow-sm">
+    <header className="flex items-center justify-between border border-[#d4af37] rounded-4xl m-2 shadow-sm">
       <Navigation customerAccessToken={customerAccessToken} />
       {customerAccessToken && <Logout />}
       <LanguageSwitcher storedLocale={storedLocale} />

@@ -8,7 +8,7 @@ export default function ShoppingCart() {
   return (
     <button
       onClick={() => openCheckout(variantId)}
-      className="text-sm text-red-600 underline hover:text-red-800"
+      className="text-sm p-4 text-red-600 underline hover:text-red-800"
     >
       Checkout
     </button>

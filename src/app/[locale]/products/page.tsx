@@ -1,7 +1,7 @@
 import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
-import About from '@/components/Pages/About/About';
+import Products from '@/components/Pages/Products/Products';
 
-export default async function AboutPage({
+export default async function ProductsPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
@@ -10,7 +10,7 @@ export default async function AboutPage({
 
   return (
     <PageBuilder>
-      <About locale={locale} />
+      <Products locale={locale} />
     </PageBuilder>
   );
 }

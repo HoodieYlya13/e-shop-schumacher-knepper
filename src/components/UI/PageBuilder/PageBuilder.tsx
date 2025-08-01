@@ -12,7 +12,7 @@ export default function PageBuilder({
   showFooter = true,
 }: PageBuilderProps) {  
   return (
-    <div className="flex h-screen flex-col overflow-hidden">
+    <div className="flex h-screen flex-col overflow-hidden border-[#4a2c2a] bg-[#1e1e1e] text-[#e8e8e8] font-black">
       <NavBar />
 
       <div className="flex-grow overflow-y-auto">

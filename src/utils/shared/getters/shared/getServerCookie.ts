@@ -1,5 +1,5 @@
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 export async function getServerCookie(
   name: string
@@ -7,6 +7,9 @@ export async function getServerCookie(
   return (await cookies()).get(name)?.value;
 }
 
-export function getMiddlewareCookie(res: NextResponse, name: string): string | undefined {
-  return res.cookies.get(name)?.value;
+export function getMiddlewareCookie(
+  req: NextRequest,
+  name: string
+): string | undefined {
+  return req.cookies.get(name)?.value;
 }

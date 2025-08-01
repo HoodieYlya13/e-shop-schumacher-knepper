@@ -10,7 +10,7 @@ const intlMiddleware = createMiddleware(routing);
 export async function middleware(req: NextRequest) {
   const res = intlMiddleware(req);
 
-  const hasPreferredLocale = getMiddlewareCookie(res, "preferred_locale");
+  const hasPreferredLocale = getMiddlewareCookie(req, "preferred_locale");
 
   if (!hasPreferredLocale) {
     const acceptLang = req.headers.get("accept-language");

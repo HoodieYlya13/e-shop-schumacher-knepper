@@ -8,7 +8,7 @@ import { useEffect } from 'react';
 
 const navItemsBase = [
   { href: '/', labelKey: 'NAV.HOME' },
-  { href: '/about', labelKey: 'NAV.ABOUT' },
+  { href: '/products', labelKey: 'NAV.PRODUCTS' },
 ];
 
 interface NavigationProps {
@@ -38,7 +38,7 @@ export default function Navigation({ customerAccessToken }: NavigationProps) {
   ];
 
   return (
-    <nav className="flex gap-4 p-4 border-b bg-white shadow-sm">
+    <nav className="flex gap-4 p-4 shadow-sm">
       {navItems.map(({ href, labelKey }) => {
         const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
 

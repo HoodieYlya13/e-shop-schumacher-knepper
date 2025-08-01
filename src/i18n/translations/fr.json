@@ -13,13 +13,13 @@
     "CART": "Panier",
     "CHECKOUT": "Commander"
   },
-  "ABOUT_PAGE": {
-    "TITLE": "À propos de nous",
+  "PRODUCTS_PAGE": {
+    "TITLE": "Tous nos vins",
     "DESCRIPTION": "Nous sommes passionnés par le bon vin et la tradition locale."
   },
   "NAV": {
     "HOME": "Accueil",
-    "ABOUT": "À propos",
+    "PRODUCTS": "Produits",
     "ACCOUNT": "Compte"
   },
   "AUTH": {
