@@ -1,6 +1,6 @@
-import { cookies } from "next/headers";
+import { getCookie } from "./getCookie";
 
 export async function getPreferredLocale(toUpperCase = false) {
-  const locale = (await cookies()).get("preferred_locale")?.value;
+  const locale = await getCookie("preferred_locale");
   return toUpperCase ? locale?.toUpperCase() : locale;
 }

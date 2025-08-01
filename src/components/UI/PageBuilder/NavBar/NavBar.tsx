@@ -7,7 +7,7 @@ import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
 import { LocaleLanguages } from "@/i18n/utils";
 
 export default async function NavBar() {
-  const customerAccessToken = await getCustomerAccessToken();
+  const customerAccessToken = await getCustomerAccessToken(true);
   const storedLocale = await getPreferredLocale() as LocaleLanguages;
   
   return (

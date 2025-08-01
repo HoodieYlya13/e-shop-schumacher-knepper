@@ -1,5 +1,5 @@
-import { cookies } from 'next/headers';
+import { getCookie } from './getCookie';
 
 export async function getBuyerIp(): Promise<string | undefined> {
-  return (await cookies()).get('buyer_ip')?.value;
+  return getCookie('buyer_ip');
 }

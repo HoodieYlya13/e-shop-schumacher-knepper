@@ -6,5 +6,5 @@ export async function logout() {
       "Content-Type": "application/json",
     }
   });
-  window.location.href = "https://i621t2-yy.myshopify.com/account/logout";
+  window.location.href = `${process.env.PUBLIC_STORE_DOMAIN}/account/logout`;
 }

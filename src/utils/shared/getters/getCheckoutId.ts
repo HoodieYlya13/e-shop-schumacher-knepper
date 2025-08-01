@@ -1,5 +1,5 @@
-import { cookies } from "next/headers";
+import { getCookie } from "./getCookie";
 
 export async function getCheckoutId(): Promise<string | undefined> {
-  return (await cookies()).get("checkout_id")?.value;
+  return getCookie("checkout_id");
 }

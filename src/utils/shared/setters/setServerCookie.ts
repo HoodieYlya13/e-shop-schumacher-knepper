@@ -1,4 +1,5 @@
 import { serialize, type SerializeOptions } from "cookie";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export function setServerCookie({
@@ -24,14 +25,18 @@ export function setServerCookie({
 }
 
 export function setMiddlewareCookie(
-    res: NextResponse,
-    name: string,
-    value: string,
-    options: Partial<SerializeOptions> = {}
-  ) {
-    res.cookies.set(name, value, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-      ...options,
-    });
-  }
+  res: NextResponse,
+  name: string,
+  value: string,
+  options: Partial<SerializeOptions> = {}
+) {
+  res.cookies.set(name, value, {
+    path: "/",
+    maxAge: 60 * 60 * 24 * 365,
+    ...options,
+  });
+}
+
+export async function deleteCookie(name: string) {
+  (await cookies()).delete(name);
+}

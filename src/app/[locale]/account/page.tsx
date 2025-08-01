@@ -5,10 +5,8 @@ import { redirect } from "next/navigation";
 import { fetchCustomerData } from "@/lib/services/store-front/customer";
 
 export default async function AccountPage() {
-  const customerAccessToken = await getCustomerAccessToken();
-  if (!customerAccessToken) {
-    redirect("/auth");
-  }
+  const customerAccessToken = await getCustomerAccessToken(true);
+  if (!customerAccessToken) redirect("/auth");
   
   const customer = await fetchCustomerData(customerAccessToken);
   return (

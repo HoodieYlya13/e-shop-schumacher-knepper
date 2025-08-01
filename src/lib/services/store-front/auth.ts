@@ -133,3 +133,19 @@ const CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION = `
 export async function deleteCustomerAccessToken(customerAccessToken: string) {
   return shopifyServerFetch(CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION, { customerAccessToken });
 }
+
+const CUSTOMER_ACCESS_TOKEN_VERIFICATION_QUERY = `
+  query ($customerAccessToken: String!) {
+    customer(customerAccessToken: $customerAccessToken) {
+      id
+    }
+  }
+`;
+
+export async function isCustomerAccessTokenValid(token: string): Promise<boolean> {
+  const data = await shopifyServerFetch<{
+    customer: { id: string } | null;
+  }>(CUSTOMER_ACCESS_TOKEN_VERIFICATION_QUERY, { customerAccessToken: token });
+
+  return !!data.customer;
+}

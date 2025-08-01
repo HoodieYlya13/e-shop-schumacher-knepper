@@ -6,7 +6,7 @@ import { getInitialAuthMode } from '@/utils/auth/getters/getInitialAuthMode';
 import { redirect } from 'next/navigation';
 
 export default async function AuthPage() {
-  const customerAccessToken = await getCustomerAccessToken();
+  const customerAccessToken = await getCustomerAccessToken(true);
   if (customerAccessToken) redirect("/account");
   
   const initialMode = await getInitialAuthMode();

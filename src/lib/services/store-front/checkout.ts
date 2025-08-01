@@ -55,7 +55,6 @@ export async function createCheckout(
   }>(CREATE_CART_MUTATION, variables);
 
   const cart = data.cartCreate.cart;
-  console.log("Checkout:", cart);
 
   return cart;
 }
