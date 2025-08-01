@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCheckoutId } from "@/utils/shared/getters/getCheckoutId";
-import { updateBuyerIdentity } from "@/lib/services/store-front/checkout";
+import { createCheckout, updateBuyerIdentity } from "@/lib/services/store-front/checkout";
 import { setServerCookie } from "@/utils/shared/setters/setServerCookie";
 
 export async function POST(req: NextRequest) {
@@ -14,14 +14,24 @@ export async function POST(req: NextRequest) {
   if (expires.getTime() <= Date.now()) return NextResponse.json({ error: "Token expiry must be in the future" }, { status: 400 });
 
   let checkoutUrl = null;
-  
+
   if (checkoutUrlPath) {
-    checkoutUrl = `${process.env.NEXT_PUBLIC_STORE_DOMAIN}${decodeURIComponent(checkoutUrlPath)}`;
     const checkoutId = await getCheckoutId();
     if (checkoutId)
-      await updateBuyerIdentity(checkoutId, { customerAccessToken });
+      checkoutUrl = await updateBuyerIdentity(checkoutId, {
+        customerAccessToken,
+      });
+    else
+      checkoutUrl = (
+        await createCheckout({
+          variantId: "gid://shopify/ProductVariant/50446774370632",
+          quantity: 1,
+          customerAccessToken,
+        })
+      )?.checkoutUrl;
+    
   }
-  
+
   const redirectUrl = checkoutUrl || redirectTo || "account";
 
   const response = NextResponse.json({ redirectUrl });
