@@ -112,7 +112,5 @@ export async function updateBuyerIdentity(
     };
   }>(UPDATE_BUYER_IDENTITY_MUTATION, variables);
 
-  console.log("Updated checkout:", data);
-
   return data.cartBuyerIdentityUpdate.cart.checkoutUrl;
 }

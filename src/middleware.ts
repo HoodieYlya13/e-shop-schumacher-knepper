@@ -27,7 +27,10 @@ export async function middleware(req: NextRequest) {
 
   if (!ipCookie || !countryCookie) {
     try {
-      const geoRes = await fetch(`https://ipinfo.io/json`);
+      const forwarded = req.headers.get("x-forwarded-for");
+      const ip = forwarded?.split(",")[0] ?? "unknown";
+
+      const geoRes = await fetch(`https://ipinfo.io/${ip}/json?token=${process.env.IPINFO_TOKEN}`);
       const geo = await geoRes.json();
 
       setMiddlewareCookie(res, "buyer_ip", geo.ip ?? "unknown", {
