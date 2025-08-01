@@ -1,5 +1,6 @@
 import Footer from './Footer';
 import NavBar from './NavBar/NavBar';
+import BuyerGeoInfo from './BuyerGeoInfo/BuyerGeoInfo';
 
 interface PageBuilderProps {
   children: React.ReactNode;
@@ -9,7 +10,7 @@ interface PageBuilderProps {
 export default function PageBuilder({
   children,
   showFooter = true,
-}: PageBuilderProps) {
+}: PageBuilderProps) {  
   return (
     <div className="flex h-screen flex-col overflow-hidden">
       <NavBar />
@@ -18,6 +19,8 @@ export default function PageBuilder({
         <main className="p-6">{children}</main>
         {showFooter && <Footer />}
       </div>
+
+      <BuyerGeoInfo />
     </div>
   );
 }
