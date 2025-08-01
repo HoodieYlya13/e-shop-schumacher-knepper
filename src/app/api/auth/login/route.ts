@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
   let checkoutUrl = null;
   
   if (checkoutUrlPath) {
-    checkoutUrl = `${process.env.PUBLIC_STORE_DOMAIN}${decodeURIComponent(checkoutUrlPath)}`;
+    checkoutUrl = `${process.env.NEXT_PUBLIC_STORE_DOMAIN}${decodeURIComponent(checkoutUrlPath)}`;
     const checkoutId = await getCheckoutId();
     if (checkoutId)
       await updateBuyerIdentity(checkoutId, { customerAccessToken });

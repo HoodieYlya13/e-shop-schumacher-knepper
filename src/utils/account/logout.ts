@@ -6,5 +6,5 @@ export async function logout() {
       "Content-Type": "application/json",
     }
   });
-  window.location.href = `${process.env.PUBLIC_STORE_DOMAIN}/account/logout`;
+  window.location.href = `${process.env.PUBLIC_STORE_DOMAIN}account/logout`;
 }
