@@ -17,7 +17,7 @@ export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) 
         onClick={() => handleModeChange("LOGIN")}
         className={clsx(
           "px-4 py-2 rounded",
-          mode === "LOGIN" ? "bg-black text-white" : "bg-gray-200"
+          mode === "LOGIN" ? "bg-black" : "bg-gray-200 text-black"
         )}
       >
         {t("LOGIN")}
@@ -26,7 +26,7 @@ export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) 
         onClick={() => handleModeChange("REGISTER")}
         className={clsx(
           "px-4 py-2 rounded",
-          mode === "REGISTER" ? "bg-black text-white" : "bg-gray-200"
+          mode === "REGISTER" ? "bg-black" : "bg-gray-200 text-black"
         )}
       >
         {t("REGISTER")}

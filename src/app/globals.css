@@ -1,27 +1,51 @@
+@config "../../tailwind.config.ts";
+
 @import "tailwindcss";
+
+:root {
+  --primary-color: #e8e8e8;
+  --secondary-color: #1e1e1e;
+  --accent-color: #d4af37;
+  --accent-dark-color: #4a2c2a;
+}
 
 /* Firefox */
 * {
-    scrollbar-width: thin;
-    scrollbar-color: #9ca3af #f1f1f1;
-  }
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--secondary-color);
+}
   
-  /* WebKit browsers (Chrome, Safari, Edge) */
-  *::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  *::-webkit-scrollbar-track {
-    background: #f1f1f1;
-  }
-  
-  *::-webkit-scrollbar-thumb {
-    background-color: #9ca3af;
-    border-radius: 6px;
-    border: 2px solid #f1f1f1;
-  }
-  
-  *::-webkit-scrollbar-thumb:hover {
-    background-color: #6b7280;
-  }
+/* WebKit browsers (Chrome, Safari, Edge) */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: var(--accent-color);
+  border-radius: 6px;
+  border: 2px solid var(--secondary-color);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: var(--secondary-color);
+}
+
+html, body {
+  width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  overscroll-behavior: none;
+}
+
+.text-outline {
+  text-shadow:
+    -1px -1px 0 black,
+     1px -1px 0 black,
+    -1px  1px 0 black,
+     1px  1px 0 black;
+}

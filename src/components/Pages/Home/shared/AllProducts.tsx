@@ -12,7 +12,7 @@ export default function AllProducts({ products }: AllProductsProps) {
   const t = useTranslations("HOME_PAGE");
 
   return (
-    <section className="p-6 space-y-12">
+    <section className="p-6 pt-26 md:pt-36 space-y-12">
       {products.length === 0 && <p>{t('NO_PRODUCTS')}</p>}
       {products.map((product) => (
         <div key={product.id} className="border rounded-lg p-4 shadow">

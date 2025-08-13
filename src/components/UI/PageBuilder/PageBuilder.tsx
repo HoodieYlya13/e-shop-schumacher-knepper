@@ -10,13 +10,13 @@ interface PageBuilderProps {
 export default function PageBuilder({
   children,
   showFooter = true,
-}: PageBuilderProps) {  
+}: PageBuilderProps) {
   return (
-    <div className="flex h-screen flex-col overflow-hidden border-[#4a2c2a] bg-[#1e1e1e] text-[#e8e8e8] font-black">
+    <div className="flex w-screen flex-col border-accent-dark bg-secondary text-primary font-black">
       <NavBar />
 
-      <div className="flex-grow overflow-y-auto">
-        <main className="p-6">{children}</main>
+      <div className="flex flex-col min-h-screen">
+        <main className="grow">{children}</main>
         {showFooter && <Footer />}
       </div>
 

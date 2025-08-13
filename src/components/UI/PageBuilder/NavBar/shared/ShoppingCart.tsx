@@ -1,16 +1,29 @@
 'use client';
 
 import { openCheckout } from "@/utils/checkout/openCheckout";
+import Image from "next/image";
 
-export default function ShoppingCart() {
+interface ShoppingCartProps {
+  showCart: boolean;
+  setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: ShoppingCartProps) {
   const variantId = "gid://shopify/ProductVariant/50446774370632";
 
   return (
-    <button
-      onClick={() => openCheckout(variantId)}
-      className="text-sm p-4 text-red-600 underline hover:text-red-800"
-    >
-      Checkout
+    <button onClick={() => {
+      setShowCart(!showCart);
+      setShowMenu(false);
+    }}>
+      <Image
+        src="/img/icons/cart.svg"
+        width={24}
+        height={24}
+        alt="cart"
+        className="cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+      />
     </button>
   );
 }

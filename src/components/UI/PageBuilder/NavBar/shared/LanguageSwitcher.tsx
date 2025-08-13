@@ -2,8 +2,9 @@
 
 import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
 import { setClientCookie } from '@/utils/shared/setters/shared/setClientCookie';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 interface LanguageSwitcherProps {
   storedLocale?: LocaleLanguages;
@@ -11,6 +12,8 @@ interface LanguageSwitcherProps {
 
 export default function LanguageSwitcher({ storedLocale = defaultLocale }: LanguageSwitcherProps) {
   const router = useRouter();
+  const [showAll, setShowAll] = useState(false);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const switchTo = (locale: string) => {
     setClientCookie("preferred_locale", locale, {
@@ -40,11 +43,51 @@ export default function LanguageSwitcher({ storedLocale = defaultLocale }: Langu
     }
   }, [router, storedLocale]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (showAll && wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+        setShowAll(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showAll]);
+
+  const languages = [
+    { code: 'fr', img: 'FR.svg', alt: 'French' },
+    { code: 'en', img: 'EN.svg', alt: 'English' },
+    { code: 'de', img: 'DE.svg', alt: 'Deutsch' },
+  ];
+
   return (
-    <div className="space-x-2">
-      <button onClick={() => switchTo('fr')}>Français</button>
-      <button onClick={() => switchTo('en')}>English</button>
-      <button onClick={() => switchTo('de')}>Deutsch</button>
+    <div className="space-x-2 flex" ref={wrapperRef}>
+      {!showAll ? (
+        languages.filter(({ code }) => code === storedLocale).map(({ code, img, alt }) => (
+          <button key={code} onClick={() => setShowAll(true)}>
+            <Image
+              src={`/img/flags/${img}`}
+              width={24}
+              height={16}
+              alt={alt}
+              className="cursor-pointer border hover:scale-110 transition-transform duration-300"
+            />
+          </button>
+        ))
+      ) : (
+        languages.map(({ code, img, alt }) => (
+          <button key={code} onClick={() => { switchTo(code); setShowAll(false); }}>
+            <Image
+              src={`/img/flags/${img}`}
+              width={24}
+              height={16}
+              alt={alt}
+              className="cursor-pointer border hover:scale-110 transition-transform duration-300"
+            />
+          </button>
+        ))
+      )}
     </div>
   );
 }

@@ -28,8 +28,8 @@ export async function loginHandler(
     new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
   const loginError = json?.customerAccessTokenCreate?.customerUserErrors?.[0]
     ?.message
-    ? "UNIDENTIFIED_CUSTOMER"
-    : null;
+      ? "LOGIN_ERROR"
+      : null;
 
   if (!customerAccessToken) {
     const errorMessage = afterRegister ? "AUTHENTICATION_PROBLEM" : (loginError || "GENERIC");

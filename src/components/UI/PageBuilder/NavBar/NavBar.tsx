@@ -1,21 +1,18 @@
 import { getCustomerAccessToken } from "@/utils/shared/getters/getCustomerAccessToken";
-import Navigation from "./shared/Navigation";
-import Logout from "./shared/Logout";
-import LanguageSwitcher from "./shared/LanguageSwitcher";
-import ShoppingCart from "./shared/ShoppingCart";
 import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
 import { LocaleLanguages } from "@/i18n/utils";
+import NavBarClient from "./shared/NavBarClient";
 
 export default async function NavBar() {
   const customerAccessToken = await getCustomerAccessToken(true);
   const storedLocale = await getPreferredLocale() as LocaleLanguages;
   
   return (
-    <header className="flex items-center justify-between border border-[#d4af37] rounded-4xl m-2 shadow-sm">
-      <Navigation customerAccessToken={customerAccessToken} />
-      {customerAccessToken && <Logout />}
-      <LanguageSwitcher storedLocale={storedLocale} />
-      <ShoppingCart />
+    <header className="fixed w-full z-10 p-5 md:p-10">
+      <NavBarClient
+        customerAccessToken={customerAccessToken}
+        storedLocale={storedLocale}
+      />
     </header>
   );
 }

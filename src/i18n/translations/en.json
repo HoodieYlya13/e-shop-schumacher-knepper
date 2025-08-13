@@ -6,19 +6,23 @@
   "HOME_PAGE": {
     "META": {
       "TITLE": "Online shop - {shopName}",
-      "DESCRIPTION": "Welcome to {shopName}'s online shop! Explore all our wines or get your loved ones a gift card.",
-      "NO_PRODUCTS": "No products available at the moment."
+      "DESCRIPTION": "Welcome to {shopName}'s online shop! Explore all our wines or get your loved ones a gift card."
     },
-    "WELCOME": "Welcome to {shopName}'s store!",
+    "BEST_SELLERS": "See our best-sellers",
+    "NO_PRODUCTS": "No products available at the moment.",
     "CART": "Cart",
-    "CHECKOUT": "Checkout"
+    "CHECKOUT": "Checkout",
+    "SINCE": "Since",
+    "WELCOME": "{shopName} winery",
+    "SEARCH": "Search...",
+    "ALL_RIGHTS_RESERVED": "All rights reserved."
   },
   "PRODUCTS_PAGE": {
     "TITLE": "All our wines",
     "DESCRIPTION": "We are passionate about great wine and local tradition."
   },
   "NAV": {
-    "HOME": "Home",
+    "HOME": "Schumacher-Knepper",
     "PRODUCTS": "Products",
     "ACCOUNT": "Account"
   },

@@ -5,6 +5,7 @@ import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import clsx from 'clsx';
 import { useEffect } from 'react';
+import Logout from './Logout';
 
 const navItemsBase = [
   { href: '/', labelKey: 'NAV.HOME' },
@@ -13,9 +14,10 @@ const navItemsBase = [
 
 interface NavigationProps {
   customerAccessToken: string | undefined;
+  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export default function Navigation({ customerAccessToken }: NavigationProps) {
+export default function Navigation({ customerAccessToken, setShowMenu }: NavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations();
@@ -38,21 +40,30 @@ export default function Navigation({ customerAccessToken }: NavigationProps) {
   ];
 
   return (
-    <nav className="flex gap-4 p-4 shadow-sm">
+    <nav className="flex flex-col md:flex-row gap-4">
       {navItems.map(({ href, labelKey }) => {
-        const isActive = href === '/' ? pathname === '/' : pathname.startsWith(href);
+        const localeRegex = /^\/[a-z]{2}(?=\/|$)/;
+        const normalizedPath = pathname.replace(localeRegex, "") || "/";
+        const isActive =
+          href === "/"
+            ? normalizedPath === "/"
+            : normalizedPath.startsWith(href);
 
         return (
-          <Link
-            key={href}
-            href={href}
-            className={clsx(
-              'px-4 py-2 rounded hover:bg-gray-100 transition',
-              isActive && 'bg-gray-200 font-semibold'
-            )}
-          >
-            {t(labelKey)}
-          </Link>
+          <div className="flex flex-row gap-4 itmes-center" key={href}>
+            <Link
+              href={href}
+              onClick={() => setShowMenu(false)}
+              className={clsx(
+                "rounded transition hover:scale-110 duration-300 text-outline",
+                isActive && "text-accent"
+              )}
+            >
+              {t(labelKey)}
+            </Link>
+            {(href === "/account" || href === "/auth") &&
+              customerAccessToken && <Logout />}
+          </div>
         );
       })}
     </nav>
