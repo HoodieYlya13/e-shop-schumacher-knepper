@@ -9,6 +9,7 @@ export default async function AuthPage() {
   const customerAccessToken = await getCustomerAccessToken(true);
   if (customerAccessToken) redirect("/account");
   
+  // TODO: Implement logic to use searchParams to determine initial mode and reset password URL
   const initialMode = await getInitialAuthMode();
   const resetPasswordUrl = await getResetPasswordUrl();
   return (

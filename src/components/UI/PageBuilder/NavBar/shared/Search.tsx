@@ -6,6 +6,8 @@ import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
 import { getProductsSearchSuggestions, ProductSuggestion } from '@/utils/products/getProductsSearchSuggestions';
+import { useRouter } from 'next/navigation';
+import { useCallback } from 'react';
 
 interface SearchProps {
   showSearch: boolean;
@@ -20,6 +22,16 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
   const t = useTranslations('HOME_PAGE');
   const inputRef = useRef<HTMLInputElement>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const router = useRouter();
+
+  const handleSearch = useCallback(() => {
+    if (searchTerm.length > 0 && storedLocale) {
+      router.push(`/${storedLocale}/products?search=${searchTerm}`);
+      setSearchTerm('');
+      setShowSearch(false);
+      setSearchSuggestions([]);
+    }
+  }, [searchTerm, storedLocale, router, setShowSearch, setSearchSuggestions]);
 
   useEffect(() => {
     if (showSearch) {
@@ -57,13 +69,23 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
           placeholder={t("SEARCH")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault();
+              handleSearch();
+            }
+          }}
         />
       )}
       <button
         onClick={() => {
-          setShowSearch(true);
-          setShowMenu(false);
-          setShowCart(false);
+          if (showSearch && searchTerm.length > 0) {
+            handleSearch();
+          } else {
+            setShowSearch(true);
+            setShowMenu(false);
+            setShowCart(false);
+          }
         }}
         className={clsx("flex", showSearch && "mr-4 flex")}
         type="button"

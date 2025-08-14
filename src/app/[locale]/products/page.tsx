@@ -4,14 +4,14 @@ import { LocaleLanguages } from '@/i18n/utils';
 
 export default async function ProductsPage({
   params,
+  searchParams,
 }: {
-  params: Promise<{ locale: LocaleLanguages }>;
+  params: { locale: LocaleLanguages };
+  searchParams: { search?: string };
 }) {
-  const { locale } = await params;
-
   return (
     <PageBuilder>
-      <Products locale={locale} />
+      <Products params={params} searchParams={searchParams} />
     </PageBuilder>
   );
 }

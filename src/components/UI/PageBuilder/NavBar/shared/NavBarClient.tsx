@@ -68,7 +68,7 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
           />
         </div>
 
-        {!!searchSuggestions && (
+        {!!searchSuggestions && ( // TODO: navigate with arrow keys
           <div className="w-full h-fit p-4 pt-20 gap-2 flex flex-col">
             {searchSuggestions.map((suggestion) => (
               <Link
