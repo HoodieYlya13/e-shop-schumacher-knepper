@@ -16,7 +16,8 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
   const t = useTranslations("HOME_PAGE");
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
-  
+  const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({});
+
   const filtersMap: Record<string, Set<string>> = {};
 
   products.forEach((product) => {
@@ -50,6 +51,13 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
     });
   };
 
+  const toggleExpandedFilter = (filterName: string) => {
+    setExpandedFilters((prev) => ({
+      ...prev,
+      [filterName]: !prev[filterName],
+    }));
+  };
+
   const filteredProducts = products.filter((product) => {
     return Object.entries(selectedFilters).every(([filterName, values]) => {
       if (values.length === 0) return true;
@@ -65,28 +73,40 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
       <aside className="w-64 border-r border-gray-200 pr-4 hidden lg:flex flex-col ml-4">
         {filters.map((filter) => (
           <div key={filter.name} className="mb-6">
-            <h3 className="font-bold mb-2">{filter.name}</h3>
-            {filter.values.map((value) => (
-              <label key={value} className="flex items-center gap-2 mb-1">
-                <input
-                  type="checkbox"
-                  checked={
-                    selectedFilters[filter.name]?.includes(value) || false
-                  }
-                  onChange={() => toggleFilter(filter.name, value)}
-                />
-                {value}
-              </label>
-            ))}
+            <button
+              type="button"
+              onClick={() => toggleExpandedFilter(filter.name)}
+              className="font-bold mb-2 w-full text-left"
+              aria-expanded={expandedFilters[filter.name] ?? true}
+              aria-controls={`filter-values-${filter.name}`}
+            >
+              {filter.name}
+            </button>
+            {(expandedFilters[filter.name] ?? true) && (
+              <div id={`filter-values-${filter.name}`}>
+                {filter.values.map((value) => (
+                  <label key={value} className="flex items-center gap-2 mb-1">
+                    <input
+                      type="checkbox"
+                      checked={
+                        selectedFilters[filter.name]?.includes(value) || false
+                      }
+                      onChange={() => toggleFilter(filter.name, value)}
+                    />
+                    {value}
+                  </label>
+                ))}
+              </div>
+            )}
           </div>
         ))}
       </aside>
 
-      <section className="p-6 flex-grow">
+      <section className="px-6 flex-grow">
         <div className="lg:hidden mb-4">
           <button
             onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-            className="px-4 py-2 bg-gray-200 rounded-md font-semibold"
+            className="px-4 py-2 bg-gray-50 rounded-md shadow-md font-semibold"
             aria-expanded={isFilterPanelOpen}
             aria-controls="mobile-filter-panel"
           >
@@ -98,20 +118,32 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
               className="mt-4 bg-gray-50 p-4 rounded-md shadow-md"
             >
               {filters.map((filter) => (
-                <div key={filter.name} className="mb-6">
-                  <h3 className="font-bold mb-2">{filter.name}</h3>
-                  {filter.values.map((value) => (
-                    <label key={value} className="flex items-center gap-2 mb-1">
-                      <input
-                        type="checkbox"
-                        checked={
-                          selectedFilters[filter.name]?.includes(value) || false
-                        }
-                        onChange={() => toggleFilter(filter.name, value)}
-                      />
-                      {value}
-                    </label>
-                  ))}
+                <div key={filter.name} className="mb-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleExpandedFilter(filter.name)}
+                    className="font-bold mb-2 w-full text-left border-b border-gray-200 pb-2"
+                    aria-expanded={expandedFilters[filter.name] ?? true}
+                    aria-controls={`mobile-filter-values-${filter.name}`}
+                  >
+                    {filter.name}
+                  </button>
+                  {(expandedFilters[filter.name] ?? false) && (
+                    <div id={`mobile-filter-values-${filter.name}`}>
+                      {filter.values.map((value) => (
+                        <label key={value} className="flex items-center gap-2 mb-1">
+                          <input
+                            type="checkbox"
+                            checked={
+                              selectedFilters[filter.name]?.includes(value) || false
+                            }
+                            onChange={() => toggleFilter(filter.name, value)}
+                          />
+                          {value}
+                        </label>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
