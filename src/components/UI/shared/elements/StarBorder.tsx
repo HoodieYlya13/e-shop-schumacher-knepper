@@ -1,14 +1,13 @@
 import React from "react";
 
-type StarBorderProps<T extends React.ElementType> =
-  React.ComponentPropsWithoutRef<T> & {
-    as?: T;
-    className?: string;
-    children?: React.ReactNode;
-    color?: string;
-    speed?: React.CSSProperties['animationDuration'];
-    thickness?: number;
-  }
+type StarBorderProps<T extends React.ElementType> = {
+  as?: T;
+  className?: string;
+  children?: React.ReactNode;
+  color?: string;
+  speed?: React.CSSProperties["animationDuration"];
+  thickness?: number;
+} & Omit<React.ComponentPropsWithoutRef<T>, "as" | "color" | "children">;
 
 const StarBorder = <T extends React.ElementType = "button">({
   as,
@@ -17,17 +16,18 @@ const StarBorder = <T extends React.ElementType = "button">({
   speed = "3.5s",
   thickness = 1,
   children,
+  style,
   ...rest
 }: StarBorderProps<T>) => {
   const Component = as || "button";
 
   return (
-    <Component 
-      className={`cursor-pointer relative inline-block overflow-hidden rounded-[20px]`} 
-      {...(rest as any)}
+    <Component
+      className="cursor-pointer relative inline-block overflow-hidden rounded-[20px]"
+      {...rest}
       style={{
         padding: `${thickness}px 0`,
-        ...(rest as any).style,
+        ...style,
       }}
     >
       <div
@@ -44,7 +44,9 @@ const StarBorder = <T extends React.ElementType = "button">({
           animationDuration: speed,
         }}
       ></div>
-      <div className={`relative z-1 border border-gray-800 text-white text-center text-[16px] py-[16px] px-[26px] rounded-[20px] ${className}`}>
+      <div
+        className={`relative z-1 border border-gray-800 text-white text-center text-[16px] py-[16px] px-[26px] rounded-[20px] ${className}`}
+      >
         {children}
       </div>
     </Component>

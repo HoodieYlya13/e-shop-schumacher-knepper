@@ -1,6 +1,6 @@
 'use client';
 
-import { openCheckout } from "@/utils/checkout/openCheckout";
+// import { openCheckout } from "@/utils/checkout/openCheckout";
 import Image from "next/image";
 
 interface ShoppingCartProps {
@@ -10,7 +10,7 @@ interface ShoppingCartProps {
 }
 
 export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: ShoppingCartProps) {
-  const variantId = "gid://shopify/ProductVariant/50446774370632";
+  // const variantId = "gid://shopify/ProductVariant/50446774370632";
 
   return (
     <button onClick={() => {
