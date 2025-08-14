@@ -72,5 +72,23 @@
       "TOO_MANY_CHAR": "Zu viele Zeichen.",
       "PASSWORD_INVALID": "Das Passwort ist unsicher. Bitte verwenden Sie ein stärkeres Passwort."
     }
+  },
+  "PRODUCT_PAGE": {
+    "DESCRIPTION": "Description",
+    "AVAILABILITY": "Availability",
+    "OUT_OF_STOCK": "Out of stock",
+    "IN_STOCK": "In stock",
+    "ADD_TO_CART": "Add to cart",
+    "SOLD_OUT": "Sold out"
+  },
+  "CART": {
+    "TITLE": "Your cart",
+    "EMPTY": "Your cart is empty.",
+    "EMPTY_CART_MESSAGE": "Add some products to your cart to proceed.",
+    "SUBTOTAL": "Subtotal",
+    "TOTAL": "Total",
+    "CHECKOUT": "Proceed to checkout",
+    "CHECKOUT_LOADING": "Proceeding to checkout...",
+    "REMOVE_ITEM": "Remove item"
   }
 }

@@ -5,16 +5,20 @@ import { NextRequest, NextResponse } from 'next/server';
 import { setServerCookie } from '@/utils/shared/setters/shared/setServerCookie';
 
 export async function POST(req: NextRequest) {
-  const { variantId, quantity } = await req.json();
+  const { lineItems } = await req.json();
   const customerAccessToken = await getCustomerAccessToken();
   const checkoutUrl = await getCheckoutUrl();
   
   if (checkoutUrl) return NextResponse.json({ url: checkoutUrl });
 
   try {
-    if (!variantId) return NextResponse.json({ error: 'Missing variantId' }, { status: 400 });
+    if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0)
+      return NextResponse.json(
+        { error: "Missing or invalid lineItems" },
+        { status: 400 }
+      );
 
-    const { id, checkoutUrl } = await createCheckout({ variantId, quantity, customerAccessToken });
+    const { id, checkoutUrl } = await createCheckout({ lineItems, customerAccessToken });
 
     const response = NextResponse.json({ url: checkoutUrl });
 

@@ -12,6 +12,7 @@ import Logo from "./Logo";
 import clsx from "clsx";
 import { ProductSuggestion } from "@/utils/products/getProductsSearchSuggestions";
 import Link from "next/link";
+import CartContent from "./CartContent";
 
 interface NavBarClientProps {
   customerAccessToken?: string;
@@ -102,7 +103,7 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
         "relative bg-white/30 backdrop-blur-md flex mx-auto border border-accent rounded-4xl shadow-lg shadow-accent/30 h-16 w-full md:max-w-7xl transition-all duration-300 ease-in-out",
         showCart &&
           "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start",
-        showMenu && "h-[calc(100vh-2.5rem)] sm:h-72 md:h-16 md:items-start",
+        showMenu && "h-[calc(100vh-2.5rem)] sm:h-72 md:h-16 md:items-start"
       )}
       ref={navBarRef}
     >
@@ -127,7 +128,10 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
           <Logo />
 
           <div className="hidden md:flex">
-            <Navigation customerAccessToken={customerAccessToken} setShowMenu={setShowMenu} />
+            <Navigation
+              customerAccessToken={customerAccessToken}
+              setShowMenu={setShowMenu}
+            />
           </div>
         </div>
 
@@ -155,7 +159,10 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
       {showMenu && (
         <>
           <div className="absolute top-20 left-4 text-2xl flex md:hidden">
-            <Navigation customerAccessToken={customerAccessToken} setShowMenu={setShowMenu} />
+            <Navigation
+              customerAccessToken={customerAccessToken}
+              setShowMenu={setShowMenu}
+            />
           </div>
 
           <div className="absolute bottom-4 items-center flex justify-between mx-auto px-4 w-full md:hidden">
@@ -165,7 +172,11 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
         </>
       )}
 
-      {showCart && <div className="absolute">Test cart</div>}
+      {showCart && (
+        <div className="absolute top-20 left-4">
+          <CartContent />
+        </div>
+      )}
     </div>
   );
 }

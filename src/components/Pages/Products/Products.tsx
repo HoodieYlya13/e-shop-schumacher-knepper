@@ -5,13 +5,13 @@ import AllProducts from "./shared/AllProducts";
 
 export default async function Products({
   params,
-  searchParams = {},
+  searchParams,
 }: {
-  params: { locale: LocaleLanguages };
-  searchParams?: { search?: string };
+  params: Promise<{ locale: LocaleLanguages }>;
+  searchParams?: Promise<{ search?: string }>;
 }) {
-  const searchTerm = searchParams.search; 
-  const locale = params.locale;
+  const { locale } = await params;
+  const { search: searchTerm } = (await searchParams) || {};
   const language = locale.toUpperCase() as LocaleLanguagesUpperCase;
   let products: Product[] = [];
 

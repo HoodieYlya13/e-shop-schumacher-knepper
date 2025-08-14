@@ -17,27 +17,27 @@ const CREATE_CART_MUTATION = `
 `;
 
 export async function createCheckout(
-  input: {
-    variantId: string;
-    quantity: number;
+  options: {
+    lineItems: Array<{
+      variantId: string;
+      quantity: number;
+    }>;
     customerAccessToken?: string;
   }
 ) {
   const variables = {
     cartInput: {
-      lines: [
-        {
-          quantity: input.quantity,
-          merchandiseId: input.variantId,
-        },
-      ],
-      ...(input.customerAccessToken && {
+      lines: options.lineItems.map(item => ({
+        quantity: item.quantity,
+        merchandiseId: item.variantId,
+      })),
+      ...(options.customerAccessToken && {
         buyerIdentity: {
-          customerAccessToken: input.customerAccessToken,
+          customerAccessToken: options.customerAccessToken,
         },
       }),
     },
-    country: "FR",
+    country: "FR", // TODO: Make this dynamic based on user location or settings
     language: "FR",
   };
 
@@ -55,7 +55,6 @@ export async function createCheckout(
   }>(CREATE_CART_MUTATION, variables);
 
   const cart = data.cartCreate.cart;
-
   return cart;
 }
 
