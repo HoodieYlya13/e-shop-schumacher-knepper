@@ -3,19 +3,26 @@
 import { Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
+import Link from 'next/link';
+import { LocaleLanguages } from '@/i18n/utils';
 
 interface AllProductsProps {
+  locale: LocaleLanguages;
   products: Product[]
 };
 
-export default function AllProducts({ products }: AllProductsProps) {
+export default function AllProducts({ locale, products }: AllProductsProps) {
   const t = useTranslations("HOME_PAGE");
 
   return (
     <section className="p-6 pt-26 md:pt-36 space-y-12">
-      {products.length === 0 && <p>{t('NO_PRODUCTS')}</p>}
+      {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
       {products.map((product) => (
-        <div key={product.id} className="border rounded-lg p-4 shadow">
+        <Link
+          key={product.id}
+          href={`/${locale}/products/${product.handle}`}
+          className="block border rounded-lg p-4 shadow hover:shadow-lg transition-shadow duration-200"
+        >
           <h2 className="text-2xl font-bold">{product.title}</h2>
           <p className="text-gray-700">{product.description}</p>
 
@@ -36,10 +43,10 @@ export default function AllProducts({ products }: AllProductsProps) {
           )}
 
           <p className="mt-4 text-lg">
-            {product.variants.edges[0]?.node.price.amount}{' '}
+            {product.variants.edges[0]?.node.price.amount}{" "}
             {product.variants.edges[0]?.node.price.currencyCode}
           </p>
-        </div>
+        </Link>
       ))}
     </section>
   );

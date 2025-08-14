@@ -15,7 +15,7 @@ export default function LanguageSwitcher({ storedLocale = defaultLocale }: Langu
   const [showAll, setShowAll] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
-  const switchTo = (locale: string) => {
+  const switchTo = (locale: LocaleLanguages) => {
     setClientCookie("preferred_locale", locale, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
@@ -77,7 +77,7 @@ export default function LanguageSwitcher({ storedLocale = defaultLocale }: Langu
         ))
       ) : (
         languages.map(({ code, img, alt }) => (
-          <button key={code} onClick={() => { switchTo(code); setShowAll(false); }}>
+          <button key={code} onClick={() => { switchTo(code as LocaleLanguages); setShowAll(false); }}>
             <Image
               src={`/img/flags/${img}`}
               width={24}

@@ -10,6 +10,8 @@ import { LocaleLanguages } from "@/i18n/utils";
 import Image from "next/image";
 import Logo from "./Logo";
 import clsx from "clsx";
+import { ProductSuggestion } from "@/utils/products/getProductsSearchSuggestions";
+import Link from "next/link";
 
 interface NavBarClientProps {
   customerAccessToken?: string;
@@ -20,37 +22,39 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showCart, setShowCart] = useState(false);
-  const [suggestedProducts, setSuggestedProducts] = useState(2);
+  const [searchSuggestions, setSearchSuggestions] = useState<ProductSuggestion[]>([]);
 
   const navBarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        (showMenu || showCart) &&
+        (showMenu || showCart || showSearch) &&
         navBarRef.current &&
         !navBarRef.current.contains(event.target as Node)
       ) {
         setShowMenu(false);
         setShowCart(false);
+        setShowSearch(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showMenu, showCart]);
+  }, [showMenu, showCart, showSearch]);
 
-  const suggestionsHeight = suggestedProducts
-    ? 6 + suggestedProducts * 2 + (suggestedProducts - 1) * 0.5
+  const suggestionsHeight = searchSuggestions.length
+    ? 6 + searchSuggestions.length * 2 + (searchSuggestions.length - 1) * 0.5
     : 4;
 
   if (showSearch)
     return (
       <div
+        ref={navBarRef}
         className={`relative bg-white/30 backdrop-blur-md flex flex-col mx-auto items-start border border-accent rounded-4xl shadow-lg shadow-accent/30 w-full md:max-w-4xl transition-all duration-300 ease-in-out overflow-hidden`}
         style={{
-          height: `${suggestionsHeight}rem`
+          height: `${suggestionsHeight}rem`,
         }}
       >
         <div className="absolute h-16 items-center flex w-full border-b border-accent rounded-4xl">
@@ -59,18 +63,34 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
             setShowSearch={setShowSearch}
             setShowMenu={setShowMenu}
             setShowCart={setShowCart}
+            storedLocale={storedLocale}
+            setSearchSuggestions={setSearchSuggestions}
           />
         </div>
 
-        {!!suggestedProducts && (
+        {!!searchSuggestions && (
           <div className="w-full h-fit p-4 pt-20 gap-2 flex flex-col">
-            <div className="h-8 border-b border-accent flex items-center">
-              Product 1
-            </div>
-
-            <div className="h-8 border-b border-accent flex items-center">
-              Product 1
-            </div>
+            {searchSuggestions.map((suggestion) => (
+              <Link
+                key={suggestion.handle}
+                href={`/${storedLocale}/products/${suggestion.handle}`}
+              >
+                <div className="h-8 border-b border-accent flex items-center gap-2">
+                  {suggestion.image && (
+                    <Image
+                      src={suggestion.image.url}
+                      alt={suggestion.image.altText || suggestion.title}
+                      width={24}
+                      height={24}
+                      className="object-cover rounded"
+                    />
+                  )}
+                  <p className="flex-grow truncate overflow-hidden whitespace-nowrap">
+                    {suggestion.title}
+                  </p>{" "}
+                </div>
+              </Link>
+            ))}
           </div>
         )}
       </div>
@@ -117,6 +137,8 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
             setShowSearch={setShowSearch}
             setShowMenu={setShowMenu}
             setShowCart={setShowCart}
+            storedLocale={storedLocale}
+            setSearchSuggestions={setSearchSuggestions}
           />
           <div className="hidden md:flex gap-4">
             <Phone />

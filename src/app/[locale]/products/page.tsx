@@ -1,10 +1,11 @@
 import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
 import Products from '@/components/Pages/Products/Products';
+import { LocaleLanguages } from '@/i18n/utils';
 
 export default async function ProductsPage({
   params,
 }: {
-  params: Promise<{ locale: string }>;
+  params: Promise<{ locale: LocaleLanguages }>;
 }) {
   const { locale } = await params;
 

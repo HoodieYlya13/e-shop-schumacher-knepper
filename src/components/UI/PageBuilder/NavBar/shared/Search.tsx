@@ -1,21 +1,25 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from "next/image";
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
+import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
+import { getProductsSearchSuggestions, ProductSuggestion } from '@/utils/products/getProductsSearchSuggestions';
 
 interface SearchProps {
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
+  storedLocale?: LocaleLanguages;
+  setSearchSuggestions: React.Dispatch<React.SetStateAction<ProductSuggestion[]>>;
 }
 
-export default function Search({ showSearch, setShowSearch, setShowMenu, setShowCart }: SearchProps) {
+export default function Search({ showSearch, setShowSearch, setShowMenu, setShowCart, storedLocale, setSearchSuggestions }: SearchProps) {
   const t = useTranslations('HOME_PAGE');
-  const wrapperRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     if (showSearch) {
@@ -24,20 +28,23 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
   }, [showSearch]);
 
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showSearch && wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
-        setShowSearch(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showSearch]);
+    if (searchTerm.length > 0) {
+      const fetchProducts = async () => {
+        const products = await getProductsSearchSuggestions(
+          searchTerm,
+          storedLocale?.toUpperCase() as LocaleLanguagesUpperCase
+        );
+        setSearchSuggestions(products);
+      };
+
+      const debounceTimeout = setTimeout(fetchProducts, 300);
+
+      return () => clearTimeout(debounceTimeout);
+    } else setSearchSuggestions([]);
+  }, [searchTerm, storedLocale, setSearchSuggestions]);
 
   return (
     <div
-      ref={wrapperRef}
       className={clsx(
         showSearch && "flex w-full h-full items-center justify-between gap-2"
       )}
@@ -47,7 +54,9 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
           ref={inputRef}
           type="text"
           className="outline-hidden pl-4 rounded-4xl w-full h-full"
-          placeholder={t('SEARCH')}
+          placeholder={t("SEARCH")}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       )}
       <button

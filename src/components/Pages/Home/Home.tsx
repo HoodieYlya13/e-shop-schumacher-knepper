@@ -2,8 +2,9 @@ import CountUp from "@/components/UI/shared/elements/CountUp";
 import AllProductsButton from "./shared/AllProductsButton";
 import { getShopName } from "@/lib/services/store-front/shop";
 import { getTranslations } from "next-intl/server";
+import { LocaleLanguages } from "@/i18n/utils";
 
-export default async function Home({ locale }: { locale: string }) {
+export default async function Home({ locale }: { locale: LocaleLanguages }) {
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
   const shopName = await getShopName();
 

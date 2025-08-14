@@ -1,21 +1,15 @@
-import { LocaleLanguagesUpperCase } from "@/i18n/utils";
+import { LocaleLanguages, LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { getAllProducts } from "@/lib/services/store-front/products";
 import { Product } from "@shopify/hydrogen-react/storefront-api-types";
-import AllProducts from "../Home/shared/AllProducts";
+import AllProducts from "./shared/AllProducts";
 
-export default async function Products({ locale }: { locale: string }) {
+export default async function Products({ locale }: { locale: LocaleLanguages }) {
   const products: Product[] = await getAllProducts(locale.toUpperCase() as LocaleLanguagesUpperCase);
+
+  console.log("Products:", products);
   return (
     <>
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
-      <AllProducts products={products} />
+      <AllProducts locale={locale} products={products} />
     </>
   );
 }
