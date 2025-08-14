@@ -75,22 +75,18 @@ export default function CartContent() {
     return acc + (price * item.quantity);
   }, 0);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <p>Loading cart...</p>
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="flex justify-center items-center h-64">
+      <p>Loading cart...</p>
+    </div>
+  );
 
-  if (cart.length === 0) {
-    return (
-      <div className="flex justify-center items-center h-64 flex-col space-y-4">
-        <p className="text-2xl font-semibold">{t('EMPTY')}</p>
-        <p className="text-gray-500">{t('EMPTY_CART_MESSAGE')}</p>
-      </div>
-    );
-  }
+  if (cart.length === 0) return (
+    <div className="flex justify-center items-center h-64 flex-col space-y-4">
+      <p className="text-2xl font-semibold">{t("EMPTY")}</p>
+      <p className="text-gray-500">{t("EMPTY_CART_MESSAGE")}</p>
+    </div>
+  );
 
   return (
     <div className="container mx-auto p-4 md:p-8">
