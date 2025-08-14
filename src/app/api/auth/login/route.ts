@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getCheckoutId } from "@/utils/shared/getters/getCheckoutId";
-import { createCheckout, updateCustomerIdentity } from "@/lib/services/store-front/checkout";
+import { updateCustomerIdentity } from "@/lib/services/store-front/checkout";
 import { setServerCookie } from "@/utils/shared/setters/shared/setServerCookie";
 
 export async function POST(req: NextRequest) {
@@ -21,15 +21,6 @@ export async function POST(req: NextRequest) {
       checkoutUrl = await updateCustomerIdentity(checkoutId, {
         customerAccessToken,
       });
-    else
-      checkoutUrl = (
-        await createCheckout({
-          variantId: "gid://shopify/ProductVariant/50446774370632",
-          quantity: 1,
-          customerAccessToken,
-        })
-      )?.checkoutUrl;
-    
   }
 
   const redirectUrl = checkoutUrl || redirectTo || "account";
