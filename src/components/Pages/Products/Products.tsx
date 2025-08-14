@@ -10,13 +10,12 @@ export default async function Products({
   params: { locale: LocaleLanguages };
   searchParams?: { search?: string };
 }) {
-  const { locale } = params;
-  const { search: searchTerm } = searchParams || {};
+  const { locale } = await params;
+  const { search: searchTerm } = await searchParams || {};
   const language = locale.toUpperCase() as LocaleLanguagesUpperCase;
   let products: Product[] = [];
 
-  if (searchTerm)
-    products = await getProductsForFullSearch(searchTerm, language);
+  if (searchTerm) products = await getProductsForFullSearch(searchTerm, language);
   else products = await getAllProducts(language);
 
   return <AllProducts locale={locale} products={products} />;
