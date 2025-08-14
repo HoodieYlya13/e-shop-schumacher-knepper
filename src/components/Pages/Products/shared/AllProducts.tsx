@@ -15,6 +15,7 @@ interface AllProductsProps {
 export default function AllProducts({ locale, products }: AllProductsProps) {
   const t = useTranslations("HOME_PAGE");
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
+  const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   
   const filtersMap: Record<string, Set<string>> = {};
 
@@ -60,8 +61,8 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
   });
 
   return (
-    <div className="flex gap-6 max-w-7xl mx-auto">
-      <aside className="w-64 border-r border-gray-200 pr-4 hidden lg:flex flex-col mt-36 ml-4">
+    <div className="flex gap-6 max-w-7xl mx-auto pt-26 md:pt-36">
+      <aside className="w-64 border-r border-gray-200 pr-4 hidden lg:flex flex-col ml-4">
         {filters.map((filter) => (
           <div key={filter.name} className="mb-6">
             <h3 className="font-bold mb-2">{filter.name}</h3>
@@ -81,7 +82,42 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
         ))}
       </aside>
 
-      <section className="p-6 pt-26 md:pt-36">
+      <section className="p-6 flex-grow">
+        <div className="lg:hidden mb-4">
+          <button
+            onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
+            className="px-4 py-2 bg-gray-200 rounded-md font-semibold"
+            aria-expanded={isFilterPanelOpen}
+            aria-controls="mobile-filter-panel"
+          >
+            Filters
+          </button>
+          {isFilterPanelOpen && (
+            <div
+              id="mobile-filter-panel"
+              className="mt-4 bg-gray-50 p-4 rounded-md shadow-md"
+            >
+              {filters.map((filter) => (
+                <div key={filter.name} className="mb-6">
+                  <h3 className="font-bold mb-2">{filter.name}</h3>
+                  {filter.values.map((value) => (
+                    <label key={value} className="flex items-center gap-2 mb-1">
+                      <input
+                        type="checkbox"
+                        checked={
+                          selectedFilters[filter.name]?.includes(value) || false
+                        }
+                        onChange={() => toggleFilter(filter.name, value)}
+                      />
+                      {value}
+                    </label>
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
