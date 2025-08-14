@@ -7,15 +7,16 @@ export default async function Products({
   params,
   searchParams,
 }: {
-  params: Promise<{ locale: LocaleLanguages }>;
-  searchParams?: Promise<{ search?: string }>;
+  params: { locale: LocaleLanguages };
+  searchParams?: { search?: string };
 }) {
-  const { locale } = await params;
-  const { search: searchTerm } = (await searchParams) || {};
+  const { locale } = params;
+  const { search: searchTerm } = searchParams || {};
   const language = locale.toUpperCase() as LocaleLanguagesUpperCase;
   let products: Product[] = [];
 
-  if (searchTerm) products = await getProductsForFullSearch(searchTerm, language);
+  if (searchTerm)
+    products = await getProductsForFullSearch(searchTerm, language);
   else products = await getAllProducts(language);
 
   return <AllProducts locale={locale} products={products} />;
