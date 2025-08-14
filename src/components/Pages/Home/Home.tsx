@@ -11,7 +11,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   return (
     <>
       <section
-        className="h-screen w-screen bg-cover bg-center relative shadow-2xl"
+        className="h-screen w-screen bg-cover bg-center relative shadow-2xl text-primary"
         style={{ backgroundImage: "url('/img/barrel.jpg')" }}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-black to-gray-400 opacity-30"></div>

@@ -8,14 +8,14 @@
       "TITLE": "Boutique en ligne - {shopName}",
       "DESCRIPTION": "Bienvenue dans la boutique en ligne de {shopName} ! Découvrez nos vins ou offrez une carte cadeau à vos proches."
     },
-    "BEST_SELLERS": "See our best-sellers",
+    "BEST_SELLERS": "Voir nos meilleures ventes",
     "NO_PRODUCTS": "Aucun produit disponible pour le moment.",
     "CART": "Panier",
     "CHECKOUT": "Commander",
     "SINCE": "Depuis",
     "WELCOME": "Domaine viticole {shopName}",
     "SEARCH": "Rechercher...",
-    "ALL_RIGHTS_RESERVED": "All rights reserved."
+    "ALL_RIGHTS_RESERVED": "Tous droits réservés."
   },
   "PRODUCTS_PAGE": {
     "TITLE": "Tous nos vins",
@@ -75,20 +75,19 @@
   },
   "PRODUCT_PAGE": {
     "DESCRIPTION": "Description",
-    "AVAILABILITY": "Availability",
-    "OUT_OF_STOCK": "Out of stock",
-    "IN_STOCK": "In stock",
-    "ADD_TO_CART": "Add to cart",
-    "SOLD_OUT": "Sold out"
+    "AVAILABILITY": "Disponibilité",
+    "OUT_OF_STOCK": "Rupture de stock",
+    "IN_STOCK": "En stock",
+    "ADD_TO_CART": "Ajouter au panier",
+    "SOLD_OUT": "Épuisé"
   },
   "CART": {
-    "TITLE": "Your cart",
-    "EMPTY": "Your cart is empty.",
-    "EMPTY_CART_MESSAGE": "Add some products to your cart to proceed.",
-    "SUBTOTAL": "Subtotal",
+    "TITLE": "Votre panier",
+    "EMPTY": "Votre panier est vide.",
+    "EMPTY_CART_MESSAGE": "Ajoutez des produits à votre panier pour continuer.",
+    "SUBTOTAL": "Sous-total",
     "TOTAL": "Total",
-    "CHECKOUT": "Proceed to checkout",
-    "CHECKOUT_LOADING": "Proceeding to checkout...",
-    "REMOVE_ITEM": "Remove item"
+    "CHECKOUT": "Passer à la caisse",
+    "CHECKOUT_LOADING": "Passage à la caisse en cours..."
   }
 }

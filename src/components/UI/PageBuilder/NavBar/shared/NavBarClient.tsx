@@ -53,7 +53,7 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
     return (
       <div
         ref={navBarRef}
-        className={`relative bg-white/30 backdrop-blur-md flex flex-col mx-auto items-start border border-accent rounded-4xl shadow-lg shadow-accent/30 w-full md:max-w-4xl transition-all duration-300 ease-in-out overflow-hidden`}
+        className={`relative bg-secondary/50 backdrop-blur-md flex flex-col mx-auto items-start border border-accent rounded-4xl shadow-lg shadow-accent/30 w-full md:max-w-4xl transition-all duration-300 ease-in-out overflow-hidden`}
         style={{
           height: `${suggestionsHeight}rem`,
         }}
@@ -100,10 +100,11 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
   return (
     <div
       className={clsx(
-        "relative bg-white/30 backdrop-blur-md flex mx-auto border border-accent rounded-4xl shadow-lg shadow-accent/30 h-16 w-full md:max-w-7xl transition-all duration-300 ease-in-out",
+        "relative backdrop-blur-md flex mx-auto border border-accent rounded-4xl shadow-lg shadow-accent/30 h-16 w-full md:max-w-7xl transition-all duration-300 ease-in-out",
         showCart &&
           "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start",
-        showMenu && "h-[calc(100vh-2.5rem)] sm:h-72 md:h-16 md:items-start"
+        showMenu && "h-[calc(100vh-2.5rem)] sm:h-72 md:h-16 md:items-start",
+        showCart || showMenu || showSearch ? "bg-secondary/50" : "bg-primary/30"
       )}
       ref={navBarRef}
     >

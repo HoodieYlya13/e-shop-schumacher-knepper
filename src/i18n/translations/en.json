@@ -88,7 +88,6 @@
     "SUBTOTAL": "Subtotal",
     "TOTAL": "Total",
     "CHECKOUT": "Proceed to checkout",
-    "CHECKOUT_LOADING": "Proceeding to checkout...",
-    "REMOVE_ITEM": "Remove item"
+    "CHECKOUT_LOADING": "Proceeding to checkout..."
   }
 }

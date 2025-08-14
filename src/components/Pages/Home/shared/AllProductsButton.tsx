@@ -14,8 +14,8 @@ export default function AllProductsButton() {
           behavior: "smooth",
         });
       }}
-      className="bg-gradient-to-b from-black to-gray-900"
-      color="white"
+      className="bg-gradient-to-b from-black to-secondary"
+      color="var(--accent-color)"
     >
       { t('BEST_SELLERS') }
     </StarBorder>

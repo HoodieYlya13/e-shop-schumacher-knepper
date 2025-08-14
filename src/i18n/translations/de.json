@@ -8,14 +8,14 @@
       "TITLE": "Online-Shop - {shopName}",
       "DESCRIPTION": "Willkommen im Online-Shop von {shopName}! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein."
     },
-    "BEST_SELLERS": "See our best-sellers",
+    "BEST_SELLERS": "Unsere Bestseller ansehen",
     "NO_PRODUCTS": "Zurzeit sind keine Produkte verfügbar.",
     "CART": "Warenkorb",
     "CHECKOUT": "Zur Kasse",
-    "SINCE": "Since",
-    "WELCOME": "{shopName} winery",
-    "SEARCH": "Search...",
-    "ALL_RIGHTS_RESERVED": "All rights reserved."
+    "SINCE": "Seit",
+    "WELCOME": "Weingut {shopName}",
+    "SEARCH": "Suchen...",
+    "ALL_RIGHTS_RESERVED": "Alle Rechte vorbehalten."
   },
   "PRODUCTS_PAGE": {
     "TITLE": "All our wines",
@@ -74,21 +74,20 @@
     }
   },
   "PRODUCT_PAGE": {
-    "DESCRIPTION": "Description",
-    "AVAILABILITY": "Availability",
-    "OUT_OF_STOCK": "Out of stock",
-    "IN_STOCK": "In stock",
-    "ADD_TO_CART": "Add to cart",
-    "SOLD_OUT": "Sold out"
+    "DESCRIPTION": "Beschreibung",
+    "AVAILABILITY": "Verfügbarkeit",
+    "OUT_OF_STOCK": "Nicht auf Lager",
+    "IN_STOCK": "Auf Lager",
+    "ADD_TO_CART": "In den Warenkorb",
+    "SOLD_OUT": "Ausverkauft"
   },
   "CART": {
-    "TITLE": "Your cart",
-    "EMPTY": "Your cart is empty.",
-    "EMPTY_CART_MESSAGE": "Add some products to your cart to proceed.",
-    "SUBTOTAL": "Subtotal",
-    "TOTAL": "Total",
-    "CHECKOUT": "Proceed to checkout",
-    "CHECKOUT_LOADING": "Proceeding to checkout...",
-    "REMOVE_ITEM": "Remove item"
+    "TITLE": "Ihr Warenkorb",
+    "EMPTY": "Ihr Warenkorb ist leer.",
+    "EMPTY_CART_MESSAGE": "Fügen Sie einige Produkte zu Ihrem Warenkorb hinzu, um fortzufahren.",
+    "SUBTOTAL": "Zwischensumme",
+    "TOTAL": "Gesamtsumme",
+    "CHECKOUT": "Zur Kasse gehen",
+    "CHECKOUT_LOADING": "Zur Kasse gehen..."
   }
 }

@@ -38,6 +38,14 @@ const GET_ALL_PRODUCTS_QUERY = `
               }
             }
           }
+          collections(first: 10) {
+            edges {
+              node {
+                title
+                handle
+              }
+            }
+          }
         }
       }
     }

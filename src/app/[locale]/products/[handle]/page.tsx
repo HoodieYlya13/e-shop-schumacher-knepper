@@ -13,17 +13,16 @@ export default async function ProductPage({
 
   const product = await getSingleProduct(handle, language);
 
-  if (!product) {
+  if (!product)
     return (
       <PageBuilder>
         <p>Product not found.</p>
       </PageBuilder>
     );
-  }
 
   return (
     <PageBuilder>
-      <Product product={product} />
+      <Product locale={locale} product={product} />
     </PageBuilder>
   );
 }

@@ -140,28 +140,31 @@ export default function CartContent() {
               </button>
             </div>
 
-            <button
-              onClick={() => handleRemoveItem(item.variantId)}
-              className="text-red-500 hover:text-red-700"
-            >
-              {t("REMOVE_ITEM")}
+            <button onClick={() => handleRemoveItem(item.variantId)}>
+              <Image
+                src="/img/icons/trash.svg"
+                width={24}
+                height={24}
+                alt="phone"
+                className="cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+              />
             </button>
           </div>
         ))}
       </div>
 
       <div className="mt-8 flex justify-end">
-        <div className="w-full md:w-1/3 p-4 bg-gray-50 rounded-lg shadow-md">
+        <div className="w-full md:w-1/3 p-4 bg-secondary rounded-lg shadow-md">
           <div className="flex justify-between font-bold text-xl mb-4">
             <span>{t("SUBTOTAL")}:</span>
             <span>{subtotal.toFixed(2)} EUR</span>
           </div>
           <button
             onClick={handleCheckout}
-            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            className="w-full py-3 bg-blue-600 font-semibold rounded-lg hover:bg-blue-700 transition-colors duration-300"
             disabled={isCheckingOut || cart.length === 0}
           >
-            {isCheckingOut ? t('CHECKOUT_LOADING') : t('CHECKOUT')}
+            {isCheckingOut ? t("CHECKOUT_LOADING") : t("CHECKOUT")}
           </button>
         </div>
       </div>
