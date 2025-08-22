@@ -27,20 +27,27 @@ interface SearchProps {
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
   setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
-  storedLocale?: LocaleLanguages;
   setSearchSuggestions: React.Dispatch<React.SetStateAction<ProductSuggestion[]>>;
+  storedLocale?: LocaleLanguages;
 }
 
-export default function Search({ showSearch, setShowSearch, setShowMenu, setShowCart, storedLocale, setSearchSuggestions }: SearchProps) {
-  const t = useTranslations('HOME_PAGE');
+export default function Search({
+  showSearch,
+  setShowSearch,
+  setShowMenu,
+  setShowCart,
+  setSearchSuggestions,
+  storedLocale,
+}: SearchProps) {
+  const t = useTranslations("HOME_PAGE");
   const inputRef = useRef<HTMLInputElement>(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
   const handleSearch = useCallback(() => {
     if (searchTerm.length > 0 && storedLocale) {
       router.push(`/${storedLocale}/products?search=${searchTerm}`);
-      setSearchTerm('');
+      setSearchTerm("");
       setShowSearch(false);
       setSearchSuggestions([]);
     }
@@ -100,8 +107,8 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
           }
         }}
         className={clsx(
-          "text-secondary flex cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300",
-          showSearch && "mr-4"
+          "flex cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300",
+          showSearch && "mr-4 text-primary"
         )}
         type="button"
       >

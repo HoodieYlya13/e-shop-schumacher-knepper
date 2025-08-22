@@ -79,10 +79,11 @@ export async function getHomeImageUrl() {
   return data?.shop?.metafield?.reference?.image?.url;
 }
 
-const GET_LOGO_URL_QUERY = `
-  query GetHomeImage {
+// TODO: Replace 'XXXXXX' with the actual metafield key for the XXXXXX image
+const GET_IMAGE_URL_QUERY = `
+  query GetXXXXXXImage {
     shop {
-      metafield(namespace: "custom", key: "logo") {
+      metafield(namespace: "custom", key: "XXXXXX") {
         reference {
           ... on MediaImage {
             id
@@ -96,7 +97,7 @@ const GET_LOGO_URL_QUERY = `
   }
 `;
 
-export async function getLogoUrl() {
+export async function getImageUrl() {
   const data = await shopifyServerFetch<{
     shop: {
       metafield?: {
@@ -107,7 +108,7 @@ export async function getLogoUrl() {
         };
       };
     };
-  }>(GET_LOGO_URL_QUERY, undefined);
+  }>(GET_IMAGE_URL_QUERY, undefined);
 
   return data?.shop?.metafield?.reference?.image?.url;
 }

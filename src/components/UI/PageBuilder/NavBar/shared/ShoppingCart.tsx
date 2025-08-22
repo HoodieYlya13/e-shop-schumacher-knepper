@@ -44,7 +44,7 @@ export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: Sho
         setShowCart(!showCart);
         setShowMenu(false);
       }}
-      className="text-secondary cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+      className="cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
     >
       <ShoppingCartIcon />
     </button>

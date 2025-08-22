@@ -23,12 +23,12 @@ export default function Phone() {
   return (
     <a
       href="tel:+352236045"
-      className="text-secondary flex flex-row transition hover:scale-110 duration-300"
+      className="flex flex-row transition hover:scale-110 duration-300"
     >
-      <PhoneIcon
-        className="cursor-pointer opacity-80 hover:opacity-100"
-      />
-      <span className="text-primary ml-1 text-outline flex md:hidden">+352 23 60 45</span>
+      <PhoneIcon className="cursor-pointer opacity-80 hover:opacity-100" />
+      <span className="text-primary ml-1 text-outline flex md:hidden">
+        +352 23 60 45
+      </span>
       {/* TODO Add a tooltip */}
     </a>
   );

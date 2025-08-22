@@ -73,8 +73,8 @@ html, body {
 
 .text-outline {
   text-shadow:
-    -1px -1px 0 var(--secondary-color),
-     1px -1px 0 var(--secondary-color),
-    -1px  1px 0 var(--secondary-color),
-     1px  1px 0 var(--secondary-color);
+    -1px -1px 0 var(--ultra-dark-color),
+     1px -1px 0 var(--ultra-dark-color),
+    -1px  1px 0 var(--ultra-dark-color),
+     1px  1px 0 var(--ultra-dark-color);
 }
