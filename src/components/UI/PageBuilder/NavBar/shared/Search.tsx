@@ -1,13 +1,26 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from "next/image";
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
 import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
 import { getProductsSearchSuggestions, ProductSuggestion } from '@/utils/products/getProductsSearchSuggestions';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
+
+function SearchIcon() {
+  return (
+    <svg 
+      fill="currentColor"
+      height="24" 
+      width="24" 
+      viewBox="0 0 512 512" 
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path d="M325.8,0C223,0,139.6,83.4,139.6,186.2c0,33.5,9,64.8,24.4,92L0,442.2l23.3,46.5L69.8,512l164-164 c27.1,15.5,58.5,24.4,92,24.4C428.6,372.4,512,289,512,186.2S428.6,0,325.8,0z M325.8,314.2c-70.7,0-128-57.3-128-128 c0-70.7,57.3-128,128-128s128,57.3,128,128C453.8,256.9,396.5,314.2,325.8,314.2z" />
+    </svg>
+  );
+}
 
 interface SearchProps {
   showSearch: boolean;
@@ -70,7 +83,7 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === 'Enter') {
+            if (e.key === "Enter") {
               e.preventDefault();
               handleSearch();
             }
@@ -79,24 +92,20 @@ export default function Search({ showSearch, setShowSearch, setShowMenu, setShow
       )}
       <button
         onClick={() => {
-          if (showSearch && searchTerm.length > 0) {
-            handleSearch();
-          } else {
+          if (showSearch && searchTerm.length > 0) handleSearch();
+          else {
             setShowSearch(true);
             setShowMenu(false);
             setShowCart(false);
           }
         }}
-        className={clsx("flex", showSearch && "mr-4 flex")}
+        className={clsx(
+          "text-secondary flex cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300",
+          showSearch && "mr-4"
+        )}
         type="button"
       >
-        <Image
-          src="/img/icons/search.svg"
-          width={24}
-          height={24}
-          alt="search"
-          className="cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
-        />
+        <SearchIcon />
       </button>
     </div>
   );

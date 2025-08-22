@@ -3,13 +3,18 @@ import { getCustomerAccessToken } from '@/utils/shared/getters/getCustomerAccess
 import { getCheckoutUrl } from '@/utils/shared/getters/getCheckoutUrl';
 import { NextRequest, NextResponse } from 'next/server';
 import { setServerCookie } from '@/utils/shared/setters/shared/setServerCookie';
+import { getCustomerCountryServer } from '@/utils/shared/getters/getCustomerCountryServer';
+import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
+import { LocaleLanguagesUpperCase } from '@/i18n/utils';
 
 export async function POST(req: NextRequest) {
+  const checkoutUrl = await getCheckoutUrl();
+  if (checkoutUrl) return NextResponse.json({ url: checkoutUrl });
+  
   const { lineItems } = await req.json();
   const customerAccessToken = await getCustomerAccessToken();
-  const checkoutUrl = await getCheckoutUrl();
-  
-  if (checkoutUrl) return NextResponse.json({ url: checkoutUrl });
+  const country = await getCustomerCountryServer();
+  const language = await getPreferredLocale(true) as LocaleLanguagesUpperCase;
 
   try {
     if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0)
@@ -18,7 +23,12 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const { id, checkoutUrl } = await createCheckout({ lineItems, customerAccessToken });
+    const { id, checkoutUrl } = await createCheckout({
+      lineItems,
+      customerAccessToken,
+      country,
+      language,
+    });
 
     const response = NextResponse.json({ url: checkoutUrl });
 

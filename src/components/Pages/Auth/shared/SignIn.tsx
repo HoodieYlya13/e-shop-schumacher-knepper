@@ -37,7 +37,7 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
         <button
           type="button"
           onClick={() => handleModeChange("PASSWORD_RECOVERY")}
-          className="text-blue-600 hover:underline"
+          className="text-accent hover:underline"
         >
           {t("FORGOT_PASSWORD")}
         </button>

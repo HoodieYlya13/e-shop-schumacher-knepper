@@ -12,7 +12,7 @@ export default function PageBuilder({
   showFooter = true,
 }: PageBuilderProps) {
   return (
-    <div className="flex w-screen flex-col border-accent-dark bg-primary text-primary font-black">
+    <div className="flex w-screen flex-col border-dark bg-primary text-primary font-black">
       <NavBar />
 
       <div className="flex flex-col min-h-screen">

@@ -41,7 +41,7 @@ export default async function Footer() {
         </div>
       </div>
 
-      <p className="text-sm text-gray-500 text-center">
+      <p className="text-sm text-dark text-center">
         &copy; {new Date().getFullYear()}{" "}
         <span>
           <a

@@ -10,6 +10,12 @@ module.exports = {
         'secondary': 'var(--secondary-color)',
         'accent': 'var(--accent-color)',
         'accent-dark': 'var(--accent-dark-color)',
+        'dark': 'var(--dark-color)',
+        'light': 'var(--light-color)',
+        'valid': 'var(--valid-color)',
+        'invalid': 'var(--invalid-color)',
+        'ultra-dark': 'var(--ultra-dark-color)',
+        'ultra-light': 'var(--ultra-light-color)',
       },
       animation: {
         "star-movement-bottom":

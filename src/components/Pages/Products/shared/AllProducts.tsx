@@ -22,6 +22,8 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
 
   products.forEach((product) => {
     product.collections?.edges.forEach(({ node }) => {
+      if (node.title.toLowerCase() === "gift_card") return;
+
       const [filterName, filterValue] = node.title.split("_");
       if (filterName && filterValue) {
         if (!filtersMap[filterName]) {
@@ -33,6 +35,7 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
   });
 
   const filters = Object.entries(filtersMap)
+    .filter(([name]) => name !== "gift_card")
     .sort(([nameA], [nameB]) => nameA.localeCompare(nameB))
     .map(([name, values]) => ({
       name,
@@ -68,9 +71,21 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
     });
   });
 
+  const giftCardProducts = filteredProducts.filter(
+    (product) =>
+      product.handle.toLowerCase() === "gift card" ||
+      product.title.toLowerCase() === "gift card"
+  );
+  const otherProducts = filteredProducts.filter(
+    (product) =>
+      product.handle.toLowerCase() !== "gift card" &&
+      product.title.toLowerCase() !== "gift card"
+  );
+  const sortedFilteredProducts = [...giftCardProducts, ...otherProducts];
+
   return (
-    <div className="flex gap-6 max-w-7xl mx-auto pt-26 md:pt-36">
-      <aside className="w-64 border-r border-gray-200 pr-4 hidden lg:flex flex-col ml-4">
+    <div className="flex gap-12 max-w-7xl mx-auto p-6 pt-26 md:pt-36">
+      <aside className="w-64 border-r border-light hidden lg:flex flex-col">
         {filters.map((filter) => (
           <div key={filter.name} className="mb-6">
             <button
@@ -102,11 +117,11 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
         ))}
       </aside>
 
-      <section className="px-6 flex-grow">
+      <section className="flex-grow">
         <div className="lg:hidden mb-4">
           <button
             onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-            className="px-4 py-2 bg-gray-50 rounded-md shadow-md font-semibold"
+            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold"
             aria-expanded={isFilterPanelOpen}
             aria-controls="mobile-filter-panel"
           >
@@ -115,14 +130,14 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
           {isFilterPanelOpen && (
             <div
               id="mobile-filter-panel"
-              className="mt-4 bg-gray-50 p-4 rounded-md shadow-md"
+              className="mt-4 bg-ultra-light p-4 rounded-md shadow-md"
             >
               {filters.map((filter) => (
                 <div key={filter.name} className="mb-2">
                   <button
                     type="button"
                     onClick={() => toggleExpandedFilter(filter.name)}
-                    className="font-bold mb-2 w-full text-left border-b border-gray-200 pb-2"
+                    className="font-bold mb-2 w-full text-left border-b border-light pb-2"
                     aria-expanded={expandedFilters[filter.name] ?? true}
                     aria-controls={`mobile-filter-values-${filter.name}`}
                   >
@@ -152,14 +167,14 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
 
         {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-          {filteredProducts.map((product) => (
+          {sortedFilteredProducts.map((product) => (
             <Link
               key={product.id}
               href={`/${locale}/products/${product.handle}`}
-              className="bg-white rounded-lg shadow-md border border-gray-200 overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col"
+              className="bg-white rounded-lg shadow-md border border-light overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col"
             >
               {product.images.edges.length > 0 && (
-                <div className="relative aspect-square w-full overflow-hidden border-b border-gray-200">
+                <div className="relative aspect-square w-full overflow-hidden border-b border-light">
                   <Image
                     src={product.images.edges[0].node.url}
                     alt={product.images.edges[0].node.altText ?? product.title}
@@ -172,15 +187,15 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
               )}
 
               <div className="p-4 flex flex-col flex-grow">
-                <h2 className="text-2xl font-extrabold text-gray-900 mb-2 line-clamp-1">
+                <h2 className="text-2xl font-extrabold text-secondary mb-2 line-clamp-1">
                   {product.title}
                 </h2>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                <p className="text-dark text-sm mb-4 line-clamp-2">
                   {product.description}
                 </p>
 
-                <div className="mt-auto pt-4 border-t border-gray-200">
-                  <p className="text-lg font-bold text-brand-600">
+                <div className="mt-auto pt-4 border-t border-light">
+                  <p className="text-lg font-bold">
                     {new Intl.NumberFormat(locale, {
                       style: "currency",
                       currency:

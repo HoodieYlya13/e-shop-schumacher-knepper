@@ -12,12 +12,14 @@ export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) 
   const t = useTranslations('AUTH');
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 text-primary">
       <button
         onClick={() => handleModeChange("LOGIN")}
         className={clsx(
-          "px-4 py-2 rounded",
-          mode === "LOGIN" ? "bg-black" : "bg-gray-200 text-black"
+          "px-4 py-2 rounded border",
+          mode === "LOGIN"
+            ? "bg-secondary border-accent"
+            : "bg-primary text-secondary border-light"
         )}
       >
         {t("LOGIN")}
@@ -25,8 +27,10 @@ export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) 
       <button
         onClick={() => handleModeChange("REGISTER")}
         className={clsx(
-          "px-4 py-2 rounded",
-          mode === "REGISTER" ? "bg-black" : "bg-gray-200 text-black"
+          "px-4 py-2 rounded border",
+          mode === "REGISTER"
+            ? "bg-secondary border-accent"
+            : "bg-primary text-secondary border-light"
         )}
       >
         {t("REGISTER")}

@@ -56,13 +56,14 @@ export default function PasswordRecovery({
       />
 
       {successText && emailProviderLink && (
-        <p className="text-sm text-gray-600 mt-2">
+        // TODO maybe a lighter color?
+        <p className="text-sm text-dark mt-2"> 
           {t("CHECK_YOUR_EMAIL")}{" "}
           <a
             href={emailProviderLink.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-600 hover:underline"
+            className="text-accent hover:underline"
           >
             {emailProviderLink.name}
           </a>

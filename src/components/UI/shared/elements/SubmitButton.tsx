@@ -16,8 +16,8 @@ export default function SubmitButton({ label, error, disabled }: SubmitButtonPro
         className={clsx(
           "w-full py-2 rounded cursor-pointer",
           disabled
-            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-            : "bg-black text-white"
+            ? "bg-light text-dark cursor-not-allowed"
+            : "bg-secondary text-primary"
         )}
       >
         {label}

@@ -14,12 +14,27 @@ import { ProductSuggestion } from "@/utils/products/getProductsSearchSuggestions
 import Link from "next/link";
 import CartContent from "./CartContent";
 
+function BurgerIcon() {
+  return (
+    <svg 
+      viewBox="0 0 20 20" 
+      xmlns="http://www.w3.org/2000/svg"
+      fill="currentColor"
+      width="24"
+      height="24"
+    >
+      <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
+    </svg>
+  );
+}
+
 interface NavBarClientProps {
   customerAccessToken?: string;
   storedLocale?: LocaleLanguages;
+  logoUrl?: string;
 }
 
-export default function NavBarClient({ customerAccessToken, storedLocale }: NavBarClientProps) {
+export default function NavBarClient({ customerAccessToken, storedLocale, logoUrl }: NavBarClientProps) {
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showCart, setShowCart] = useState(false);
@@ -115,18 +130,12 @@ export default function NavBarClient({ customerAccessToken, storedLocale }: NavB
               setShowMenu(!showMenu);
               setShowCart(false);
             }}
-            className="z-30 md:hidden"
+            className="z-30 text-secondary md:hidden cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
           >
-            <Image
-              src="/img/icons/burger.svg"
-              width={24}
-              height={24}
-              alt="menu"
-              className="cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
-            />
+            <BurgerIcon />
           </button>
 
-          <Logo />
+          <Logo logoUrl={logoUrl} />
 
           <div className="hidden md:flex">
             <Navigation

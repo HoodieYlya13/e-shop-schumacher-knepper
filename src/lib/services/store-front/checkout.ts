@@ -1,3 +1,4 @@
+import { LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
 
 const CREATE_CART_MUTATION = `
@@ -23,8 +24,13 @@ export async function createCheckout(
       quantity: number;
     }>;
     customerAccessToken?: string;
+    country?: LocaleLanguagesUpperCase;
+    language?: LocaleLanguagesUpperCase;
   }
 ) {
+  const countryCode = options.country || "LU";
+  const languageCode = options.language || "EN";
+
   const variables = {
     cartInput: {
       lines: options.lineItems.map(item => ({
@@ -37,8 +43,8 @@ export async function createCheckout(
         },
       }),
     },
-    country: "FR", // TODO: Make this dynamic based on user location or settings
-    language: "FR",
+    country: countryCode,
+    language: languageCode,
   };
 
   const data = await shopifyServerFetch<{

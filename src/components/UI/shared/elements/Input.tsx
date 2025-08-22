@@ -113,12 +113,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <>
         {label && (
-          <label className="block mb-2 text-sm font-medium text-gray-700">
+          <label className="block mb-2 text-sm font-medium text-dark">
             {label}
-            {required && requiredTag && <span className="text-red-500">*</span>}
-            {optionalTag && !required && (
-              <span className="text-gray-400"> ({t("OPTIONAL")})</span>
-            )}
+            {required && requiredTag && <span className="text-invalid">*</span>}
+            {optionalTag && !required && <span> ({t("OPTIONAL")})</span>}
           </label>
         )}
 
@@ -129,10 +127,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 "inline-flex items-center px-2 w-full border rounded outline-none":
                   type === "tel",
               },
-              focused ? "border-blue-500" : "border-gray-300",
-              {
-                "border-red-500": !!errorText,
-              }
+              focused
+                ? "border-accent"
+                : errorText
+                  ? "border-invalid"
+                  : "border-light"
             )}
           >
             <div className="PhoneInputCountry">
@@ -164,7 +163,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 alt={country || "Country Flag"}
                 className={clsx(
                   "PhoneInputCountryIcon w-6 h-4 object-cover border",
-                  { "border-blue-500": flagFocused }
+                  { "border-accent": flagFocused }
                 )}
                 width={24}
                 height={16}
@@ -172,13 +171,11 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               <div
                 className="PhoneInputCountrySelectArrow"
                 style={{
-                  borderColor: flagFocused
-                    ? "oklch(62.3% 0.214 259.815)"
-                    : "currentColor",
+                  borderColor: flagFocused ? "#2b7fff" : "currentColor",
                 }}
               />
             </div>
-            <span className="mx-2 text-gray-500">
+            <span className="mx-2 text-dark">
               {country ? `+${getCountryCallingCode(country)}` : ""}
             </span>
 
@@ -210,19 +207,17 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             placeholder={combinedPlaceholder}
             required={required}
             className={clsx(
-              "w-full p-2 border rounded outline-none border-gray-300 focus:border-blue-500",
-              {
-                "border-red-500": !!errorText,
-              }
+              "w-full p-2 border rounded outline-none focus:border-accent",
+              errorText ? "border-invalid" : "border-light"
             )}
             ref={combinedRef}
             autoComplete={rest.autoComplete}
           />
         )}
 
-        {successText && <p className="text-sm text-green-600">{successText}</p>}
+        {successText && <p className="text-sm text-valid">{successText}</p>}
         {showError && errorText && (
-          <p className="text-sm text-red-600">{errorText}</p>
+          <p className="text-sm text-invalid">{errorText}</p>
         )}
       </>
     );

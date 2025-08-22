@@ -6,7 +6,16 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import '../globals.css';
 import { getTranslations } from 'next-intl/server';
 import React from 'react';
-import { getShopName } from '@/lib/services/store-front/shop';
+import { getColorsConfig, getShopName } from '@/lib/services/store-front/shop';
+import ThemeUpdater from '@/components/UI/PageBuilder/ThemeUpdater';
+import { LocaleLanguages } from '@/i18n/utils';
+
+interface LayoutProps {
+  children: React.ReactNode;
+  params: {
+    locale: LocaleLanguages;
+  };
+}
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -18,9 +27,7 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// Disabling lint because of Next.js 15 types nonsense
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function generateMetadata({ params }: any): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { locale: LocaleLanguages } }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
 
@@ -32,19 +39,21 @@ export async function generateMetadata({ params }: any): Promise<Metadata> {
   };
 }
 
-// Disabling lint because of Next.js 15 types nonsense
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function LocaleLayout({ children, params }: any) {
+export default async function LocaleLayout({ children, params }: LayoutProps) {
   const { locale } = await params;
 
   if (!hasLocale(routing.locales, locale)) notFound();
+
+  const colors = await getColorsConfig();
 
   return (
     <html lang={locale}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <ThemeUpdater colors={colors}>{children}</ThemeUpdater>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
