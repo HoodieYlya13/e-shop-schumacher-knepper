@@ -114,6 +114,13 @@ const Filters = ({
       }));
   }
 
+  const sortOptions = [
+    { value: "name-asc", label: "Name (A-Z)" },
+    { value: "name-desc", label: "Name (Z-A)" },
+    { value: "price-asc", label: "Price (Low to High)" },
+    { value: "price-desc", label: "Price (High to Low)" },
+  ];
+
   return (
     <>
       <div className="lg:hidden mb-4">
@@ -148,40 +155,45 @@ const Filters = ({
             id="mobile-filter-panel"
             className="mt-4 bg-ultra-light p-4 rounded-md shadow-md"
           >
-            {filters.filter(f => f.queryKey !== 'type').map((filter) => (
-              <div key={filter.queryKey} className="mb-2">
-                <button
-                  type="button"
-                  onClick={() => toggleExpandedFilter(filter.queryKey)}
-                  className="font-bold mb-2 w-full text-left border-b border-light pb-2"
-                  aria-expanded={expandedFilters[filter.queryKey] ?? true}
-                  aria-controls={`mobile-filter-values-${filter.queryKey}`}
-                >
-                  {filter.name}
-                </button>
+            {filters
+              .filter((f) => f.queryKey !== "type")
+              .map((filter) => (
+                <div key={filter.queryKey} className="mb-2">
+                  <button
+                    type="button"
+                    onClick={() => toggleExpandedFilter(filter.queryKey)}
+                    className="font-bold mb-2 w-full text-left border-b border-light pb-2"
+                    aria-expanded={expandedFilters[filter.queryKey] ?? true}
+                    aria-controls={`mobile-filter-values-${filter.queryKey}`}
+                  >
+                    {filter.name}
+                  </button>
 
-                {(expandedFilters[filter.queryKey] ?? false) && (
-                  <div id={`mobile-filter-values-${filter.queryKey}`}>
-                    {filter.values.map(({ canonical, localized }) => (
-                      <label
-                        key={canonical}
-                        className="flex items-center gap-2 mb-1"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={
-                            selectedFilters[filter.queryKey]?.includes(canonical) ||
-                            false
-                          }
-                          onChange={() => toggleFilter(filter.queryKey, canonical)}
-                        />
-                        {localized}
-                      </label>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                  {(expandedFilters[filter.queryKey] ?? false) && (
+                    <div id={`mobile-filter-values-${filter.queryKey}`}>
+                      {filter.values.map(({ canonical, localized }) => (
+                        <label
+                          key={canonical}
+                          className="flex items-center gap-2 mb-1"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={
+                              selectedFilters[filter.queryKey]?.includes(
+                                canonical
+                              ) || false
+                            }
+                            onChange={() =>
+                              toggleFilter(filter.queryKey, canonical)
+                            }
+                          />
+                          {localized}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
           </div>
         )}
       </div>
@@ -189,15 +201,19 @@ const Filters = ({
       <div className="flex mb-4 justify-between">
         <select
           className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96 transform transition-transform duration-300 hover:scale-105"
-          value={selectedFilters['type']?.[0] || 'all'}
+          value={selectedFilters["type"]?.[0] || "all"}
           onChange={(e) => {
             typeFilter(e.target.value);
           }}
         >
           <option value="all">All wines</option>
-          {filters.find(f => f.queryKey === 'type')?.values.map(v => (
-            <option key={v.canonical} value={v.canonical}>{v.localized}</option>
-          ))}
+          {filters
+            .find((f) => f.queryKey === "type")
+            ?.values.map((v) => (
+              <option key={v.canonical} value={v.canonical}>
+                {v.localized}
+              </option>
+            ))}
         </select>
 
         <div className="hidden lg:flex items-center">
@@ -208,14 +224,66 @@ const Filters = ({
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
-            <option value="name-asc">Name (A-Z)</option>
-            <option value="name-desc">Name (Z-A)</option>
-            <option value="price-asc">Price (Low to High)</option>
-            <option value="price-desc">Price (High to Low)</option>
+            {sortOptions.map(({ value, label }) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
           </select>
         </div>
       </div>
     </>
+  );
+};
+
+const FiltersRecap = ({
+  selectedFilters,
+  setSelectedFilters,
+  filters
+}: {
+  selectedFilters: Record<string, string[]>;
+  setSelectedFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  filters: Filter[];
+}) => {
+  const removeFilter = (filterKey: string, value: string) => {
+    setSelectedFilters((prev) => {
+      const updated = { ...prev };
+      updated[filterKey] = updated[filterKey].filter((v) => v !== value);
+      if (updated[filterKey].length === 0) delete updated[filterKey];
+      return updated;
+    });
+  };
+
+  const activeFilters = Object.entries(selectedFilters).flatMap(([key, values]) => {
+    const filterDef = filters.find((f) => f.queryKey === key);
+    return values.map((v) => ({
+      key,
+      value: v,
+      label: filterDef?.values.find((fv) => fv.canonical === v)?.localized || v,
+      filterName: filterDef?.name || key,
+    }));
+  });
+
+  if (activeFilters.length === 0) return null;
+
+  return (
+    <div className="mb-4 flex flex-wrap gap-2">
+      {activeFilters.map(({ key, value, label, filterName }) => (
+        <span
+          key={`${key}-${value}`}
+          className="px-3 py-1 bg-light rounded-full text-sm font-medium flex items-center gap-2"
+        >
+          {filterName}: {label}
+          <button
+            onClick={() => removeFilter(key, value)}
+            className="text-dark hover:text-invalid font-bold"
+            aria-label={`Remove ${filterName} ${label}`}
+          >
+            ×
+          </button>
+        </span>
+      ))}
+    </div>
   );
 };
 
@@ -448,7 +516,13 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
           setSortOrder={setSortOrder}
         />
 
-        {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
+        <FiltersRecap
+          selectedFilters={selectedFilters}
+          setSelectedFilters={setSelectedFilters}
+          filters={filters}
+        />
+
+        {otherProducts.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
           {finalProducts.map((product) => (
