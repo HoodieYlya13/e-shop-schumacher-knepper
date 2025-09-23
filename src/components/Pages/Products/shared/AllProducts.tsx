@@ -253,19 +253,22 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const parseFiltersFromSearchParams = (): Record<string, string[]> => {
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>(() => {
     const filters: Record<string, string[]> = {};
     searchParams.forEach((value, key) => {
-      if (key === 'search') return;
-      filters[key] = value.split(',');
+      if (key === "search") return;
+      filters[key] = value.split(",");
     });
     return filters;
-  };
-
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>(() => parseFiltersFromSearchParams());
-
+  });
+  
   useEffect(() => {
-    setSelectedFilters(parseFiltersFromSearchParams());
+    const filters: Record<string, string[]> = {};
+    searchParams.forEach((value, key) => {
+      if (key === "search") return;
+      filters[key] = value.split(",");
+    });
+    setSelectedFilters(filters);
   }, [searchParams]);
 
   const filtersMap: Record<string, { filterName: string; values: FilterValue[] }> = {};
