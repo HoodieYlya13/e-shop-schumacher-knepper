@@ -24,7 +24,7 @@ export default async function ProductsPage({
 
   return (
     <PageBuilder>
-      <AllProducts locale={locale} products={products} />
+      <AllProducts locale={locale} products={products} searchTerm={searchTerm} />
     </PageBuilder>
   );
 }

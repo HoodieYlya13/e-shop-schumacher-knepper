@@ -36,7 +36,8 @@ interface ProductTileProps {
 
 interface AllProductsProps {
   locale: LocaleLanguages;
-  products: Product[]
+  products: Product[];
+  searchTerm?: string
 };
 
 const Filters = ({
@@ -239,30 +240,41 @@ const Filters = ({
 const FiltersRecap = ({
   selectedFilters,
   setSelectedFilters,
-  filters
+  filters,
+  searchTerm
 }: {
   selectedFilters: Record<string, string[]>;
   setSelectedFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   filters: Filter[];
+  searchTerm?: string;
 }) => {
-  const removeFilter = (filterKey: string, value: string) => {
+  const removeFilter = (filterKey: string, value?: string) => {
     setSelectedFilters((prev) => {
       const updated = { ...prev };
+      if (filterKey === "search") return updated; // handled separately
       updated[filterKey] = updated[filterKey].filter((v) => v !== value);
       if (updated[filterKey].length === 0) delete updated[filterKey];
       return updated;
     });
   };
 
-  const activeFilters = Object.entries(selectedFilters).flatMap(([key, values]) => {
-    const filterDef = filters.find((f) => f.queryKey === key);
-    return values.map((v) => ({
-      key,
-      value: v,
-      label: filterDef?.values.find((fv) => fv.canonical === v)?.localized || v,
-      filterName: filterDef?.name || key,
-    }));
-  });
+  const activeFilters = [
+    ...(searchTerm ? [{
+      key: "search",
+      value: searchTerm,
+      label: searchTerm,
+      filterName: "Search", // TODO add trad
+    }] : []),
+    ...Object.entries(selectedFilters).flatMap(([key, values]) => {
+      const filterDef = filters.find((f) => f.queryKey === key);
+      return values.map((v) => ({
+        key,
+        value: v,
+        label: filterDef?.values.find((fv) => fv.canonical === v)?.localized || v,
+        filterName: filterDef?.name || key,
+      }));
+    }),
+  ];
 
   if (activeFilters.length === 0) return null;
 
@@ -275,7 +287,7 @@ const FiltersRecap = ({
         >
           {filterName}: {label}
           <button
-            onClick={() => removeFilter(key, value)}
+            onClick={() => key === "search" ? null : removeFilter(key, value)}
             className="text-dark hover:text-invalid font-bold"
             aria-label={`Remove ${filterName} ${label}`}
           >
@@ -328,7 +340,7 @@ const ProductTile = ({ locale, product }: ProductTileProps) => {
   );
 };
 
-export default function AllProducts({ locale, products }: AllProductsProps) {
+export default function AllProducts({ locale, products, searchTerm }: AllProductsProps) {
   const t = useTranslations("HOME_PAGE");
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -520,6 +532,7 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
           filters={filters}
+          searchTerm={searchTerm}
         />
 
         {otherProducts.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
