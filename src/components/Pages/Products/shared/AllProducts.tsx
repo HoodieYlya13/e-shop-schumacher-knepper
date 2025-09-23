@@ -25,6 +25,8 @@ interface FiltersProps {
   filters: Filter[];
   selectedFilters: Record<string, string[]>;
   setSelectedFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  sortOrder: string;
+  setSortOrder: React.Dispatch<React.SetStateAction<string>>;
 }
 
 interface ProductTileProps {
@@ -42,6 +44,8 @@ const Filters = ({
   filters,
   selectedFilters,
   setSelectedFilters,
+  sortOrder,
+  setSortOrder,
 }: FiltersProps) => {
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
@@ -116,7 +120,7 @@ const Filters = ({
         <div className="flex justify-between">
           <button
             onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold"
+            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
             aria-expanded={isFilterPanelOpen}
             aria-controls="mobile-filter-panel"
           >
@@ -126,7 +130,11 @@ const Filters = ({
           <div className="flex items-center">
             <span className="mr-2 font-bold">Sort by:</span>
 
-            <select className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold">
+            <select
+              className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+            >
               <option value="name-asc">Name (A-Z)</option>
               <option value="name-desc">Name (Z-A)</option>
               <option value="price-asc">Price (Low to High)</option>
@@ -180,7 +188,7 @@ const Filters = ({
 
       <div className="flex mb-4 justify-between">
         <select
-          className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96"
+          className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96 transform transition-transform duration-300 hover:scale-105"
           value={selectedFilters['type']?.[0] || 'all'}
           onChange={(e) => {
             typeFilter(e.target.value);
@@ -195,7 +203,11 @@ const Filters = ({
         <div className="hidden lg:flex items-center">
           <span className="mr-2 font-bold">Sort by:</span>
 
-          <select className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold">
+          <select
+            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+          >
             <option value="name-asc">Name (A-Z)</option>
             <option value="name-desc">Name (Z-A)</option>
             <option value="price-asc">Price (Low to High)</option>
@@ -256,16 +268,19 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>(() => {
     const filters: Record<string, string[]> = {};
     searchParams.forEach((value, key) => {
-      if (key === "search") return;
+      if (key === "search" || key === "sort") return;
       filters[key] = value.split(",");
     });
     return filters;
   });
+
+  const initialSort = searchParams.get("sort") || "name-asc";
+  const [sortOrder, setSortOrder] = useState(initialSort);
   
   useEffect(() => {
     const filters: Record<string, string[]> = {};
     searchParams.forEach((value, key) => {
-      if (key === "search") return;
+      if (key === "search" || key === "sort") return;
       filters[key] = value.split(",");
     });
     setSelectedFilters(filters);
@@ -275,6 +290,11 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
   const productTypes: FilterValue[] = [];
 
   products.forEach((product) => {
+    if (
+      product.handle.toLowerCase() === "gift-card" ||
+      product.title.toLowerCase() === "gift card"
+    ) return;
+
     product.collections?.edges.forEach(({ node }) => {
       if (node.title.toLowerCase() === "gift_card") return;
 
@@ -353,10 +373,18 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
     Object.entries(selectedFilters).forEach(([key, values]) => {
       if (values.length > 0) params.set(key, values.join(','));
     });
+    if (sortOrder && sortOrder !== "name-asc") {
+      params.set("sort", sortOrder);
+    }
     router.push(`?${params.toString()}`);
-  }, [selectedFilters, router, searchParams]);
+  }, [selectedFilters, sortOrder, router, searchParams]);
 
   const filteredProducts = products.filter((product) => {
+    if (
+      product.handle.toLowerCase() === "gift-card" ||
+      product.title.toLowerCase() === "gift card"
+    ) return true;
+
     return Object.entries(selectedFilters).every(([filterName, values]) => {
       if (!values || values.length === 0) return true;
       return (
@@ -373,17 +401,32 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
 
   const giftCardProducts = filteredProducts.filter(
     (product) =>
-      product.handle.toLowerCase() === "gift card" ||
+      product.handle.toLowerCase() === "gift-card" ||
       product.title.toLowerCase() === "gift card"
   );
 
   const otherProducts = filteredProducts.filter(
     (product) =>
-      product.handle.toLowerCase() !== "gift card" &&
+      product.handle.toLowerCase() !== "gift-card" &&
       product.title.toLowerCase() !== "gift card"
   );
 
-  const sortedFilteredProducts = [...giftCardProducts, ...otherProducts];
+  const sortedOtherProducts = [...otherProducts].sort((a, b) => {
+    switch (sortOrder) {
+      case "name-asc":
+        return a.title.localeCompare(b.title);
+      case "name-desc":
+        return b.title.localeCompare(a.title);
+      case "price-asc":
+        return parseFloat(a.variants.edges[0]?.node.price.amount) - parseFloat(b.variants.edges[0]?.node.price.amount);
+      case "price-desc":
+        return parseFloat(b.variants.edges[0]?.node.price.amount) - parseFloat(a.variants.edges[0]?.node.price.amount);
+      default:
+        return 0;
+    }
+  });
+
+  const finalProducts = [...sortedOtherProducts, ...giftCardProducts];
 
   return (
     <div className="flex gap-12 max-w-7xl mx-auto p-6 pt-26 md:pt-36">
@@ -392,6 +435,8 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
         filters={filters}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
       />
 
       <section className="flex-grow">
@@ -399,12 +444,14 @@ export default function AllProducts({ locale, products }: AllProductsProps) {
           filters={filters}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
+          sortOrder={sortOrder}
+          setSortOrder={setSortOrder}
         />
 
         {products.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
-          {sortedFilteredProducts.map((product) => (
+          {finalProducts.map((product) => (
             <ProductTile key={product.id} product={product} locale={locale} />
           ))}
         </div>
