@@ -121,30 +121,31 @@ const addProductToCart = (
       currencyCode: product.variants.edges[0]?.node.price.currencyCode,
     };
 
-    if (existingItemIndex > -1) {
-      cart[existingItemIndex].quantity += quantity;
-    } else {
-      cart.push({
-        variantId,
-        quantity,
-        product: productData,
-      });
-    }
+    if (existingItemIndex > -1) cart[existingItemIndex].quantity += quantity;
+    else cart.push({
+      variantId,
+      quantity,
+      product: productData,
+    });
 
     localStorage.setItem('cart', JSON.stringify(cart));
   }
 };
 
-export default function Product({ locale, product }: { locale: LocaleLanguages, product: Product }) {
-  const t = useTranslations('PRODUCT_PAGE');
+export default function Product({
+  locale,
+  product,
+}: {
+  locale: LocaleLanguages;
+  product: Product;
+}) {
+  const t = useTranslations("PRODUCT_PAGE");
   const [quantity, setQuantity] = useState(1);
   const mainVariant = product.variants.edges[0]?.node;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleAddToCart = () => {
-    if (mainVariant) {
-      addProductToCart(mainVariant.id, quantity, product);
-    }
+    if (mainVariant) addProductToCart(mainVariant.id, quantity, product);
   };
 
   return (

@@ -60,6 +60,7 @@ function SearchSuggestions({ searchSuggestions, storedLocale }: SearchSuggestion
     </div>
   );
 }
+
 interface NavBarContentProps {
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -152,10 +153,12 @@ function NavBarContent({
             setSearchSuggestions={setSearchSuggestions}
             storedLocale={storedLocale}
           />
+
           <div className="hidden md:flex gap-4">
             <Phone />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>
+          
           <ShoppingCart
             showCart={showCart}
             setShowCart={setShowCart}
