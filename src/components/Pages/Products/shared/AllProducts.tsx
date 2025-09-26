@@ -48,10 +48,10 @@ const Filters = ({
   sortOrder,
   setSortOrder,
 }: FiltersProps) => {
-  if (filters.length === 0) return null;
-  
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
+  
+  if (filters.length === 0) return null;
 
   const toggleFilter = (filterName: string, value: string) => {
     setSelectedFilters((prev) => {
@@ -82,7 +82,7 @@ const Filters = ({
   if (aside)
     return (
       <aside className="w-64 border-r border-light hidden lg:flex flex-col pr-2">
-        {filters.filter(f => f.queryKey !== 'type').map((filter) => (
+        {filters.filter(f => f.queryKey !== 'type' && f.queryKey !== "supertype").map((filter) => (
           <div key={filter.queryKey} className="mb-6">
             <div className="font-bold mb-2 w-full text-left">{filter.name}</div>
 
@@ -103,19 +103,19 @@ const Filters = ({
       </aside>
     );
   
-  const typeFilter = (value: string) => {
-    if (value === "all")
+    const typeFilter = (queryKey: 'type' | 'supertype', value: string) => {
       setSelectedFilters((prev) => {
         const newFilters = { ...prev };
-        delete newFilters["type"];
+
+        if (queryKey === "type") delete newFilters["supertype"];
+        if (queryKey === "supertype") delete newFilters["type"];
+
+        if (value === "all") delete newFilters[queryKey];
+        else newFilters[queryKey] = [value];
+
         return newFilters;
       });
-    else
-      setSelectedFilters((prev) => ({
-        ...prev,
-        type: [value],
-      }));
-  }
+    };
 
   const sortOptions = [
     { value: "name-asc", label: "Name (A-Z)" },
@@ -130,7 +130,7 @@ const Filters = ({
         <div className="flex justify-between">
           <button
             onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
-            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
+            className="px-2 py-1 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
             aria-expanded={isFilterPanelOpen}
             aria-controls="mobile-filter-panel"
           >
@@ -141,7 +141,7 @@ const Filters = ({
             <span className="mr-2 font-bold">Sort by:</span>
 
             <select
-              className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
+              className="px-2 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
@@ -159,7 +159,9 @@ const Filters = ({
             className="mt-4 bg-ultra-light p-4 rounded-md shadow-md"
           >
             {filters
-              .filter((f) => f.queryKey !== "type")
+              .filter(
+                (f) => f.queryKey !== "type" && f.queryKey !== "supertype"
+              )
               .map((filter) => (
                 <div key={filter.queryKey} className="mb-2">
                   <button
@@ -204,19 +206,29 @@ const Filters = ({
       <div className="flex mb-4 justify-between">
         <select
           className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96 transform transition-transform duration-300 hover:scale-105"
-          value={selectedFilters["type"]?.[0] || "all"}
+          value={
+            (selectedFilters['type']?.[0] || selectedFilters['supertype']?.[0]) || 'all'
+          }
           onChange={(e) => {
-            typeFilter(e.target.value);
+            const combinedOptions = filters
+              .filter(f => f.queryKey === 'type' || f.queryKey === 'supertype')
+              .flatMap(f => f.values.map(v => ({ queryKey: f.queryKey, value: v.canonical, label: v.localized })));
+            const selectedOption = combinedOptions.find(opt => opt.value === e.target.value);
+            if (selectedOption) typeFilter(selectedOption.queryKey as 'type' | 'supertype', selectedOption.value);
+            else typeFilter('type', 'all');
           }}
         >
           <option value="all">All wines</option>
-          {filters
-            .find((f) => f.queryKey === "type")
-            ?.values.map((v) => (
-              <option key={v.canonical} value={v.canonical}>
-                {v.localized}
+          {(() => {
+            const combinedOptions = filters
+              .filter(f => f.queryKey === 'type' || f.queryKey === 'supertype')
+              .flatMap(f => f.values.map(v => ({ queryKey: f.queryKey, value: v.canonical, label: v.localized })));
+            return combinedOptions.map(opt => (
+              <option key={`${opt.queryKey}-${opt.value}`} value={opt.value}>
+                {opt.label}
               </option>
-            ))}
+            ));
+          })()}
         </select>
 
         <div className="hidden lg:flex items-center">
@@ -294,7 +306,7 @@ const FiltersRecap = ({
           key={`${key}-${value}`}
           className="px-3 py-1 bg-light rounded-full text-sm font-medium flex items-center gap-2"
         >
-          {filterName}: {label}
+          {(key === 'type' || key === 'supertype') ? label : `${filterName}: ${label}`}
           <button
             onClick={() => removeFilter(key, value)}
             className="text-dark hover:text-invalid font-bold"
@@ -311,7 +323,7 @@ const FiltersRecap = ({
 const ProductTile = ({ locale, product }: ProductTileProps) => {
   return (
     <Link
-      href={`/${locale}/products/${product.handle}`}
+      href={`/products/${product.handle}`}
       className="bg-white rounded-lg shadow-md border border-light overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col"
     >
       {product.images.edges.length > 0 && (
@@ -377,6 +389,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
 
   const filtersMap: Record<string, { filterName: string; values: FilterValue[] }> = {};
   const productTypes: FilterValue[] = [];
+  const productSupertypes: FilterValue[] = [];
 
   products.forEach((product) => {
     if (
@@ -408,6 +421,22 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
         return;
       }
 
+      if (canonicalPart.startsWith('supertype_')) {
+        const supertypeCanonical = canonicalPart.substring(10);
+        let localizedSupertypeName = localizedPart;
+        if (
+          localizedPart.startsWith("Supertype_") ||
+          localizedPart.startsWith("supertype_")
+        )
+          localizedSupertypeName = localizedPart.substring(10);
+        if (!productSupertypes.some(st => st.canonical === supertypeCanonical))
+          productSupertypes.push({
+            canonical: supertypeCanonical,
+            localized: localizedSupertypeName,
+          });
+        return;
+      }
+
       const [filterKey, filterValueCanonical] = canonicalPart.split("_");
       if (!filterKey || !filterValueCanonical) return;
 
@@ -434,6 +463,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
   });
 
   productTypes.sort((a, b) => a.localized.localeCompare(b.localized));
+  productSupertypes.sort((a, b) => a.localized.localeCompare(b.localized));
 
   const filters = Object.entries(filtersMap).map(([key, { filterName, values }]) => ({
     queryKey: key,
@@ -444,16 +474,26 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
     })),
   }));
 
-  if (productTypes.length > 0)
+  if (productSupertypes.length > 0) {
+    filters.unshift({
+      queryKey: "supertype",
+      name: "Supertype",
+      values: productSupertypes,
+    });
+  }
+  if (productTypes.length > 0) {
     filters.unshift({
       queryKey: "type",
       name: "Type",
       values: productTypes,
     });
+  }
 
   filters.sort((a, b) => {
     if (a.queryKey === 'type') return -1;
     if (b.queryKey === 'type') return 1;
+    if (a.queryKey === 'supertype') return -1;
+    if (b.queryKey === 'supertype') return 1;
     return a.name.localeCompare(b.name);
   });
 
