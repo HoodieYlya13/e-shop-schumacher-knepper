@@ -29,7 +29,7 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
   }
 
   return (
-    <section className="max-w-lg mx-auto pt-26 md:pt-36">
+    <section className="max-w-lg mx-auto">
       <div className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
         <h1 className="text-2xl font-bold">{t(form.mode)}</h1>
 

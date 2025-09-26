@@ -8,7 +8,7 @@ export default async function HomePage(props: {
   const { locale } = await props.params;
 
   return (
-    <PageBuilder>
+    <PageBuilder padding={false}>
       <Home locale={locale} />
     </PageBuilder>
   );

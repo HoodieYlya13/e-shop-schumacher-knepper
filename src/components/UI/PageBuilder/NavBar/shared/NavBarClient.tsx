@@ -131,7 +131,7 @@ function NavBarContent({
 
           <Logo />
 
-          <div className="hidden md:flex text-primary">
+          <div className="hidden md:flex">
             <Navigation
               customerAccessToken={customerAccessToken}
               setShowMenu={setShowMenu}
@@ -230,14 +230,14 @@ export default function NavBarClient({ customerAccessToken, storedLocale = "en" 
     const dynamicHeight = showSearch ? `${suggestionsHeight}rem` : undefined;
 
     const navBarClasses = clsx(
-      "relative backdrop-blur-md flex mx-auto border border-accent rounded-4xl shadow-lg shadow-accent/30 transition-all duration-300 ease-in-out",
+      "relative backdrop-blur-md flex mx-auto outline outline-accent/50 rounded-4xl shadow-lg shadow-accent/30 transition-all duration-300 ease-in-out",
       {
         "flex-col items-start w-full md:max-w-4xl": showSearch,
         "h-16 w-full md:max-w-7xl": !showSearch,
         "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start": showCart,
         "h-[calc(100vh-2.5rem)] sm:h-72 md:h-16 md:items-start": showMenu,
         "bg-secondary/50": showCart || showMenu || showSearch,
-        "bg-primary/30": !(showCart || showMenu || showSearch),
+        "bg-light/50": !(showCart || showMenu || showSearch),
       }
     );
   

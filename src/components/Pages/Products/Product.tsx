@@ -2,9 +2,47 @@
 
 import type { Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { LocaleLanguages } from '@/i18n/utils';
+
+const ProductTree = ({
+  product,
+  typeQueryParam,
+  type,
+}: {
+  product: Product;
+  typeQueryParam?: string;
+  type?: string;
+}) => {
+  return (
+    <div className="flex gap-2 truncate items-center">
+      <Link href="/products" className="whitespace-nowrap transition hover:scale-105 duration-300">
+        All products
+      </Link>
+
+      <span>&gt;</span>
+
+      {type && (
+        <>
+          <Link
+            href={`/products?${typeQueryParam}`}
+            className="whitespace-nowrap transition hover:scale-105 duration-300"
+          >
+            {type}
+          </Link>
+
+          <span>&gt;</span>
+        </>
+      )}
+
+      <Link href={`/products/${product.handle}`} className="truncate transition hover:scale-105 duration-300">
+        {product.title}
+      </Link>
+    </div>
+  );
+};
 
 const CurrentImage = ({ product, currentImageIndex, setCurrentImageIndex }: { product: Product; currentImageIndex: number; setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>> }) => {
   const featuredImage = product.images.edges[currentImageIndex]?.node;
@@ -143,13 +181,29 @@ export default function Product({
   const [quantity, setQuantity] = useState(1);
   const mainVariant = product.variants.edges[0]?.node;
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  const typeCollection = product.collections.edges.find(({ node }) =>
+    node.title.startsWith("type_")
+  );
+  const type = typeCollection
+    ? typeCollection.node.title.split("__")[1]?.replace(/^type_/, "") ?? ""
+    : "";
+  const typeQueryParam = typeCollection
+    ? typeCollection.node.title.split("__")[0]?.replace(/_/g, "=") ?? ""
+    : ""; 
 
   const handleAddToCart = () => {
     if (mainVariant) addProductToCart(mainVariant.id, quantity, product);
   };
 
   return (
-    <section className="container mx-auto p-4 md:p-8 pt-26 md:pt-36">
+    <section className="container mx-auto flex flex-col gap-2">
+      <ProductTree
+        product={product}
+        typeQueryParam={typeQueryParam}
+        type={type}
+      />
+
       <div className="flex flex-col md:flex-row gap-8">
         <div className="md:w-1/2">
           {product.images.edges.length > 0 && (

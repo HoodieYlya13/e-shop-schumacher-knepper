@@ -12,8 +12,8 @@ export default function Account({ customer }: AccountProps) {
   );
 
   return (
-    <section className="max-w-lg mx-auto pt-26 md:pt-36">
-      <div className="max-w-lg mx-auto p-6 space-y-4 border rounded shadow">
+    <section className="max-w-lg mx-auto">
+      <div className="max-w-lg mx-auto space-y-4 border rounded shadow">
         <h1 className="text-2xl font-bold">Account Information</h1>
 
         <p>

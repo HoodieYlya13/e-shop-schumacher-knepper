@@ -55,7 +55,7 @@ export default function Navigation({ customerAccessToken, setShowMenu }: Navigat
               href={href}
               onClick={() => setShowMenu(false)}
               className={clsx(
-                "rounded transition hover:scale-110 duration-300 text-outline",
+                "rounded opacity-80 hover:opacity-100 transition hover:scale-110 duration-300",
                 isActive && "text-accent"
               )}
             >

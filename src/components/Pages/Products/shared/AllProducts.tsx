@@ -249,9 +249,16 @@ const FiltersRecap = ({
   searchTerm?: string;
 }) => {
   const removeFilter = (filterKey: string, value?: string) => {
+    if (filterKey === "search") {
+      const newHref = "/products" + window.location.search
+        .replace(/([?&])search=[^&]*&?/, '$1')
+        .replace(/&$/, '')
+        .replace(/\?$/, '');
+      return window.location.href = newHref;
+    }
     setSelectedFilters((prev) => {
       const updated = { ...prev };
-      if (filterKey === "search") return updated; // handled separately
+      if (filterKey === "search") return updated;
       updated[filterKey] = updated[filterKey].filter((v) => v !== value);
       if (updated[filterKey].length === 0) delete updated[filterKey];
       return updated;
@@ -287,7 +294,7 @@ const FiltersRecap = ({
         >
           {filterName}: {label}
           <button
-            onClick={() => key === "search" ? null : removeFilter(key, value)}
+            onClick={() => removeFilter(key, value)}
             className="text-dark hover:text-invalid font-bold"
             aria-label={`Remove ${filterName} ${label}`}
           >
@@ -509,7 +516,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
   const finalProducts = [...sortedOtherProducts, ...giftCardProducts];
 
   return (
-    <div className="flex gap-12 max-w-7xl mx-auto p-6 pt-26 md:pt-36">
+    <div className="flex gap-12 max-w-7xl mx-auto">
       <Filters
         aside={true}
         filters={filters}
