@@ -1,6 +1,6 @@
 import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from '@/i18n/utils';
 import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
-import { Product } from '@shopify/hydrogen-react/storefront-api-types';
+import { Collection, Product } from '@shopify/hydrogen-react/storefront-api-types';
 
 const GET_ALL_PRODUCTS_QUERY = `
   query AllProducts($language: LanguageCode, $after: String, $sortKey: ProductSortKeys, $reverse: Boolean) @inContext(language: $language) {
@@ -263,4 +263,33 @@ export async function getProductsForFullSearch(
   }
 
   return allProducts;
+}
+
+const GET_COLLECTION_BY_HANDLE_QUERY = `
+  query CollectionByHandle($handle: String!, $language: LanguageCode) @inContext(language: $language) {
+    collection(handle: $handle) {
+      title
+      description
+      image {
+        url
+        altText
+      }
+    }
+  }
+`;
+
+interface ShopifyCollectionResponse {
+  collection: Collection;
+}
+
+export async function getCollectionByHandle(
+  handle: string,
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+) {
+  const data: ShopifyCollectionResponse = await shopifyServerFetch<ShopifyCollectionResponse>(
+    GET_COLLECTION_BY_HANDLE_QUERY,
+    { handle, language }
+  );
+
+  return data.collection || null;
 }

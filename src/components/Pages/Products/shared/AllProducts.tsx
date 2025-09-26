@@ -1,23 +1,32 @@
 'use client';
 
-import { Product } from '@shopify/hydrogen-react/storefront-api-types';
+import { Collection, Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { LocaleLanguages } from '@/i18n/utils';
+import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
+import clsx from 'clsx';
+import { getCollection } from '@/utils/products/getCollection';
 
 interface FilterValue {
   canonical: string;
   localized: string;
+  handle?: string;
 }
 
 interface Filter {
   queryKey: string;
   name: string;
   values: FilterValue[];
+}
+
+interface TypeBannerProps {
+  handle?: string;
+  language: LocaleLanguagesUpperCase;
+  title?: string;
 }
 
 interface FiltersProps {
@@ -27,6 +36,7 @@ interface FiltersProps {
   setSelectedFilters: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   sortOrder: string;
   setSortOrder: React.Dispatch<React.SetStateAction<string>>;
+  searchTerm?: string;
 }
 
 interface ProductTileProps {
@@ -47,6 +57,7 @@ const Filters = ({
   setSelectedFilters,
   sortOrder,
   setSortOrder,
+  searchTerm,
 }: FiltersProps) => {
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
@@ -141,7 +152,7 @@ const Filters = ({
             <span className="mr-2 font-bold">Sort by:</span>
 
             <select
-              className="px-2 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
+              className="px-1 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
@@ -203,33 +214,64 @@ const Filters = ({
         )}
       </div>
 
-      <div className="flex mb-4 justify-between">
-        <select
-          className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96 transform transition-transform duration-300 hover:scale-105"
-          value={
-            (selectedFilters['type']?.[0] || selectedFilters['supertype']?.[0]) || 'all'
-          }
-          onChange={(e) => {
-            const combinedOptions = filters
-              .filter(f => f.queryKey === 'type' || f.queryKey === 'supertype')
-              .flatMap(f => f.values.map(v => ({ queryKey: f.queryKey, value: v.canonical, label: v.localized })));
-            const selectedOption = combinedOptions.find(opt => opt.value === e.target.value);
-            if (selectedOption) typeFilter(selectedOption.queryKey as 'type' | 'supertype', selectedOption.value);
-            else typeFilter('type', 'all');
-          }}
-        >
-          <option value="all">All wines</option>
-          {(() => {
-            const combinedOptions = filters
-              .filter(f => f.queryKey === 'type' || f.queryKey === 'supertype')
-              .flatMap(f => f.values.map(v => ({ queryKey: f.queryKey, value: v.canonical, label: v.localized })));
-            return combinedOptions.map(opt => (
-              <option key={`${opt.queryKey}-${opt.value}`} value={opt.value}>
-                {opt.label}
-              </option>
-            ));
-          })()}
-        </select>
+      <div className={clsx("flex justify-between", { "mb-4": !searchTerm })}>
+        {!searchTerm && (
+          <select
+            className="px-1 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96 transform transition-transform duration-300 hover:scale-105"
+            value={
+              selectedFilters["type"]?.[0] ||
+              selectedFilters["supertype"]?.[0] ||
+              "all"
+            }
+            onChange={(e) => {
+              const combinedOptions = filters
+                .filter(
+                  (f) => f.queryKey === "type" || f.queryKey === "supertype"
+                )
+                .flatMap((f) =>
+                  f.values.map((v) => ({
+                    queryKey: f.queryKey,
+                    value: v.canonical,
+                    label: v.localized,
+                  }))
+                );
+              const selectedOption = combinedOptions.find(
+                (opt) => opt.value === e.target.value
+              );
+              if (selectedOption)
+                typeFilter(
+                  selectedOption.queryKey as "type" | "supertype",
+                  selectedOption.value
+                );
+              else typeFilter("type", "all");
+            }}
+          >
+            <option value="all">
+              {filters.find(f => f.queryKey === 'supertype')?.values?.[0]?.localized || 'All wines'}
+            </option>
+
+            {(() => {
+              const combinedOptions = filters
+                .filter(
+                  (f) => f.queryKey === "type" || f.queryKey === "supertype"
+                )
+                .flatMap((f) =>
+                  f.values
+                    .filter((v) => v.canonical !== 'all')
+                    .map((v) => ({
+                      queryKey: f.queryKey,
+                      value: v.canonical,
+                      label: v.localized,
+                    }))
+                );
+              return combinedOptions.map((opt) => (
+                <option key={`${opt.queryKey}-${opt.value}`} value={opt.value}>
+                  {opt.label}
+                </option>
+              ));
+            })()}
+          </select>
+        )}
 
         <div className="hidden lg:flex items-center">
           <span className="mr-2 font-bold">Sort by:</span>
@@ -248,6 +290,55 @@ const Filters = ({
         </div>
       </div>
     </>
+  );
+};
+
+const TypeBanner = ({ handle, language, title }: TypeBannerProps) => {
+  const [collection, setCollection] = useState<Collection | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (!handle) return;
+
+    const fetchCollection = async () => {
+      try {
+        setLoading(true);
+        const data = await getCollection(handle, language);
+        setCollection(data);
+      } catch (err) {
+        console.error("Failed to load collection:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCollection();
+  }, [handle, language]);
+
+  if (!handle) return null;
+
+  if (loading) return <div className="hidden lg:flex">Loading...</div>;
+  if (!collection) return null;
+
+  return (
+    <div className="hidden lg:flex flex-row justify-between lg:mb-4">
+      <div>
+        <h2 className="text-xl font-bold">{title ?? collection.title}</h2>
+        {collection.description && (
+          <p className="text-sm text-dark">{collection.description}</p>
+        )}
+      </div>
+
+      {collection.image && (
+        <Image
+          src={collection.image.url}
+          alt={collection.image.altText || collection.title}
+          width={600}
+          height={300}
+          className="rounded-md h-40 w-auto"
+        />
+      )}
+    </div>
   );
 };
 
@@ -306,7 +397,9 @@ const FiltersRecap = ({
           key={`${key}-${value}`}
           className="px-3 py-1 bg-light rounded-full text-sm font-medium flex items-center gap-2"
         >
-          {(key === 'type' || key === 'supertype') ? label : `${filterName}: ${label}`}
+          {key === "type" || key === "supertype"
+            ? label
+            : `${filterName}: ${label}`}
           <button
             onClick={() => removeFilter(key, value)}
             className="text-dark hover:text-invalid font-bold"
@@ -417,6 +510,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
           productTypes.push({
             canonical: typeCanonical,
             localized: localizedTypeName,
+            handle: node.handle,
           });
         return;
       }
@@ -433,6 +527,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
           productSupertypes.push({
             canonical: supertypeCanonical,
             localized: localizedSupertypeName,
+            handle: node.handle,
           });
         return;
       }
@@ -465,29 +560,25 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
   productTypes.sort((a, b) => a.localized.localeCompare(b.localized));
   productSupertypes.sort((a, b) => a.localized.localeCompare(b.localized));
 
-  const filters = Object.entries(filtersMap).map(([key, { filterName, values }]) => ({
+  const filters: Filter[] = Object.entries(filtersMap).map(([key, { filterName, values }]) => ({
     queryKey: key,
     name: filterName,
-    values: values.map((v) => ({
-      canonical: v.canonical,
-      localized: v.localized,
-    })),
+    values,
   }));
 
-  if (productSupertypes.length > 0) {
+  if (productSupertypes.length > 0)
     filters.unshift({
       queryKey: "supertype",
       name: "Supertype",
       values: productSupertypes,
     });
-  }
-  if (productTypes.length > 0) {
+
+  if (productTypes.length > 0)
     filters.unshift({
       queryKey: "type",
       name: "Type",
       values: productTypes,
     });
-  }
 
   filters.sort((a, b) => {
     if (a.queryKey === 'type') return -1;
@@ -561,6 +652,26 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
 
   const finalProducts = [...sortedOtherProducts, ...giftCardProducts];
 
+  const selectedTypeHandle = selectedFilters["type"]?.[0]
+  ? productTypes.find((pt) => pt.canonical === selectedFilters["type"]?.[0])?.handle
+  : undefined;
+
+  const selectedSupertypeHandle = selectedFilters["supertype"]?.[0]
+    ? productSupertypes.find((st) => st.canonical === selectedFilters["supertype"]?.[0])?.handle
+    : productSupertypes.find((st) => st.canonical === "all")?.handle;
+
+  const collectionHandleToPass = selectedTypeHandle ?? selectedSupertypeHandle;
+
+  const selectedTypeTitle = selectedFilters["type"]?.[0]
+    ? productTypes.find((pt) => pt.canonical === selectedFilters["type"]?.[0])?.localized
+    : undefined;
+
+  const selectedSupertypeTitle = selectedFilters["supertype"]?.[0]
+    ? productSupertypes.find((st) => st.canonical === selectedFilters["supertype"]?.[0])?.localized
+    : productSupertypes.find((st) => st.canonical === "all")?.localized;
+
+  const collectionTitleToPass = selectedTypeTitle ?? selectedSupertypeTitle;
+
   return (
     <div className="flex gap-12 max-w-7xl mx-auto">
       <Filters
@@ -570,15 +681,23 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
         setSelectedFilters={setSelectedFilters}
         sortOrder={sortOrder}
         setSortOrder={setSortOrder}
+        searchTerm={searchTerm}
       />
 
       <section className="flex-grow">
+        <TypeBanner
+          handle={collectionHandleToPass}
+          language={locale.toUpperCase() as LocaleLanguagesUpperCase}
+          title={collectionTitleToPass}
+        />
+
         <Filters
           filters={filters}
           selectedFilters={selectedFilters}
           setSelectedFilters={setSelectedFilters}
           sortOrder={sortOrder}
           setSortOrder={setSortOrder}
+          searchTerm={searchTerm}
         />
 
         <FiltersRecap
