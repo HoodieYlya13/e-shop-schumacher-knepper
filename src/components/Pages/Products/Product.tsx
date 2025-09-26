@@ -48,7 +48,7 @@ const CurrentImage = ({ product, currentImageIndex, setCurrentImageIndex }: { pr
   const featuredImage = product.images.edges[currentImageIndex]?.node;
   
   return (
-    <div className="relative w-full aspect-square rounded-lg overflow-hidden shadow-lg">
+    <div className="relative w-full max-w-100 aspect-square rounded-lg overflow-hidden shadow-lg">
       <Image
         src={featuredImage?.url}
         alt={featuredImage?.altText || product.title}
@@ -57,23 +57,25 @@ const CurrentImage = ({ product, currentImageIndex, setCurrentImageIndex }: { pr
         style={{ objectFit: "cover" }}
         priority
       />
+
       <button
         onClick={() =>
           setCurrentImageIndex((prev) =>
             prev > 0 ? prev - 1 : product.images.edges.length - 1
           )
         }
-        className="absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
+        className="absolute top-1/2 left-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full cursor-pointer"
       >
         &lt;
       </button>
+      
       <button
         onClick={() =>
           setCurrentImageIndex((prev) =>
             prev < product.images.edges.length - 1 ? prev + 1 : 0
           )
         }
-        className="absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full"
+        className="absolute top-1/2 right-2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full cursor-pointer"
       >
         &gt;
       </button>
@@ -114,7 +116,7 @@ const Thumbnail = ({ img, idx, isActive, product, setCurrentImageIndex }: { img:
 
 const Thumbnails = ({ product, currentImageIndex, setCurrentImageIndex }: { product: Product; currentImageIndex: number; setCurrentImageIndex: React.Dispatch<React.SetStateAction<number>> }) => {
   return (
-    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide max-w-100">
       {product.images.edges.map(({ node: img }, idx) => (
         <Thumbnail
           key={`${img.id ?? idx}-${idx}`}
@@ -186,7 +188,7 @@ export default function Product({
     node.title.startsWith("type_")
   );
   const type = typeCollection
-    ? typeCollection.node.title.split("__")[1]?.replace(/^type_/, "") ?? ""
+    ? typeCollection.node.title.split("__")[1]?.replace(/^type_/i, "") ?? ""
     : "";
   const typeQueryParam = typeCollection
     ? typeCollection.node.title.split("__")[0]?.replace(/_/g, "=") ?? ""
@@ -197,7 +199,7 @@ export default function Product({
   };
 
   return (
-    <section className="container mx-auto flex flex-col gap-2">
+    <section className="container mx-auto flex flex-col gap-2 md:gap-4">
       <ProductTree
         product={product}
         typeQueryParam={typeQueryParam}
@@ -205,7 +207,7 @@ export default function Product({
       />
 
       <div className="flex flex-col md:flex-row gap-8">
-        <div className="md:w-1/2">
+        <div className="md:w-100">
           {product.images.edges.length > 0 && (
             <div className="flex flex-col gap-2 pb-2">
               {product.images.edges.length > 0 && (

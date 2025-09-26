@@ -48,6 +48,8 @@ const Filters = ({
   sortOrder,
   setSortOrder,
 }: FiltersProps) => {
+  if (filters.length === 0) return null;
+  
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
 
@@ -393,7 +395,11 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
       if (canonicalPart.startsWith('type_')) {
         const typeCanonical = canonicalPart.substring(5);
         let localizedTypeName = localizedPart;
-        if (localizedPart.startsWith('type_')) localizedTypeName = localizedPart.substring(5);
+        if (
+          localizedPart.startsWith("Type_") ||
+          localizedPart.startsWith("type_")
+        )
+          localizedTypeName = localizedPart.substring(5);
         if (!productTypes.some(pt => pt.canonical === typeCanonical))
           productTypes.push({
             canonical: typeCanonical,

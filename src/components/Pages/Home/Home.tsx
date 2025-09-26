@@ -16,7 +16,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   return (
     <>
       <section
-        className="h-screen w-screen bg-cover bg-center relative shadow-2xl text-primary"
+        className="h-screen w-full bg-cover bg-center relative shadow-2xl text-primary"
         style={homeSectionStyle}
       >
         <div className="absolute inset-0 bg-gradient-to-b from-ultra-dark to-light opacity-20"></div>

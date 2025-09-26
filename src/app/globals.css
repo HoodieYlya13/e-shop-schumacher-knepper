@@ -63,10 +63,3 @@
     scrollbar-width: none !important; /* For Firefox */
   }
 }
-
-html, body {
-  width: 100vw;
-  overflow-x: hidden;
-  margin: 0;
-  overscroll-behavior: none;
-}
