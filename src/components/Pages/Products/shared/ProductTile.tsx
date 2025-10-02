@@ -54,7 +54,7 @@ export default function ProductTile({ locale, product }: ProductTileProps) {
               </button>
 
               <div className="flex items-center gap-1 @3xs:gap-2">
-                <p className="font-bold @5xs:text-xl @4xs:text-2xl @3xs:text-3xl">
+                <p className="font-bold text-base @5xs:text-xl @4xs:text-2xl @3xs:text-3xl">
                   {new Intl.NumberFormat(locale, {
                     style: "currency",
                     currency:
