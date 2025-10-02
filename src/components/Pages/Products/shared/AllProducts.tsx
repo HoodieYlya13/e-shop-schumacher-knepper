@@ -3,13 +3,13 @@
 import { Collection, Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
 import clsx from 'clsx';
 import { getCollection } from '@/utils/products/getCollection';
+import ProductTile from './ProductTile';
 
 interface FilterValue {
   canonical: string;
@@ -38,11 +38,6 @@ interface FiltersProps {
   setSortOrder: React.Dispatch<React.SetStateAction<string>>;
   searchTerm?: string;
 }
-
-interface ProductTileProps {
-  locale: LocaleLanguages;
-  product: Product
-};
 
 interface AllProductsProps {
   locale: LocaleLanguages;
@@ -152,14 +147,15 @@ const Filters = ({
             <span className="mr-2 font-bold">Sort by:</span>
 
             <select
-              className="px-1 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
+              className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
-              <option value="name-asc">Name (A-Z)</option>
-              <option value="name-desc">Name (Z-A)</option>
-              <option value="price-asc">Price (Low to High)</option>
-              <option value="price-desc">Price (High to Low)</option>
+              {sortOptions.map(({ value, label }) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
             </select>
           </div>
         </div>
@@ -247,7 +243,8 @@ const Filters = ({
             }}
           >
             <option value="all">
-              {filters.find(f => f.queryKey === 'supertype')?.values?.[0]?.localized || 'All wines'}
+              {filters.find((f) => f.queryKey === "supertype")?.values?.[0]
+                ?.localized || "All wines"}
             </option>
 
             {(() => {
@@ -257,7 +254,7 @@ const Filters = ({
                 )
                 .flatMap((f) =>
                   f.values
-                    .filter((v) => v.canonical !== 'all')
+                    .filter((v) => v.canonical !== "all")
                     .map((v) => ({
                       queryKey: f.queryKey,
                       value: v.canonical,
@@ -277,7 +274,7 @@ const Filters = ({
           <span className="mr-2 font-bold">Sort by:</span>
 
           <select
-            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold"
+            className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
           >
@@ -410,47 +407,6 @@ const FiltersRecap = ({
         </span>
       ))}
     </div>
-  );
-};
-
-const ProductTile = ({ locale, product }: ProductTileProps) => {
-  return (
-    <Link
-      href={`/products/${product.handle}`}
-      className="bg-white rounded-lg shadow-md border border-light overflow-hidden transform transition-transform duration-300 hover:scale-105 flex flex-col"
-    >
-      {product.images.edges.length > 0 && (
-        <div className="relative aspect-square w-full overflow-hidden border-b border-light">
-          <Image
-            src={product.images.edges[0].node.url}
-            alt={product.images.edges[0].node.altText ?? product.title}
-            fill
-            style={{ objectFit: "cover" }}
-            priority
-            sizes="(max-width: 768px) 100vw, 33vw"
-          />
-        </div>
-      )}
-
-      <div className="p-4 flex flex-col flex-grow">
-        <h2 className="text-2xl font-extrabold text-secondary mb-2 line-clamp-1">
-          {product.title}
-        </h2>
-
-        <p className="text-dark text-sm mb-4 line-clamp-2">
-          {product.description}
-        </p>
-
-        <div className="mt-auto pt-4 border-t border-light">
-          <p className="text-lg font-bold">
-            {new Intl.NumberFormat(locale, {
-              style: "currency",
-              currency: product.variants.edges[0]?.node.price.currencyCode,
-            }).format(parseFloat(product.variants.edges[0]?.node.price.amount))}
-          </p>
-        </div>
-      </div>
-    </Link>
   );
 };
 
@@ -673,7 +629,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
   const collectionTitleToPass = selectedTypeTitle ?? selectedSupertypeTitle;
 
   return (
-    <div className="flex gap-12 max-w-7xl mx-auto">
+    <div className="flex gap-8 max-w-7xl mx-auto">
       <Filters
         aside={true}
         filters={filters}
@@ -709,7 +665,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
 
         {otherProducts.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
 
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4 justify-items-center mx-auto">
           {finalProducts.map((product) => (
             <ProductTile key={product.id} product={product} locale={locale} />
           ))}

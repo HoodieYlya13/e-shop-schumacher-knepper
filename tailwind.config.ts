@@ -3,7 +3,12 @@ module.exports = {
   theme: {
     extend: {
       screens: {
+        xs: "24rem",
         md: "54rem",
+      },
+      containers: {
+        "5xs": "12rem",
+        "4xs": "14rem",
       },
       colors: {
         'primary': 'var(--primary-color)',

@@ -22,7 +22,9 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
         <div className="absolute inset-0 bg-gradient-to-b from-ultra-dark to-light opacity-20"></div>
 
         <div className="flex flex-col justify-center items-center text-9xl h-screen">
-          <p className="text-5xl justify-center text-center">{t("WELCOME", { shopName })}</p>
+          <p className="text-5xl justify-center text-center">
+            {t("WELCOME", { shopName })}
+          </p>
           <p>{t("SINCE")}</p>
           <CountUp
             from={new Date().getFullYear()}
@@ -37,9 +39,10 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
         </div>
       </section>
 
-      <section id="best-sellers" className="bg-primary h-screen">
-
-      </section>
+      <section
+        id="best-sellers"
+        className="bg-primary min-h-screen flex"
+      ></section>
     </>
   );
 }
