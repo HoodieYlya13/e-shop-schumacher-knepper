@@ -15,7 +15,7 @@ export async function getCollection(
 
   if (!response.ok) throw new Error("Failed to fetch the collection.");
 
-  const products: Collection = await response.json();
+  const collection: Collection = await response.json();
 
-  return products;
+  return collection;
 }

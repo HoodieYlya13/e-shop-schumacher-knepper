@@ -314,7 +314,7 @@ const TypeBanner = ({ handle, language, title }: TypeBannerProps) => {
 
   if (!handle) return null;
 
-  if (loading) return <div className="hidden lg:flex">Loading...</div>;
+  if (loading) return <div className="hidden lg:flex">Loading...</div>; // FIXME add skeleton
   if (!collection) return null;
 
   return (

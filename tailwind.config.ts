@@ -26,6 +26,7 @@ module.exports = {
         "star-movement-bottom":
           "star-movement-bottom linear infinite alternate",
         "star-movement-top": "star-movement-top linear infinite alternate",
+        'scroll-infinite': 'scroll-infinite 30s linear infinite',
       },
       keyframes: {
         "star-movement-bottom": {
@@ -35,6 +36,10 @@ module.exports = {
         "star-movement-top": {
           "0%": { transform: "translate(0%, 0%)", opacity: "1" },
           "100%": { transform: "translate(100%, 0%)", opacity: "0" },
+        },
+        'scroll-infinite': {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
         },
       },
     },

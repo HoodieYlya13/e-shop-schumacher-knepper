@@ -52,7 +52,7 @@ const GET_ALL_PRODUCTS_QUERY = `
   }
 `;
 
-interface ShopifyProductsResponse {
+interface ShopifySearchProductsResponse {
   products: {
     pageInfo: {
       hasNextPage: boolean;
@@ -74,12 +74,16 @@ export async function getAllProducts(
   let cursor: string | null = null;
 
   while (hasNextPage) {
-    const data: ShopifyProductsResponse = await shopifyServerFetch<ShopifyProductsResponse>(GET_ALL_PRODUCTS_QUERY, {
-      language,
-      after: cursor,
-      sortKey,
-      reverse,
-    });
+    const data: ShopifySearchProductsResponse =
+      await shopifyServerFetch<ShopifySearchProductsResponse>(
+        GET_ALL_PRODUCTS_QUERY,
+        {
+          language,
+          after: cursor,
+          sortKey,
+          reverse,
+        }
+      );
 
     allProducts.push(...data.products.edges.map((edge) => edge.node));
 
@@ -213,28 +217,19 @@ const SEARCH_PRODUCTS_QUERY = `
   }
 `;
 
-interface ShopifySearchProductsResponse {
-  products: {
-    pageInfo: {
-      hasNextPage: boolean;
-      endCursor: string | null;
-    };
-    edges: {
-      node: Product;
-    }[];
-  };
-}
-
 export async function getProductsForLiveSearch(
   title: string,
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
 ): Promise<Product[]> {
   const query = `title:*${title}*`;
-  const data = await shopifyServerFetch<ShopifySearchProductsResponse>(SEARCH_PRODUCTS_QUERY, {
-    query,
-    language,
-    first: 3,
-  });
+  const data = await shopifyServerFetch<ShopifySearchProductsResponse>(
+    SEARCH_PRODUCTS_QUERY,
+    {
+      query,
+      language,
+      first: 3,
+    }
+  );
 
   return data.products.edges.map((edge) => edge.node);
 }
@@ -249,12 +244,16 @@ export async function getProductsForFullSearch(
   let cursor: string | null = null;
 
   while (hasNextPage) {
-    const data: ShopifySearchProductsResponse = await shopifyServerFetch<ShopifySearchProductsResponse>(SEARCH_PRODUCTS_QUERY, {
-      query,
-      language,
-      first: 250,
-      after: cursor,
-    });
+    const data: ShopifySearchProductsResponse =
+      await shopifyServerFetch<ShopifySearchProductsResponse>(
+        SEARCH_PRODUCTS_QUERY,
+        {
+          query,
+          language,
+          first: 250,
+          after: cursor,
+        }
+      );
 
     allProducts.push(...data.products.edges.map((edge) => edge.node));
 
@@ -286,10 +285,100 @@ export async function getCollectionByHandle(
   handle: string,
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
 ) {
-  const data: ShopifyCollectionResponse = await shopifyServerFetch<ShopifyCollectionResponse>(
-    GET_COLLECTION_BY_HANDLE_QUERY,
-    { handle, language }
-  );
+  const data: ShopifyCollectionResponse =
+    await shopifyServerFetch<ShopifyCollectionResponse>(
+      GET_COLLECTION_BY_HANDLE_QUERY,
+      { handle, language }
+    );
 
   return data.collection || null;
+}
+
+const GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY = `
+  query ProductsByCollectionHandle($handle: String!, $language: LanguageCode, $after: String) @inContext(language: $language) {
+    collection(handle: $handle) {
+      products(first: 250, after: $after) {
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            images(first: 5) {
+              edges {
+                node {
+                  url
+                  altText
+                }
+              }
+            }
+            variants(first: 1) {
+              edges {
+                node {
+                  id
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  compareAtPrice {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+interface ShopifyProductsByCollectionResponse {
+  collection: {
+    products: {
+      pageInfo: {
+        hasNextPage: boolean;
+        endCursor: string | null;
+      };
+      edges: {
+        node: Product;
+      }[];
+    };
+  };
+}
+
+export async function getProductsByCollectionHandle(
+  handle: string,
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+): Promise<Product[]> {
+  const allProducts: Product[] = [];
+  let hasNextPage = true;
+  let cursor: string | null = null;
+
+  while (hasNextPage) {
+    const data: ShopifyProductsByCollectionResponse =
+      await shopifyServerFetch<ShopifyProductsByCollectionResponse>(
+        GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY,
+        {
+          handle,
+          language,
+          after: cursor,
+        }
+      );
+
+    if (!data.collection?.products) break;
+
+    allProducts.push(
+      ...data.collection.products.edges.map((edge) => edge.node)
+    );
+    hasNextPage = data.collection.products.pageInfo.hasNextPage;
+    cursor = data.collection.products.pageInfo.endCursor;
+  }
+
+  return allProducts;
 }
