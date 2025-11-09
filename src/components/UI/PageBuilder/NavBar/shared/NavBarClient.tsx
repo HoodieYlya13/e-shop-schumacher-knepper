@@ -235,7 +235,7 @@ export default function NavBarClient({ customerAccessToken, storedLocale = "en" 
         "flex-col items-start w-full md:max-w-4xl": showSearch,
         "h-16 w-full md:max-w-7xl": !showSearch,
         "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start": showCart,
-        "h-[calc(100vh-2.5rem)] sm:h-72 md:h-16 md:items-start": showMenu,
+        "h-72 md:h-16 md:items-start": showMenu,
         "bg-secondary/50": showCart || showMenu || showSearch,
         "bg-light/50": !(showCart || showMenu || showSearch),
       }
