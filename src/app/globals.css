@@ -25,6 +25,7 @@
   --invalid-color: #e7000b;
   --ultra-dark-color: #030712;
   --ultra-light-color: #f9fafb;
+  --carousel-duration: 30s;
 }
 
 /* Firefox */

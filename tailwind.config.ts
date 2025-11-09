@@ -26,7 +26,7 @@ module.exports = {
         "star-movement-bottom":
           "star-movement-bottom linear infinite alternate",
         "star-movement-top": "star-movement-top linear infinite alternate",
-        'scroll-infinite': 'scroll-infinite 30s linear infinite',
+        'scroll-infinite': 'scroll-infinite var(--carousel-duration) linear infinite',
       },
       keyframes: {
         "star-movement-bottom": {

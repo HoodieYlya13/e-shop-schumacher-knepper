@@ -25,6 +25,8 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   const areRecommendedProducts = products && products.length > 0;
   if (!areRecommendedProducts) products = await getAllProducts(language);  
 
+  const carouselDuration = products.length * 4;
+
   return (
     <>
       <section
@@ -56,6 +58,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
       <section
         id="best-sellers"
         className="bg-primary flex flex-col py-8 justify-center items-center min-h-screen"
+        style={{ "--carousel-duration": `${carouselDuration}s` } as React.CSSProperties}
       >
         <RecommendedCollection collection={collection} />
         <RecommendedProducts locale={locale} products={products} />
