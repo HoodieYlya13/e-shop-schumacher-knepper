@@ -11,7 +11,7 @@ export default function RecommendedCollection({ collection }: RecommendedCollect
   return (
     <div className="flex flex-col w-full items-center justify-center gap-4">
       <Image
-        src={collection?.image?.url || "/img/placeholder-collection.png"}
+        src={collection?.image?.url || "/img/placeholder-recommended-collection.png"}
         alt={
           collection?.image?.altText || collection?.title || "Collection Image"
         }

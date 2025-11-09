@@ -23,8 +23,7 @@
   },
   "NAV": {
     "HOME": "Schumacher-Knepper",
-    "PRODUCTS": "Products",
-    "ACCOUNT": "Account"
+    "PRODUCTS": "Products"
   },
   "AUTH": {
     "LOGIN": "Sign in",
