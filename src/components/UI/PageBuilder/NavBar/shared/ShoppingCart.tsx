@@ -1,5 +1,7 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+
 function ShoppingCartIcon() {
   return (
     <svg
@@ -38,15 +40,52 @@ interface ShoppingCartProps {
 }
 
 export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: ShoppingCartProps) {
+  const [cartCount, setCartCount] = useState<number>(0);
+
+  useEffect(() => {
+    const updateCartCount = () => {
+      const storedCart = localStorage.getItem("cart");
+      if (storedCart) {
+        try {
+          const parsedCart = JSON.parse(storedCart);
+          const totalQuantity = parsedCart.reduce(
+            (sum: number, item: { quantity: number }) => sum + item.quantity,
+            0
+          );
+          setCartCount(totalQuantity);
+        } catch (error) {
+          console.error("Error parsing cart data:", error);
+          setCartCount(0);
+        }
+      } else setCartCount(0);
+    };
+
+    updateCartCount();
+
+    window.addEventListener("storage", updateCartCount);
+    window.addEventListener("cartUpdated", updateCartCount);
+
+    return () => {
+      window.removeEventListener("storage", updateCartCount);
+      window.removeEventListener("cartUpdated", updateCartCount);
+    };
+  }, []);
+
   return (
     <button
       onClick={() => {
         setShowCart(!showCart);
         setShowMenu(false);
       }}
-      className="cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+      className="relative cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
     >
       <ShoppingCartIcon />
+
+      {cartCount > 0 && (
+        <div className="absolute -top-1/2 left-0 text-xs w-5 h-5 flex justify-center items-center">
+          {cartCount > 9 ? "9+" : cartCount}
+        </div>
+      )}
     </button>
   );
 }

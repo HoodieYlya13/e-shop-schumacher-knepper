@@ -169,6 +169,7 @@ const addProductToCart = (
     });
 
     localStorage.setItem('cart', JSON.stringify(cart));
+    window.dispatchEvent(new Event("cartUpdated"));
   }
 };
 
