@@ -23,7 +23,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   const collection = await getCollectionByHandle("supertype_recommandations__Supertype_Recommandations", language);
   let products = await getProductsByCollectionHandle("supertype_recommandations__Supertype_Recommandations", language); // FIXME: temporary solution
   const areRecommendedProducts = products && products.length > 0;
-  if (!areRecommendedProducts) products = await getAllProducts(language);  
+  if (!areRecommendedProducts) products = await getAllProducts(language);
 
   const carouselDuration = products.length * 4;
 
@@ -51,19 +51,29 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
             />
           </div>
 
-          <RecommendedProductsButton areRecommendedProducts={areRecommendedProducts} />
+          {products.length > 0 && (
+            <RecommendedProductsButton
+              areRecommendedProducts={areRecommendedProducts}
+            />
+          )}
         </div>
       </section>
 
-      <section
-        id="best-sellers"
-        className="bg-primary flex flex-col py-8 justify-center items-center min-h-screen"
-        style={{ "--carousel-duration": `${carouselDuration}s` } as React.CSSProperties}
-      >
-        <RecommendedCollection collection={collection} />
-        <RecommendedProducts locale={locale} products={products} />
-        <SeeAllProductsButton />
-      </section>
+      {products.length > 0 && (
+        <section
+          id="best-sellers"
+          className="bg-primary flex flex-col py-8 justify-center items-center min-h-screen gap-2"
+          style={
+            {
+              "--carousel-duration": `${carouselDuration}s`,
+            } as React.CSSProperties
+          }
+        >
+          <RecommendedCollection collection={collection} />
+          <RecommendedProducts locale={locale} products={products} />
+          <SeeAllProductsButton />
+        </section>
+      )}
     </>
   );
 }

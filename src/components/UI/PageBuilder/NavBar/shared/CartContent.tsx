@@ -124,6 +124,7 @@ export default function CartContent() {
                 src={item.product.featuredImage.url}
                 alt={item.product.featuredImage.altText || item.product.title}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 style={{ objectFit: "cover" }}
                 className="rounded-lg"
               />

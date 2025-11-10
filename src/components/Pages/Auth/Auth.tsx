@@ -22,9 +22,7 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
 
   const handleModeChange = (newMode: Mode) => {
     form.reset(form.getValues());
-    if (form.mode === "RESET_PASSWORD") {
-      form.setValue("email", "");
-    };
+    if (form.mode === "RESET_PASSWORD") form.setValue("email", "");;
     form.setMode(newMode);
   }
 
@@ -60,7 +58,9 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
                 form.mode !== "PASSWORD_RECOVERY" &&
                 Object.keys(form.errors).length > 0) ||
               Object.entries(form.getValues())
-                .filter(([key]) => key !== "acceptsMarketing" && key !== "phone")
+                .filter(
+                  ([key]) => key !== "acceptsMarketing" && key !== "phone"
+                )
                 .every(([, value]) => !value),
           }}
           errors={form.errors.root}
@@ -71,7 +71,9 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
                 return (
                   <SignUp
                     register={form.register as UseFormRegister<RegisterValues>}
-                    setValue={form.setValue as unknown as UseFormSetValue<FieldValues>}
+                    setValue={
+                      form.setValue as unknown as UseFormSetValue<FieldValues>
+                    }
                     errors={form.errors}
                   />
                 );
