@@ -629,7 +629,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
   const collectionTitleToPass = selectedTypeTitle ?? selectedSupertypeTitle;
 
   return (
-    <div className="flex gap-8 max-w-7xl mx-auto">
+    <div className="flex gap-8 w-full max-w-7xl mx-auto">
       <Filters
         aside={true}
         filters={filters}

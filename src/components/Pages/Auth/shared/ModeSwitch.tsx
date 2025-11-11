@@ -23,7 +23,6 @@ export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) 
       )}
       condition={mode === "LOGIN"}
       className="w-full"
-      oneLiner={true}
     />
   );
 }

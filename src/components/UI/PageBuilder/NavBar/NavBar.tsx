@@ -8,7 +8,7 @@ export default async function NavBar() {
   const storedLocale = await getPreferredLocale() as LocaleLanguages;
   
   return (
-    <header className="fixed w-full z-10 p-5 md:p-10">
+    <header className="fixed w-full z-20 p-5 md:p-10">
       <NavBarClient
         customerAccessToken={customerAccessToken}
         storedLocale={storedLocale}

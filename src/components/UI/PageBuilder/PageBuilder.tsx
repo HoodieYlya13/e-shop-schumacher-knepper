@@ -2,12 +2,14 @@ import Footer from './Footer';
 import NavBar from './NavBar/NavBar';
 import CustomerGeoInfo from './CustomerGeoInfo/CustomerGeoInfo';
 import clsx from "clsx";
+import Prism from './NavBar/shared/Prism';
 
 interface PageBuilderProps {
   children: React.ReactNode;
   padding?: boolean;
   fullScreen?: boolean;
   showFooter?: boolean;
+  prismBackground?: boolean;
 }
 
 export default function PageBuilder({
@@ -15,17 +17,23 @@ export default function PageBuilder({
   padding = true,
   fullScreen = true,
   showFooter = true,
+  prismBackground = false,
 }: PageBuilderProps) {
   return (
     <div className="flex flex-col bg-primary text-primary font-black">
       <NavBar />
 
-      <div className="flex flex-col min-h-screen">
+      {prismBackground && <Prism />}
+
+      <div className="flex flex-col min-h-screen z-10 w-screen">
         <main
-          className={clsx("grow text-secondary", {
-            "p-4 md:p-8 pt-26 md:pt-36": padding,
-            "min-h-screen": fullScreen,
-          })}
+          className={clsx(
+            "grow text-secondary flex flex-col",
+            {
+              "p-5 md:p-10 pt-26 md:pt-36": padding,
+              "min-h-screen": fullScreen,
+            }
+          )}
         >
           {children}
         </main>

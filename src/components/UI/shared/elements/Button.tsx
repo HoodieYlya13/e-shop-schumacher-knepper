@@ -70,7 +70,7 @@ const Button = ({
 
   if (children2) {
     const childrenClassName = (isLeft: boolean) =>
-      clsx("w-full transition-all duration-500 px-2 py-3", {
+      clsx("flex w-full px-2 py-3 transition-all duration-300 ease-in-out items-center justify-center", {
         "rounded-l-2xl": isLeft,
         "rounded-r-2xl": !isLeft,
         "bg-accent text-ultra-light":
@@ -81,7 +81,7 @@ const Button = ({
   
     return (
       <button
-        className={`${baseButtonClassName} ${importanceClassName} ${className} items-center inline-flex justify-around !p-0`}
+        className={`${baseButtonClassName} ${importanceClassName} ${className} inline-flex justify-around !p-0`}
         {...rest}
         style={style}
       >

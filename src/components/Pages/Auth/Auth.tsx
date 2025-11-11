@@ -27,8 +27,8 @@ export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
   }
 
   return (
-    <section className="max-w-lg mx-auto">
-      <div className="max-w-lg mx-auto p-6 space-y-6 border rounded shadow">
+    <section className="flex flex-1 w-full min-h-full items-center justify-center pb-26 md:pb-36">
+      <div className="max-w-lg w-full mx-auto p-6 space-y-6 rounded-4xl shadow-lg shadow-accent/30 backdrop-blur-md bg-light/50 outline outline-accent/50">
         <ModeSwitch mode={form.mode} handleModeChange={handleModeChange} />
 
         <Form
