@@ -24,6 +24,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   let products = await getProductsByCollectionHandle("supertype_recommandations__Supertype_Recommandations", language); // FIXME: temporary solution
   const areRecommendedProducts = products && products.length > 0;
   if (!areRecommendedProducts) products = await getAllProducts(language);
+  products = products.slice(0, 10);
 
   const carouselDuration = products.length * 4;
 
@@ -69,7 +70,10 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
             } as React.CSSProperties
           }
         >
-          <RecommendedCollection collection={collection} />
+          <RecommendedCollection
+            collection={collection}
+            areRecommendedProducts={areRecommendedProducts}
+          />
           <RecommendedProducts locale={locale} products={products} />
           <SeeAllProductsButton />
         </section>

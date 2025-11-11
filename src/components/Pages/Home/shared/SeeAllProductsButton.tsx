@@ -8,9 +8,9 @@ export default function SeeAllProductsButton() {
 
   return (
     <Button
-      onClick={() => router.push('/products')}
-    >
-      See all products
-    </Button>
+      onClick={() => router.push("/products")}
+      child="See All Products"
+      primary={false}
+    />
   );
 }

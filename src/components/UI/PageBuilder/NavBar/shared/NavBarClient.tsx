@@ -227,40 +227,40 @@ export default function NavBarClient({ customerAccessToken, storedLocale = "en" 
     ? 6 + searchSuggestions.length * 2 + (searchSuggestions.length - 1) * 0.5
     : 4;
 
-    const dynamicHeight = showSearch ? `${suggestionsHeight}rem` : undefined;
-
-    const navBarClasses = clsx(
-      "relative backdrop-blur-md flex mx-auto outline outline-accent/50 rounded-4xl shadow-lg shadow-accent/30 transition-all duration-300 ease-in-out",
-      {
-        "flex-col items-start w-full md:max-w-4xl": showSearch,
-        "h-16 w-full md:max-w-7xl": !showSearch,
-        "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start": showCart,
-        "h-72 md:h-16 md:items-start": showMenu,
-        "bg-secondary/50": showCart || showMenu || showSearch,
-        "bg-light/50": !(showCart || showMenu || showSearch),
-      }
-    );
+  const dynamicHeight = showSearch ? `${suggestionsHeight}rem` : undefined;
   
-    return (
-      <div
-        ref={navBarRef}
-        className={navBarClasses}
-        style={{
-          height: dynamicHeight,
-        }}
-      >
-        <NavBarContent
-          showSearch={showSearch}
-          setShowSearch={setShowSearch}
-          showMenu={showMenu}
-          setShowMenu={setShowMenu}
-          showCart={showCart}
-          setShowCart={setShowCart}
-          searchSuggestions={searchSuggestions}
-          setSearchSuggestions={setSearchSuggestions}
-          storedLocale={storedLocale}
-          customerAccessToken={customerAccessToken}
-        />
-      </div>
-    );
-  }
+  const navBarClasses = clsx(
+    "relative backdrop-blur-md flex mx-auto outline outline-accent/50 rounded-4xl shadow-lg shadow-accent/30 transition-all duration-300 ease-in-out",
+    {
+      "flex-col items-start w-full md:max-w-4xl": showSearch,
+      "h-16 w-full md:max-w-7xl": !showSearch,
+      "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start": showCart,
+      "h-72 md:h-16 md:items-start": showMenu,
+      "bg-secondary/50": showCart || showMenu || showSearch,
+      "bg-light/50": !(showCart || showMenu || showSearch),
+    }
+  );
+
+  return (
+    <div
+      ref={navBarRef}
+      className={navBarClasses}
+      style={{
+        height: dynamicHeight,
+      }}
+    >
+      <NavBarContent
+        showSearch={showSearch}
+        setShowSearch={setShowSearch}
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+        showCart={showCart}
+        setShowCart={setShowCart}
+        searchSuggestions={searchSuggestions}
+        setSearchSuggestions={setSearchSuggestions}
+        storedLocale={storedLocale}
+        customerAccessToken={customerAccessToken}
+      />
+    </div>
+  );
+}

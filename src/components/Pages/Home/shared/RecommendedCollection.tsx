@@ -5,15 +5,21 @@ import Image from 'next/image';
 
 interface RecommendedCollectionProps {
   collection: Collection;
+  areRecommendedProducts?: boolean;
 }
 
-export default function RecommendedCollection({ collection }: RecommendedCollectionProps) {
+export default function RecommendedCollection({ collection, areRecommendedProducts }: RecommendedCollectionProps) {
   return (
     <div className="flex flex-col w-full items-center justify-center gap-4">
       <Image
-        src={collection?.image?.url || "/img/placeholder-recommended-collection.png"}
+        src={
+          collection?.image?.url ||
+          "/img/placeholder-recommended-collection.png"
+        }
         alt={
-          collection?.image?.altText || collection?.title || "Collection Image"
+          collection?.image?.altText ||
+          collection?.title ||
+          "Recommended Collection Image"
         }
         width={1000}
         height={1000}
@@ -22,8 +28,15 @@ export default function RecommendedCollection({ collection }: RecommendedCollect
       />
 
       <div className="flex flex-col items-center text-center break-words">
-        <h1 className="text-xl sm:text-4xl">Nos recommendations</h1>
-        <h2 className="sm:text-2xl font-light">{collection?.description || "Retrouvez nos meilleures recommendations"}</h2>
+        <h1 className="text-xl sm:text-4xl">
+          {areRecommendedProducts ? "Nos recommendations" : "Nos vins"}
+        </h1>
+        <h2 className="sm:text-2xl font-light">
+          {areRecommendedProducts
+            ? collection?.description ||
+              "Retrouvez nos meilleures recommendations"
+            : "Retrouvez tous nos vins"}
+        </h2>
       </div>
     </div>
   );

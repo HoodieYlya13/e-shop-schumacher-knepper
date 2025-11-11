@@ -23,7 +23,7 @@ export default function RecommendedProducts({ locale, products }: RecommendedPro
   }, []);
   
   if (!products || products.length === 0) return null;
-  
+
   const carouselContainerClassName = "flex w-full items-center justify-center";
   const carouselClassName = "flex w-11/12 max-w-7xl overflow-auto p-2 py-8 scrollbar-hide snap-x snap-mandatory";
   const carouselItemClassName =
@@ -47,8 +47,9 @@ export default function RecommendedProducts({ locale, products }: RecommendedPro
         >
           <div
             className={clsx(
-              "flex w-max hover:[animation-play-state:paused]",
-              isSmUp && "sm:animate-scroll-infinite"
+              "flex w-max",
+              isSmUp &&
+                "sm:animate-scroll-infinite hover:[animation-play-state:paused]"
             )}
           >
             {displayedProducts.map((product, index) => (
