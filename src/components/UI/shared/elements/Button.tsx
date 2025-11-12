@@ -30,10 +30,10 @@ const Button = ({
   disabled = false,
   ...rest
 }: ButtonProps) => {
-  const baseButtonClassName = `cursor-pointer rounded-2xl font-black transition duration-300 px-6 py-3 text-base outline min-w-fit ${primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg"} ${!disabled && "hover:scale-105"} ${oneLiner && "whitespace-nowrap"}`;
+  const baseButtonClassName = `${disabled ? "cursor-not-allowed" : "cursor-pointer"} rounded-2xl font-black transition duration-300 px-6 py-3 text-base outline min-w-fit ${primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg"} ${!disabled && "hover:scale-105"} ${oneLiner && "whitespace-nowrap"}`;
 
   const importanceClassName = disabled
-    ? "bg-light text-dark cursor-not-allowed outline-secondary/50 opacity-50 inset-shadow-sm inset-shadow-dark"
+    ? "bg-light text-dark outline-secondary/50 opacity-50 inset-shadow-sm inset-shadow-dark"
     : primary
       ? "bg-gradient-to-b from-ultra-light to-primary text-ultra-dark outline-secondary/50"
       : `bg-gradient-to-b from-ultra-dark to-secondary text-ultra-light outline-accent ${!child2 && "shadow-accent/30"}`;
