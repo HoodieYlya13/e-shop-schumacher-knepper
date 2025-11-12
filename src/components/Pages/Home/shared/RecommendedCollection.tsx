@@ -23,7 +23,7 @@ export default function RecommendedCollection({ collection, areRecommendedProduc
         }
         width={1000}
         height={1000}
-        className="w-30 h-30 sm:w-40 sm:h-40 object-cover rounded-full mr-4"
+        className="w-30 h-30 sm:w-40 sm:h-40 object-cover rounded-full"
         priority
       />
 

@@ -25,7 +25,7 @@ export default function PageBuilder({
 
       {prismBackground && <Prism />}
 
-      <div className="flex flex-col min-h-screen z-10 w-screen">
+      <div className="flex flex-col min-h-screen z-10">
         <main
           className={clsx(
             "grow text-secondary flex flex-col",

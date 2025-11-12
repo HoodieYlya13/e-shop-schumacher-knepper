@@ -20,9 +20,9 @@ const Button = ({
   className = "",
   color = "var(--accent-color)",
   speed = "3.5s",
-  thickness = 1,
-  child: children,
-  child2: children2,
+  thickness = 2,
+  child,
+  child2,
   style,
   primary = true,
   condition = false,
@@ -30,19 +30,18 @@ const Button = ({
   disabled = false,
   ...rest
 }: ButtonProps) => {
-  const baseButtonClassName =
-    `cursor-pointer rounded-2xl font-black transition ${!disabled && "hover:scale-105"} duration-300 px-6 py-3 text-base shadow-md min-w-fit ${oneLiner && "whitespace-nowrap"}`;
+  const baseButtonClassName = `cursor-pointer rounded-2xl font-black transition duration-300 px-6 py-3 text-base outline min-w-fit ${primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg"} ${!disabled && "hover:scale-105"} ${oneLiner && "whitespace-nowrap"}`;
 
   const importanceClassName = disabled
-    ? "bg-light text-dark cursor-not-allowed"
+    ? "bg-light text-dark cursor-not-allowed outline-secondary/50 opacity-50 inset-shadow-sm inset-shadow-dark"
     : primary
-      ? "bg-gradient-to-b from-ultra-light to-primary text-ultra-dark border-primary"
-      : "bg-gradient-to-b from-ultra-dark to-secondary text-ultra-light border-secondary";
+      ? "bg-gradient-to-b from-ultra-light to-primary text-ultra-dark outline-secondary/50"
+      : `bg-gradient-to-b from-ultra-dark to-secondary text-ultra-light outline-accent ${!child2 && "shadow-accent/30"}`;
 
   if (variant === "starborder")
     return (
       <button
-        className={`${baseButtonClassName} relative overflow-hidden`}
+        className={`${baseButtonClassName} shadow-ultra-dark relative overflow-hidden outline-hidden`}
         {...rest}
         style={{
           padding: `${thickness}px 0`,
@@ -64,32 +63,38 @@ const Button = ({
           }}
         ></div>
         <div
-          className={`${baseButtonClassName} ${importanceClassName} relative z-1 border !scale-100 hover:!scale-100 ${className}`}
+          className={`${baseButtonClassName} ${importanceClassName} border-secondary outline-hidden relative z-1 border !scale-100 hover:!scale-100 ${className}`}
         >
-          {children}
+          {child}
         </div>
       </button>
     );
 
-  if (children2) {
-    const childrenClassName = (isLeft: boolean) =>
-      clsx("flex w-full px-2 py-3 transition-all duration-300 ease-in-out items-center justify-center", {
-        "rounded-l-2xl": isLeft,
-        "rounded-r-2xl": !isLeft,
-        "bg-accent text-ultra-light":
-          primary && ((isLeft && condition) || (!isLeft && !condition)),
-        "bg-primary text-ultra-dark":
-          !primary && ((isLeft && !condition) || (!isLeft && condition)),
-      });
+  if (child2) {
+    const childClassName = (isLeft: boolean) =>
+      clsx(
+        "flex w-full px-2 py-3 transition-all duration-300 ease-in-out items-center justify-center",
+        {
+          "rounded-l-2xl": isLeft,
+          "rounded-r-2xl": !isLeft,
+          "border-r border-dark": isLeft && condition,
+          "border-l border-dark": !isLeft && !condition,
+          "inset-shadow-sm inset-shadow-dark": (isLeft && !condition) || (!isLeft && condition),
+          "bg-accent text-ultra-light":
+            primary && ((isLeft && condition) || (!isLeft && !condition)),
+          "bg-primary text-ultra-dark":
+            !primary && ((isLeft && !condition) || (!isLeft && condition)),
+        }
+      );
   
     return (
       <button
-        className={`${baseButtonClassName} ${importanceClassName} ${className} inline-flex justify-around !p-0`}
+        className={`${baseButtonClassName} ${importanceClassName} ${className} outline-secondary/50 inline-flex justify-around !p-0`}
         {...rest}
         style={style}
       >
-        <div className={childrenClassName(true)}>{children}</div>
-        <div className={childrenClassName(false)}>{children2}</div>
+        <div className={childClassName(true)}>{child}</div>
+        <div className={childClassName(false)}>{child2}</div>
       </button>
     );
   }
@@ -100,7 +105,7 @@ const Button = ({
       {...rest}
       style={style}
     >
-      {children}
+      {child}
     </button>
   );
 };

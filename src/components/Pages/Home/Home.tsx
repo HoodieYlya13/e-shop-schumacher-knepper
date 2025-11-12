@@ -34,7 +34,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
         className="h-screen w-full bg-cover bg-center relative shadow-2xl text-primary"
         style={homeSectionStyle}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-ultra-dark to-light opacity-20"></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-ultra-dark to-dark opacity-30"></div>
 
         <div className="flex flex-col gap-8 justify-center items-center text-8xl xs:text-9xl h-screen break-words">
           <div className="flex flex-col items-center">
