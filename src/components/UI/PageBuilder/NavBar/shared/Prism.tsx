@@ -453,7 +453,7 @@ const Prism: React.FC<PrismProps> = ({
     suspendWhenOffscreen
   ]);
 
-  return <div className="fixed w-full h-full bg-ultra-dark" ref={containerRef} />;
+  return <div className="fixed w-full h-full bg-ultra-dark hidden sm:flex" ref={containerRef} />;
 };
 
 export default Prism;

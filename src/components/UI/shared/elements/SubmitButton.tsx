@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import React from "react";
+import Button from "./Button";
 
 interface SubmitButtonProps {
   label: string;
@@ -7,21 +7,19 @@ interface SubmitButtonProps {
   disabled?: boolean;
 }
 
-export default function SubmitButton({ label, error, disabled }: SubmitButtonProps) {
+export default function SubmitButton({
+  label,
+  error,
+  disabled,
+}: SubmitButtonProps) {
   return (
     <>
-      <button
+      <Button
         type="submit"
         disabled={disabled}
-        className={clsx(
-          "w-full py-2 rounded cursor-pointer",
-          disabled
-            ? "bg-light text-dark cursor-not-allowed"
-            : "bg-secondary text-primary"
-        )}
-      >
-        {label}
-      </button>
+        child={label}
+        className="w-full"
+      />
       {error && <p className="text-sm text-red-500">{error}</p>}
     </>
   );

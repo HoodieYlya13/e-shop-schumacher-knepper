@@ -27,14 +27,17 @@ const Button = ({
   primary = true,
   condition = false,
   oneLiner = false,
+  disabled = false,
   ...rest
 }: ButtonProps) => {
   const baseButtonClassName =
-    `cursor-pointer rounded-2xl font-black transition hover:scale-105 duration-300 px-6 py-3 text-base shadow-md min-w-fit ${oneLiner && "whitespace-nowrap"}`;
-  
-  const importanceClassName = primary
-    ? "bg-gradient-to-b from-ultra-light to-primary text-ultra-dark border-primary"
-    : "bg-gradient-to-b from-ultra-dark to-secondary text-ultra-light border-secondary";
+    `cursor-pointer rounded-2xl font-black transition ${!disabled && "hover:scale-105"} duration-300 px-6 py-3 text-base shadow-md min-w-fit ${oneLiner && "whitespace-nowrap"}`;
+
+  const importanceClassName = disabled
+    ? "bg-light text-dark cursor-not-allowed"
+    : primary
+      ? "bg-gradient-to-b from-ultra-light to-primary text-ultra-dark border-primary"
+      : "bg-gradient-to-b from-ultra-dark to-secondary text-ultra-light border-secondary";
 
   if (variant === "starborder")
     return (
