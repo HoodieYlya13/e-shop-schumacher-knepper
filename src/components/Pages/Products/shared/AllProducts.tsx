@@ -631,7 +631,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
   return (
     <div className="flex gap-8 w-full max-w-7xl mx-auto">
       <Filters
-        aside={true}
+        aside
         filters={filters}
         selectedFilters={selectedFilters}
         setSelectedFilters={setSelectedFilters}

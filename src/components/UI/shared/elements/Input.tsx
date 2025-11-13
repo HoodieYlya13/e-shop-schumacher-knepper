@@ -46,6 +46,43 @@ function VisibilityButton({
   );
 }
 
+interface CheckMarkIconProps {
+  checkedValue?: boolean;
+  disabled?: boolean;
+};
+
+function CheckMarkIcon({ checkedValue, disabled }: CheckMarkIconProps) {
+  const [checked, setChecked] = useState(false);
+  useEffect(() => {
+    if (checkedValue !== undefined) setChecked(checkedValue);
+  }, [checkedValue]);
+  
+  return (
+    <div
+      onClick={() => {
+        if (!disabled) setChecked(!checked);
+      }}
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="24px"
+        viewBox="0 -960 960 960"
+        width="24px"
+        fill="currentColor"
+        className="w-full h-full"
+      >
+        <path
+          d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
+          className={clsx(
+            "transition-opacity duration-200 ease-in-out",
+            checked ? "opacity-100" : "opacity-0"
+          )}
+        />
+      </svg>
+    </div>
+  );
+}
+
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: React.HTMLInputTypeAttribute;
   label?: string;
@@ -57,6 +94,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   focusOnMount?: boolean;
   defaultCountry?: CountryCode;
   setValue?: UseFormSetValue<FieldValues>;
+  disabled?: boolean;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -87,6 +125,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const [flagFocused, setFlagFocused] = useState(false);
     const [touched, setTouched] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [checked, setChecked] = useState(false);
 
     const internalRef = useRef<HTMLInputElement>(null);
     const combinedRef = (node: HTMLInputElement | null) => {
@@ -96,8 +135,19 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       internalRef.current = node;
     };
 
+    useEffect(() => {
+      if (rest.checked !== undefined) {
+        setChecked(rest.checked);
+        if (rest.disabled === undefined)
+          console.warn(
+            "Input with controlled checked state should also have disabled prop to avoid unexpected behavior."
+          );
+      }
+      else if (rest.defaultChecked !== undefined)
+        setChecked(rest.defaultChecked);
+    }, [rest.checked, rest.defaultChecked]);
+
     const focusedBorderColor = "border-accent";
-    const onFocusedBorderColor = `focus:${focusedBorderColor}`;
     const borderColor = clsx(
       focused
         ? focusedBorderColor
@@ -106,8 +156,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           : "border-ultra-light/20"
     );
     const baseInputClassName = clsx(
-      `px-2 items-center w-full liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ${onFocusedBorderColor} ${borderColor}`,
-      type === "tel" ? "inline-flex" : "py-3"
+      "items-center liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ease-in-out focus:border-accent",
+      type === "tel" && "inline-flex",
+      type === "checkbox" ? "rounded-lg w-6 h-6 peer-has-focus:border-accent" : "w-full px-2",
+      type !== "checkbox" && type !== "tel" && "py-3",
+      borderColor,
+      rest.disabled || rest.checked !== undefined
+        ? "cursor-not-allowed inset-shadow-sm inset-shadow-dark"
+        : type === "checkbox" && "cursor-pointer"
     );
 
     useEffect(() => {
@@ -152,6 +208,33 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       optionalTag && !required ? ` (${t("OPTIONAL")})` : ""
     }`;
 
+    if (type === "checkbox")
+      return (
+        <div className="flex gap-2">
+          <label className="sr-only peer">
+            <input
+              {...rest}
+              ref={combinedRef}
+              type="checkbox"
+              name="acceptsMarketing"
+              onClick={() => setChecked(!checked)}
+              id={rest.id}
+            />
+          </label>
+
+          <label
+            htmlFor={rest.id}
+            className={baseInputClassName}
+          >
+            <CheckMarkIcon
+              checkedValue={checked}
+              disabled={rest.disabled || rest.checked !== undefined}
+            />
+          </label>
+          <span>{combinedPlaceholder}</span>
+        </div>
+      );
+
     return (
       <div className="flex flex-col gap-1">
         <div className="relative input-focus-glow">
@@ -174,6 +257,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                     setCountry(e.target.value as CountryCode);
                     internalRef.current?.focus();
                   }}
+                  disabled={rest.disabled}
                 >
                   {countries.map(({ code, name }) => (
                     <option key={code} value={code}>
@@ -206,7 +290,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 type="tel"
                 placeholder={combinedPlaceholder}
                 required={required}
-                className="grow py-3 border-none outline-hidden"
+                disabled={rest.disabled}
+                className={clsx("grow py-3 border-none outline-hidden",
+                  rest.disabled && "cursor-not-allowed"
+                )}
                 ref={combinedRef}
                 value={phoneNumber || ""}
                 autoComplete={rest.autoComplete}

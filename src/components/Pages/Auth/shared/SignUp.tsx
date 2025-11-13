@@ -82,14 +82,15 @@ export default function SignUp({ register, setValue, errors }: SignUpProps) {
         defaultCountry={(getCustomerCountryClient() || "LU") as CountryCode}
       />
 
-      <label className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          defaultChecked
-          {...register("acceptsMarketing")}
-        />
-        <span>{t("ACCEPTS_MARKETING")}</span>
-      </label>
+      <Input
+        type="checkbox"
+        defaultChecked
+        {...register("acceptsMarketing")}
+        label={t("ACCEPTS_MARKETING")}
+        optionalTag
+        required={false}
+        id="acceptsMarketing"
+      />
     </>
   );
 }
