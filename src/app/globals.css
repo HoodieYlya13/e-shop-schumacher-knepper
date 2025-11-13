@@ -64,3 +64,21 @@
     scrollbar-width: none !important; /* For Firefox */
   }
 }
+
+.input-focus-glow:focus-within::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1rem;
+  width: 100%;
+  background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+  filter: blur(2rem);
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.liquid-glass-backdrop {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Safari support */
+}

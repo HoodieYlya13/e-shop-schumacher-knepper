@@ -49,8 +49,6 @@ function VisibilityButton({
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   type: React.HTMLInputTypeAttribute;
   label?: string;
-  labelIsPlaceholder?: boolean;
-  placeholder?: string;
   successText?: string;
   errorText?: string;
   required?: boolean;
@@ -66,8 +64,6 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     {
       type,
       label,
-      labelIsPlaceholder = true,
-      placeholder,
       successText,
       errorText,
       required = true,
@@ -100,11 +96,22 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       internalRef.current = node;
     };
 
+    const focusedBorderColor = "border-accent";
+    const onFocusedBorderColor = `focus:${focusedBorderColor}`;
+    const borderColor = clsx(
+      focused
+        ? focusedBorderColor
+        : errorText
+          ? "border-invalid"
+          : "border-ultra-light/20"
+    );
+    const baseInputClassName = clsx(
+      `px-2 items-center w-full liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ${onFocusedBorderColor} ${borderColor}`,
+      type === "tel" ? "inline-flex" : "py-3"
+    );
+
     useEffect(() => {
-      if (!errorText) {
-        setShowError(false);
-        return;
-      }
+      if (!errorText) return setShowError(false);
 
       const timeout = setTimeout(() => {
         setShowError(true);
@@ -114,9 +121,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     }, [errorText]);
 
     useEffect(() => {
-      if (focusOnMount && internalRef.current) {
-        internalRef.current.focus();
-      }
+      if (focusOnMount && internalRef.current) internalRef.current.focus();
     }, [focusOnMount]);
 
     useEffect(() => {
@@ -143,129 +148,112 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       name: getPhoneInputLabels()[code] || code,
     }));
 
-    const combinedPlaceholder =
-      placeholder ||
-      (labelIsPlaceholder ? label : "") +
-        (optionalTag && !required ? ` (${t("OPTIONAL")})` : "");
+    const combinedPlaceholder = `${label || ""}${required && requiredTag ? " *" : ""}${
+      optionalTag && !required ? ` (${t("OPTIONAL")})` : ""
+    }`;
 
     return (
-      <>
-        {label && (
-          <label className="block mb-2 text-sm font-medium text-dark">
-            {label}
-            {required && requiredTag && <span className="text-invalid">*</span>}
-            {optionalTag && !required && <span> ({t("OPTIONAL")})</span>}
-          </label>
-        )}
+      <div className="flex flex-col gap-1">
+        <div className="relative input-focus-glow">
+          {type === "tel" ? (
+            <div className={baseInputClassName}>
+              <div className="PhoneInputCountry">
+                <select
+                  className="PhoneInputCountrySelect"
+                  value={country}
+                  onFocus={() => {
+                    setFlagFocused(true);
+                    setFocused(true);
+                  }}
+                  onBlur={() => {
+                    setFlagFocused(false);
+                    setFocused(false);
+                  }}
+                  onChange={(e) => {
+                    setFocused(true);
+                    setCountry(e.target.value as CountryCode);
+                    internalRef.current?.focus();
+                  }}
+                >
+                  {countries.map(({ code, name }) => (
+                    <option key={code} value={code}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+                <Image
+                  src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
+                  alt={country || "Country Flag"}
+                  className={clsx(
+                    "PhoneInputCountryIcon w-6 h-4 object-cover border",
+                    { [focusedBorderColor]: flagFocused }
+                  )}
+                  width={24}
+                  height={16}
+                />
+                <div
+                  className="PhoneInputCountrySelectArrow"
+                  style={{
+                    borderColor: flagFocused ? "#2b7fff" : "currentColor",
+                  }}
+                />
+              </div>
+              <span className="mx-2 text-dark">
+                {country ? `+${getCountryCallingCode(country)}` : ""}
+              </span>
 
-        {type === "tel" ? (
-          <div
-            className={clsx(
-              "inline-flex items-center px-2 w-full border rounded outline-none transition-all duration-300",
-              focused
-                ? "border-accent"
-                : errorText
-                  ? "border-invalid"
-                  : "border-light"
-            )}
-          >
-            <div className="PhoneInputCountry">
-              <select
-                className="PhoneInputCountrySelect"
-                value={country}
-                onFocus={() => {
-                  setFlagFocused(true);
-                  setFocused(true);
-                }}
+              <input
+                type="tel"
+                placeholder={combinedPlaceholder}
+                required={required}
+                className="grow py-3 border-none outline-hidden"
+                ref={combinedRef}
+                value={phoneNumber || ""}
+                autoComplete={rest.autoComplete}
                 onBlur={() => {
-                  setFlagFocused(false);
                   setFocused(false);
+                  setTouched(true);
                 }}
+                onFocus={() => setFocused(true)}
                 onChange={(e) => {
-                  setFocused(true);
-                  setCountry(e.target.value as CountryCode);
-                  internalRef.current?.focus();
-                }}
-              >
-                {countries.map(({ code, name }) => (
-                  <option key={code} value={code}>
-                    {name}
-                  </option>
-                ))}
-              </select>
-              <Image
-                src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
-                alt={country || "Country Flag"}
-                className={clsx(
-                  "PhoneInputCountryIcon w-6 h-4 object-cover border",
-                  { "border-accent": flagFocused }
-                )}
-                width={24}
-                height={16}
-              />
-              <div
-                className="PhoneInputCountrySelectArrow"
-                style={{
-                  borderColor: flagFocused ? "#2b7fff" : "currentColor",
+                  setPhoneNumber(e.target.value);
+                  if (touched) setPhoneNumber(e.target.value);
                 }}
               />
             </div>
-            <span className="mx-2 text-dark">
-              {country ? `+${getCountryCallingCode(country)}` : ""}
-            </span>
-
-            <input
-              type="tel"
-              placeholder={combinedPlaceholder}
-              required={required}
-              className="grow py-2 border-none outline-hidden"
-              ref={combinedRef}
-              value={phoneNumber || ""}
-              autoComplete={rest.autoComplete}
-              onBlur={() => {
-                setFocused(false);
-                setTouched(true);
-              }}
-              onFocus={() => {
-                setFocused(true);
-              }}
-              onChange={(e) => {
-                setPhoneNumber(e.target.value);
-                if (touched) setPhoneNumber(e.target.value);
-              }}
-            />
-          </div>
-        ) : (
-          <div className="relative">
-            <input
-              {...rest}
-              type={
-                type !== "password" ? type : showPassword ? "text" : "password"
-              }
-              placeholder={combinedPlaceholder}
-              required={required}
-              className={clsx(
-                "w-full p-2 border rounded outline-none focus:border-accent transition-all duration-300",
-                errorText ? "border-invalid" : "border-light"
-              )}
-              ref={combinedRef}
-              autoComplete={rest.autoComplete}
-            />
-
-            {type === "password" && (
-              <VisibilityButton
-                showPassword={showPassword}
-                setShowPassword={setShowPassword}
+          ) : (
+            <div className="relative">
+              <input
+                {...rest}
+                type={
+                  type !== "password"
+                    ? type
+                    : showPassword
+                      ? "text"
+                      : "password"
+                }
+                placeholder={combinedPlaceholder}
+                required={required}
+                className={baseInputClassName}
+                ref={combinedRef}
+                autoComplete={rest.autoComplete}
               />
-            )}
-          </div>
-        )}
+
+              {type === "password" && (
+                <VisibilityButton
+                  showPassword={showPassword}
+                  setShowPassword={setShowPassword}
+                />
+              )}
+            </div>
+          )}
+        </div>
 
         {successText && <p className="text-sm text-valid">{successText}</p>}
         {showError && errorText && (
           <p className="text-sm text-invalid">{errorText}</p>
         )}
-      </>
+      </div>
     );
   }
 );

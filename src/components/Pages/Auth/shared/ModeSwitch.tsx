@@ -10,19 +10,20 @@ interface ModeSwitchProps {
 
 export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) {
   const t = useTranslations('AUTH');
-  const changeMode: Mode = mode === "LOGIN" ? "REGISTER" : "LOGIN";
+  const child2: Mode =
+    mode !== "RESET_PASSWORD" && mode !== "PASSWORD_RECOVERY"
+      ? "REGISTER"
+      : mode;
 
   return (
     <Button
-      onClick={() => handleModeChange(changeMode)}
+      onClick={() => handleModeChange("LOGIN")}
       child={t("LOGIN")}
-      child2={t(
-        mode !== "RESET_PASSWORD" && mode !== "PASSWORD_RECOVERY"
-          ? "REGISTER"
-          : mode
-      )}
+      child2={t(child2)}
+      onClick2={() => handleModeChange(child2)}
       condition={mode === "LOGIN"}
       className="w-full"
+      oneLiner={true}
     />
   );
 }

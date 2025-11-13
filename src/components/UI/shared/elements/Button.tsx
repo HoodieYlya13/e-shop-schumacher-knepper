@@ -6,6 +6,7 @@ type ButtonProps = {
   className?: string;
   child?: React.ReactNode;
   child2?: React.ReactNode;
+  onClick2?: React.MouseEventHandler<HTMLButtonElement>;
   color?: string;
   speed?: React.CSSProperties["animationDuration"];
   thickness?: number;
@@ -23,6 +24,7 @@ const Button = ({
   thickness = 2,
   child,
   child2,
+  onClick2,
   style,
   primary = true,
   condition = false,
@@ -75,10 +77,8 @@ const Button = ({
       clsx(
         "flex w-full px-2 py-3 transition-all duration-300 ease-in-out items-center justify-center",
         {
-          "rounded-l-2xl": isLeft,
+          "rounded-l-2xl border-r border-dark": isLeft,
           "rounded-r-2xl": !isLeft,
-          "border-r border-dark": isLeft && condition,
-          "border-l border-dark": !isLeft && !condition,
           "inset-shadow-sm inset-shadow-dark": (isLeft && !condition) || (!isLeft && condition),
           "bg-accent text-ultra-light":
             primary && ((isLeft && condition) || (!isLeft && !condition)),
@@ -88,14 +88,17 @@ const Button = ({
       );
   
     return (
-      <button
+      <div
         className={`${baseButtonClassName} ${importanceClassName} ${className} outline-secondary/50 inline-flex justify-around !p-0`}
-        {...rest}
         style={style}
       >
-        <div className={childClassName(true)}>{child}</div>
-        <div className={childClassName(false)}>{child2}</div>
-      </button>
+        <button {...rest} className={childClassName(true)}>
+          {child}
+        </button>
+        <button {...rest} onClick={onClick2} className={childClassName(false)}>
+          {child2}
+        </button>
+      </div>
     );
   }
 
