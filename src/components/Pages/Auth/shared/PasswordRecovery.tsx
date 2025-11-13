@@ -3,6 +3,7 @@ import Input from "../../../UI/shared/elements/Input";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { PasswordRecoveryValue } from "@/schemas/authSchema";
 import { useMemo } from "react";
+import Button from "@/components/UI/shared/elements/Button";
 
 interface PasswordRecoveryProps {
   register: UseFormRegister<PasswordRecoveryValue>;
@@ -57,16 +58,13 @@ export default function PasswordRecovery({
 
       {successText && emailProviderLink && (
         // TODO maybe a lighter color?
-        <p className="text-sm text-dark mt-2"> 
+        <p className="text-sm text-dark mt-2">
           {t("CHECK_YOUR_EMAIL")}{" "}
-          <a
-            href={emailProviderLink.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-accent hover:underline"
-          >
-            {emailProviderLink.name}
-          </a>
+          <Button
+            link={emailProviderLink.url}
+            className="text-accent"
+            child={emailProviderLink.name}
+          />
         </p>
       )}
     </>

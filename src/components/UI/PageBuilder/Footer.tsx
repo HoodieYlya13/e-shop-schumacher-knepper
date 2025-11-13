@@ -1,6 +1,7 @@
 import { getShopName } from "@/lib/services/store-front/shop";
 import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
 import { getTranslations } from "next-intl/server";
+import Button from "../shared/elements/Button";
 
 export default async function Footer() {
   const locale = await getPreferredLocale();
@@ -14,14 +15,14 @@ export default async function Footer() {
           <h1 className="text-xl">Le domaine</h1>
           <div>
             Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry&#39;s standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            industry. Lorem Ipsum has been the industry&#39;s standard dummy
+            text ever since the 1500s, when an unknown printer took a galley of
+            type and scrambled it to make a type specimen book. It has survived
+            not only five centuries, but also the leap into electronic
+            typesetting, remaining essentially unchanged. It was popularised in
+            the 1960s with the release of Letraset sheets containing Lorem Ipsum
+            passages, and more recently with desktop publishing software like
+            Aldus PageMaker including versions of Lorem Ipsum.
           </div>
         </div>
 
@@ -29,14 +30,14 @@ export default async function Footer() {
           <h1 className="text-xl">Nous contacter</h1>
           <div>
             Lorem Ipsum is simply dummy text of the printing and typesetting
-            industry. Lorem Ipsum has been the industry&#39;s standard dummy text
-            ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not
-            only five centuries, but also the leap into electronic typesetting,
-            remaining essentially unchanged. It was popularised in the 1960s
-            with the release of Letraset sheets containing Lorem Ipsum passages,
-            and more recently with desktop publishing software like Aldus
-            PageMaker including versions of Lorem Ipsum.
+            industry. Lorem Ipsum has been the industry&#39;s standard dummy
+            text ever since the 1500s, when an unknown printer took a galley of
+            type and scrambled it to make a type specimen book. It has survived
+            not only five centuries, but also the leap into electronic
+            typesetting, remaining essentially unchanged. It was popularised in
+            the 1960s with the release of Letraset sheets containing Lorem Ipsum
+            passages, and more recently with desktop publishing software like
+            Aldus PageMaker including versions of Lorem Ipsum.
           </div>
         </div>
       </div>
@@ -44,13 +45,10 @@ export default async function Footer() {
       <p className="text-sm text-dark text-center">
         &copy; {new Date().getFullYear()}{" "}
         <span>
-          <a
-            href="https://www.schumacher-knepper.lu/"
-            target="blank"
-            className="underline"
-          >
-            {t("WELCOME", { shopName })}
-          </a>
+          <Button
+            link="https://www.schumacher-knepper.lu/"
+            child={t("WELCOME", { shopName })}
+          />
         </span>
         . {t("ALL_RIGHTS_RESERVED")}
       </p>

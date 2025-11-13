@@ -1,12 +1,15 @@
 import clsx from "clsx";
+import Link from "next/link";
 import React from "react";
 
 type ButtonProps = {
-  variant?: "default" | "starborder";
+  variant?: "default" | "starborder" | "link";
   className?: string;
   child?: React.ReactNode;
   child2?: React.ReactNode;
   onClick2?: React.MouseEventHandler<HTMLButtonElement>;
+  link?: string;
+  linkTarget?: string;
   color?: string;
   speed?: React.CSSProperties["animationDuration"];
   thickness?: number;
@@ -25,6 +28,8 @@ const Button = ({
   child,
   child2,
   onClick2,
+  link,
+  linkTarget = "_blank",
   style,
   primary = true,
   condition = false,
@@ -32,6 +37,38 @@ const Button = ({
   disabled = false,
   ...rest
 }: ButtonProps) => {
+  if (link || variant === "link") {
+    const linkClassName = clsx(
+      "underline outline-none transition duration-300 px-0 py-0 min-w-fit",
+      { "cursor-not-allowed opacity-50": disabled },
+      className
+    );
+
+    if (!link)
+      return (
+        <button
+          className={linkClassName}
+          disabled={disabled}
+          {...rest}
+          style={style}
+        >
+          {child}
+        </button>
+      );
+
+    return (
+      <Link
+        href={link}
+        target={linkTarget}
+        rel={linkTarget === "_blank" ? "noopener noreferrer" : undefined}
+        className={linkClassName}
+        style={style}
+      >
+        {child}
+      </Link>
+    );
+  }
+
   const baseButtonClassName = `${disabled ? "cursor-not-allowed" : "cursor-pointer"} rounded-2xl font-black transition duration-300 px-6 py-3 text-base outline min-w-fit ${primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg"} ${!disabled && "hover:scale-105"} ${oneLiner && "whitespace-nowrap"}`;
 
   const importanceClassName = disabled

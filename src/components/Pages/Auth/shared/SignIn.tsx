@@ -2,6 +2,7 @@ import { useTranslations } from "next-intl";
 import Input from "../../../UI/shared/elements/Input";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 import { LoginValues } from "@/schemas/authSchema";
+import Button from "@/components/UI/shared/elements/Button";
 
 interface SignInProps {
   register: UseFormRegister<LoginValues>;
@@ -33,14 +34,12 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
         autoComplete="current-password"
       />
 
-      <div className="flex justify-end text-sm">
-        <button
-          type="button"
+      <div className="flex justify-end text-sm text-accent">
+        <Button
           onClick={() => handleModeChange("PASSWORD_RECOVERY")}
-          className="text-accent hover:underline"
-        >
-          {t("FORGOT_PASSWORD")}
-        </button>
+          child={t("FORGOT_PASSWORD")}
+          variant="link"
+        />
       </div>
     </>
   );
