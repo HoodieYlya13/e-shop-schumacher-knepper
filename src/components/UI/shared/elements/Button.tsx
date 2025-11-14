@@ -40,7 +40,7 @@ const Button = ({
   if (link || variant === "link") {
     const linkClassName = clsx(
       "underline outline-none transition duration-300 px-0 py-0 min-w-fit",
-      { "cursor-not-allowed opacity-50": disabled },
+      disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105",
       className
     );
 

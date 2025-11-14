@@ -51,7 +51,7 @@ function SearchSuggestions({ searchSuggestions, storedLocale }: SearchSuggestion
                 className="object-cover rounded"
               />
             )}
-            <p className="flex-grow truncate overflow-hidden whitespace-nowrap">
+            <p className="grow truncate overflow-hidden whitespace-nowrap">
               {suggestion.title}
             </p>{" "}
           </div>
@@ -100,7 +100,7 @@ function NavBarContent({
           />
         </div>
 
-        {/* TODO: navigate with arrow keys */}
+        {/* TODO: navigate with arrow keys and escape */}
         {!!searchSuggestions && (
           <SearchSuggestions
             searchSuggestions={searchSuggestions}

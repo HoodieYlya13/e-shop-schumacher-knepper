@@ -13,7 +13,7 @@ export default async function AuthPage() {
   const initialMode = await getInitialAuthMode();
   const resetPasswordUrl = await getResetPasswordUrl();
   return (
-    <PageBuilder padding={false} showFooter={false} prismBackground={true} fullScreen={false} >
+    <PageBuilder padding={false} showFooter={false} auroraBackground={true} fullScreen={false} >
       <Auth initialMode={initialMode} resetPasswordUrl={resetPasswordUrl} />
     </PageBuilder>
   );

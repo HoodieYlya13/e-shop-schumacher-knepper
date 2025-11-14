@@ -142,10 +142,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           console.warn(
             "Input with controlled checked state should also have disabled prop to avoid unexpected behavior."
           );
-      }
-      else if (rest.defaultChecked !== undefined)
+      } else if (rest.defaultChecked !== undefined)
         setChecked(rest.defaultChecked);
-    }, [rest.checked, rest.defaultChecked]);
+    }, [rest.checked, rest.defaultChecked, rest.disabled]);
 
     const focusedBorderColor = "border-accent";
     const borderColor = clsx(
@@ -156,7 +155,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           : "border-ultra-light/20"
     );
     const baseInputClassName = clsx(
-      "items-center liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ease-in-out focus:border-accent",
+      "items-center liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ease-in-out focus:border-accent placeholder:text-dark",
       type === "tel" && "inline-flex",
       type === "checkbox" ? "rounded-lg w-6 h-6 peer-has-focus:border-accent" : "w-full px-2",
       type !== "checkbox" && type !== "tel" && "py-3",
@@ -291,7 +290,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 placeholder={combinedPlaceholder}
                 required={required}
                 disabled={rest.disabled}
-                className={clsx("grow py-3 border-none outline-hidden",
+                className={clsx("grow py-3 border-none outline-hidden placeholder:text-dark",
                   rest.disabled && "cursor-not-allowed"
                 )}
                 ref={combinedRef}

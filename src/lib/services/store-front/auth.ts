@@ -32,7 +32,7 @@ export async function createCustomerAccount(
     acceptsMarketing?: boolean;
   },
   locale: LocaleLanguages = defaultLocale
-) {  
+) {
   const response = await shopifyServerFetch(REGISTER_MUTATION, { input }) as CustomerCreateResponse;
 
   const id = response.customerCreate?.customer?.id;

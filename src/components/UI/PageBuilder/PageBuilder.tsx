@@ -2,14 +2,14 @@ import Footer from './Footer';
 import NavBar from './NavBar/NavBar';
 import CustomerGeoInfo from './CustomerGeoInfo/CustomerGeoInfo';
 import clsx from "clsx";
-import Prism from './NavBar/shared/Prism';
+import Aurora from './NavBar/shared/Aurora';
 
 interface PageBuilderProps {
   children: React.ReactNode;
   padding?: boolean;
   fullScreen?: boolean;
   showFooter?: boolean;
-  prismBackground?: boolean;
+  auroraBackground?: boolean;
 }
 
 export default function PageBuilder({
@@ -17,13 +17,13 @@ export default function PageBuilder({
   padding = true,
   fullScreen = true,
   showFooter = true,
-  prismBackground = false,
+  auroraBackground = false,
 }: PageBuilderProps) {
   return (
     <div className="flex flex-col bg-primary text-primary font-black">
       <NavBar />
 
-      {prismBackground && <Prism />}
+      {auroraBackground && <Aurora speed={0.2} />}
 
       <div className="flex flex-col min-h-screen z-10">
         <main
