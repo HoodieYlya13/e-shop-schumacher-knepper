@@ -12,21 +12,26 @@ import { getPhoneInputLabels } from "@/i18n/utils";
 interface VisibilityButtonProps {
   showPassword: boolean;
   setShowPassword: React.Dispatch<React.SetStateAction<boolean>>;
-};
+  inputRef: React.RefObject<HTMLInputElement | null>;
+}
 
-function VisibilityButton({
-  showPassword,
-  setShowPassword,
-}: VisibilityButtonProps) {
+function VisibilityButton({ showPassword, setShowPassword, inputRef }: VisibilityButtonProps) {
   return (
     <button
       type="button"
-      onMouseDown={() => setShowPassword(true)}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        setShowPassword(true);
+        inputRef.current?.focus();
+      }}
       onMouseUp={() => setShowPassword(false)}
-      onTouchStart={() => setShowPassword(true)}
+      onTouchStart={() => {
+        setShowPassword(true);
+        inputRef.current?.focus();
+      }}
       onTouchEnd={() => setShowPassword(false)}
       onContextMenu={(e) => e.preventDefault()}
-      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-accent opacity-80 hover:opacity-100 transition hover:scale-110 duration-300 cursor-pointer"
+      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-accent-dark opacity-80 hover:opacity-100 transition hover:scale-110 duration-300 cursor-pointer"
       tabIndex={-1}
     >
       <svg
@@ -268,14 +273,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                   src={`https://purecatamphetamine.github.io/country-flag-icons/3x2/${country}.svg`}
                   alt={country || "Country Flag"}
                   className={clsx(
-                    "PhoneInputCountryIcon w-6 h-4 object-cover border",
+                    "PhoneInputCountryIcon w-6 h-4 object-cover border shrink-0",
                     { [focusedBorderColor]: flagFocused }
                   )}
                   width={24}
                   height={16}
                 />
                 <div
-                  className="PhoneInputCountrySelectArrow"
+                  className="PhoneInputCountrySelectArrow shrink-0"
                   style={{
                     borderColor: flagFocused ? "#2b7fff" : "currentColor",
                   }}
@@ -290,7 +295,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 placeholder={combinedPlaceholder}
                 required={required}
                 disabled={rest.disabled}
-                className={clsx("grow py-3 border-none outline-hidden placeholder:text-dark",
+                className={clsx("grow py-3 border-none outline-hidden placeholder:text-dark w-full",
                   rest.disabled && "cursor-not-allowed"
                 )}
                 ref={combinedRef}
@@ -329,6 +334,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 <VisibilityButton
                   showPassword={showPassword}
                   setShowPassword={setShowPassword}
+                  inputRef={internalRef}
                 />
               )}
             </div>

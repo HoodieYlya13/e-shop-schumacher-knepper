@@ -23,15 +23,15 @@ export default function PageBuilder({
     <div className="flex flex-col bg-primary text-primary font-black">
       <NavBar />
 
-      {auroraBackground && <Aurora speed={0.2} />}
+      {auroraBackground && <Aurora speed={0.3} />}
 
-      <div className="flex flex-col min-h-screen z-10">
+      <div className="flex flex-col min-h-dvh z-10">
         <main
           className={clsx(
             "grow text-secondary flex flex-col",
             {
               "p-5 md:p-10 pt-26 md:pt-36": padding,
-              "min-h-screen": fullScreen,
+              "min-h-dvh": fullScreen,
             }
           )}
         >

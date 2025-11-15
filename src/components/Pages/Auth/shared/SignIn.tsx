@@ -34,7 +34,7 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
         autoComplete="current-password"
       />
 
-      <div className="flex justify-end text-sm text-accent">
+      <div className="flex justify-end text-sm text-accent-dark">
         <Button
           onClick={() => handleModeChange("PASSWORD_RECOVERY")}
           child={t("FORGOT_PASSWORD")}
