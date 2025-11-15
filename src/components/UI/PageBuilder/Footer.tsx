@@ -9,7 +9,7 @@ export default async function Footer() {
   const shopName = await getShopName();
 
   return (
-    <footer className="w-full p-5 flex flex-col gap-4 justify-center shadow-[0_-25px_50px_-12px_rgb(0_0_0_/_0.25)] bg-secondary">
+    <footer className="w-full p-5 flex flex-col gap-4 justify-center shadow-[0_-25px_50px_-12px_rgb(0_0_0/0.25)] bg-secondary">
       <div className="flex flex-col md:flex-row gap-2 justify-center">
         <div className="max-w-4xl flex flex-col gap-1">
           <h1 className="text-xl">Le domaine</h1>

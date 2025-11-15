@@ -158,7 +158,7 @@ function NavBarContent({
             <Phone />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>
-          
+
           <ShoppingCart
             showCart={showCart}
             setShowCart={setShowCart}
@@ -184,7 +184,7 @@ function NavBarContent({
       )}
 
       {showCart && (
-        <div className="absolute top-20 left-4">
+        <div className="w-full h-full p-4 pt-16">
           <CartContent />
         </div>
       )}
@@ -234,8 +234,8 @@ export default function NavBarClient({ customerAccessToken, storedLocale = "en" 
     {
       "flex-col items-start w-full md:max-w-4xl": showSearch,
       "h-16 w-full md:max-w-7xl": !showSearch,
-      "h-[calc(100vh-2.5rem)] md:h-[calc(100vh-5rem)] items-start": showCart,
-      "h-72 md:h-16 md:items-start": showMenu,
+      "h-[calc(100dvh-2.5rem)] md:h-[calc(100dvh-5rem)] items-start": showCart,
+      "h-[calc(100dvh-2.5rem)] md:h-16 md:items-start": showMenu,
       "bg-secondary/50": showCart || showMenu || showSearch,
       "bg-light/50": !(showCart || showMenu || showSearch),
     }

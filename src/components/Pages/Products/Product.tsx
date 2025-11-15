@@ -100,7 +100,7 @@ const Thumbnail = ({ img, idx, isActive, product, setCurrentImageIndex }: { img:
     <div
       key={`${img.id}-${idx}`}
       ref={ref}
-      className={`relative w-20 h-20 flex-shrink-0 rounded-lg overflow-hidden border cursor-pointer ${isActive ? "border-accent" : "border-light"}`}
+      className={`relative w-20 h-20 shrink-0 rounded-lg overflow-hidden border cursor-pointer ${isActive ? "border-accent" : "border-light"}`}
       onClick={() => setCurrentImageIndex(idx)}
     >
       <Image
@@ -296,7 +296,7 @@ export default function Product({
 
             <button
               onClick={handleAddToCart}
-              className="flex-1 md:flex-none w-full md:w-auto px-6 py-3 bg-accent text-primary rounded-lg font-semibold hover:bg-accent-dark transition-colors duration-300 cursor-pointer"
+              className="flex-1 md:flex-none w-full md:w-auto px-6 py-3 bg-accent text-ultra-light rounded-lg font-semibold hover:bg-accent-dark transition-colors duration-300 cursor-pointer"
               disabled={!mainVariant?.availableForSale || quantity < 1}
             >
               {mainVariant?.availableForSale ? t("ADD_TO_CART") : t("SOLD_OUT")}

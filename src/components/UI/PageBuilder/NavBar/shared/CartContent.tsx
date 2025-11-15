@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { openCheckout } from "@/utils/checkout/openCheckout";
+import clsx from 'clsx';
 
 type CartItem = {
   variantId: string;
@@ -97,90 +98,95 @@ export default function CartContent() {
   }, 0);
 
   if (loading) return (
-    <div className="flex justify-center items-center h-64">
+    <div className="flex justify-center items-center w-full h-full">
       <p>Loading cart...</p>
     </div>
   );
 
   if (cart.length === 0) return (
-    <div className="flex justify-center items-center h-64 flex-col space-y-4">
+    <div className="flex justify-center items-center w-full h-full flex-col space-y-4">
       <p className="text-2xl font-semibold">{t("EMPTY")}</p>
       <p className="text-dark">{t("EMPTY_CART_MESSAGE")}</p>
     </div>
   );
 
   return (
-    <div className="container mx-auto p-4 md:p-8">
-      <h1 className="text-4xl font-bold mb-8">{t("TITLE")}</h1>
+    <div className="h-full w-full p-4 pt-0">
+      <div className="relative h-full w-full flex flex-col gap-4">
+        <h1 className="text-4xl font-bold">{t("TITLE")}</h1>
 
-      <div className="space-y-6">
-        {cart.map((item) => (
-          <div
-            key={item.variantId}
-            className="flex items-center space-x-4 border-b pb-4"
-          >
-            <div className="relative w-24 h-24 flex-shrink-0">
-              <Image
-                src={item.product.featuredImage.url}
-                alt={item.product.featuredImage.altText || item.product.title}
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                style={{ objectFit: "cover" }}
-                className="rounded-lg"
-              />
-            </div>
-
-            <div className="flex-1">
-              <h2 className="font-semibold text-lg">{item.product.title}</h2>
-              <p className="text-dark">
-                {parseFloat(item.product.price).toFixed(2)}{" "}
-                {item.product.currencyCode}
-              </p>
-            </div>
-
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() =>
-                  handleQuantityChange(item.variantId, item.quantity - 1)
-                }
-                className="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
-              >
-                -
-              </button>
-              <span className="w-8 text-center">{item.quantity}</span>
-              <button
-                onClick={() =>
-                  handleQuantityChange(item.variantId, item.quantity + 1)
-                }
-                className="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
-              >
-                +
-              </button>
-            </div>
-
-            <button
-              onClick={() => handleRemoveItem(item.variantId)}
-              className="text-invalid cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+        <div className="w-full grow flex flex-col overflow-y-auto px-1 border-y border-ultra-light">
+          {cart.map((item, index) => (
+            <div
+              key={item.variantId}
+              className={clsx(
+                "flex items-center space-x-4 border-ultra-light/20 p-2 backdrop-blur-md liquid-glass-backdrop bg-ultra-light/10",
+                { "border-t": index !== 0 }
+              )}
             >
-              <TrashIcon />
+              <div className="relative w-24 h-24 shrink-0">
+                <Image
+                  src={item.product.featuredImage.url}
+                  alt={item.product.featuredImage.altText || item.product.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  style={{ objectFit: "cover" }}
+                  className="rounded-lg"
+                />
+              </div>
+
+              <div className="flex-1">
+                <h2 className="font-semibold text-lg">{item.product.title}</h2>
+                <p className="text-dark">
+                  {parseFloat(item.product.price).toFixed(2)}{" "}
+                  {item.product.currencyCode}
+                </p>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() =>
+                    handleQuantityChange(item.variantId, item.quantity - 1)
+                  }
+                  className="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
+                >
+                  -
+                </button>
+                <span className="w-8 text-center">{item.quantity}</span>
+                <button
+                  onClick={() =>
+                    handleQuantityChange(item.variantId, item.quantity + 1)
+                  }
+                  className="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
+                >
+                  +
+                </button>
+              </div>
+
+              <button
+                onClick={() => handleRemoveItem(item.variantId)}
+                className="text-invalid cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+              >
+                <TrashIcon />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div className="w-full flex justify-end bottom-0 shadow-[0_-25px_50px_-12px_rgb(0_0_0/0.25)]">
+          <div className="w-full p-4 bg-secondary rounded-lg shadow-md">
+            <div className="flex justify-between font-bold text-xl mb-4">
+              <span>{t("SUBTOTAL")}:</span>
+              <span>{subtotal.toFixed(2)} EUR</span>
+            </div>
+            <button
+              onClick={handleCheckout}
+              className="w-full py-3 bg-accent font-semibold rounded-lg hover:bg-accent-dark transition-colors duration-300"
+              disabled={isCheckingOut || cart.length === 0}
+            >
+              {isCheckingOut ? t("CHECKOUT_LOADING") : t("CHECKOUT")}
             </button>
           </div>
-        ))}
-      </div>
-
-      <div className="mt-8 flex justify-end">
-        <div className="w-full md:w-1/3 p-4 bg-secondary rounded-lg shadow-md">
-          <div className="flex justify-between font-bold text-xl mb-4">
-            <span>{t("SUBTOTAL")}:</span>
-            <span>{subtotal.toFixed(2)} EUR</span>
-          </div>
-          <button
-            onClick={handleCheckout}
-            className="w-full py-3 bg-accent font-semibold rounded-lg hover:bg-accent-dark transition-colors duration-300"
-            disabled={isCheckingOut || cart.length === 0}
-          >
-            {isCheckingOut ? t("CHECKOUT_LOADING") : t("CHECKOUT")}
-          </button>
         </div>
       </div>
     </div>

@@ -31,7 +31,7 @@ export default function PageBuilder({
             "grow text-secondary flex flex-col",
             {
               "p-5 md:p-10 pt-26 md:pt-36": padding,
-              "min-h-dvh": fullScreen,
+              "h-full": fullScreen,
             }
           )}
         >
