@@ -23,7 +23,6 @@ export default function ModeSwitch({ mode, handleModeChange }: ModeSwitchProps) 
       onClick2={() => handleModeChange(child2)}
       condition={mode === "LOGIN"}
       className="w-full"
-      oneLiner
     />
   );
 }

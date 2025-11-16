@@ -1,11 +1,11 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import { Link } from '@/i18n/navigation';
 import { useTranslations } from 'next-intl';
 import clsx from 'clsx';
 import { useEffect } from 'react';
 import Logout from './Logout';
+import Button from '@/components/UI/shared/elements/Button';
 
 function MyAccountIcon() {
   return (
@@ -28,10 +28,10 @@ const navItemsBase = [
 
 interface NavigationProps {
   customerAccessToken: string | undefined;
-  setShowMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  onClickLink?: React.MouseEventHandler<HTMLAnchorElement>;
 };
 
-export default function Navigation({ customerAccessToken, setShowMenu }: NavigationProps) {
+export default function Navigation({ customerAccessToken, onClickLink }: NavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
   const t = useTranslations();
@@ -62,16 +62,17 @@ export default function Navigation({ customerAccessToken, setShowMenu }: Navigat
 
         return (
           <div className="flex flex-row gap-4" key={href}>
-            <Link
+            <Button
               href={href}
-              onClick={() => setShowMenu(false)}
-              className={clsx(
-                "rounded opacity-80 hover:opacity-100 transition hover:scale-110 duration-300",
-                isActive && "text-accent"
-              )}
-            >
-              {labelKey === "NAV.ACCOUNT" ? <MyAccountIcon /> : t(labelKey)}
-            </Link>
+              onClickLink={onClickLink}
+              className={clsx("opacity-80 hover:opacity-100", {
+                "text-accent": isActive,
+              })}
+              child={
+                labelKey === "NAV.ACCOUNT" ? <MyAccountIcon /> : t(labelKey)
+              }
+              oneLiner
+            />
             {labelKey === "NAV.ACCOUNT" && customerAccessToken && <Logout />}
           </div>
         );

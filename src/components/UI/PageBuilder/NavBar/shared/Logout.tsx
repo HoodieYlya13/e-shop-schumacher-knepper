@@ -1,5 +1,6 @@
 'use client';
 
+import Button from '@/components/UI/shared/elements/Button';
 import { logout } from '@/utils/account/logout';
 
 function LogoutIcon() {
@@ -18,11 +19,11 @@ function LogoutIcon() {
 
 export default function Logout() {
   return (
-    <button
+    <Button
+      variant="link"
       onClick={() => logout()}
-      className="text-invalid cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
-    >
-      <LogoutIcon />
-    </button>
+      child={<LogoutIcon />}
+      className="text-invalid"
+    />
   );
 }

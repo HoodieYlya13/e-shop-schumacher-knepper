@@ -2,10 +2,15 @@
 
 import Link from "next/link";
 
-export default function Logo() {
+interface LogoProps {
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
+}
+
+export default function Logo({ onClick }: LogoProps) {
   return (
     <Link
       href="/"
+      onClick={onClick}
       className="h-8 w-auto cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
     >
       <svg

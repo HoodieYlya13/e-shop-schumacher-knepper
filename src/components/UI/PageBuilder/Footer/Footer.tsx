@@ -41,17 +41,19 @@ export default async function Footer() {
               href="https://www.schumacher-knepper.lu"
               target="_blank"
               child={t("WELCOME", { shopName })}
+              className="opacity-100"
               underline
             />
             . {t("ALL_RIGHTS_RESERVED")}
           </p>
 
-          <p className="text-xs text-dark/60">
+          <p className="text-xs text-dark/80">
             {t("DEVELOPED_BY")}{" "}
             <Button
               href="https://hy13dev.com"
               target="_blank"
               child="HY13dev"
+              className="opacity-100"
               underline
             />
           </p>

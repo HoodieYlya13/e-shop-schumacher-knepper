@@ -8,6 +8,7 @@ type ButtonProps = {
   children?: React.ReactNode;
   child?: React.ReactNode;
   child2?: React.ReactNode;
+  onClickLink?: React.MouseEventHandler<HTMLAnchorElement>;
   onClick2?: React.MouseEventHandler<HTMLButtonElement>;
   href?: string;
   target?: string;
@@ -30,6 +31,7 @@ const Button = ({
   children,
   child,
   child2,
+  onClickLink,
   onClick2,
   href,
   target = "_self",
@@ -43,10 +45,10 @@ const Button = ({
 }: ButtonProps) => {
   if (href || variant === "link") {
     const linkClassName = clsx(
-      "outline-none transition duration-300 px-0 py-0 min-w-fit inline-flex",
+      "outline-none transition duration-300 px-0 py-0 min-w-fit inline-flex text-shadow-md",
       disabled
         ? "cursor-not-allowed opacity-50"
-        : "cursor-pointer hover:scale-105",
+        : "cursor-pointer hover:scale-105 opacity-80 hover:opacity-100 focus:opacity-100",
       { underline: underline, "whitespace-nowrap": oneLiner },
       className
     );
@@ -67,6 +69,7 @@ const Button = ({
       <Link
         href={href}
         target={target}
+        onClick={onClickLink}
         rel={target === "_blank" ? "noopener noreferrer" : undefined}
         className={linkClassName}
         style={style}

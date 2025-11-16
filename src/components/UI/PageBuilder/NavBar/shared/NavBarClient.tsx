@@ -14,7 +14,11 @@ import { ProductSuggestion } from "@/utils/products/getProductsSearchSuggestions
 import Link from "next/link";
 import CartContent from "./CartContent";
 
-function BurgerIcon() {
+interface BurgerIconProps {
+  onClick?: React.MouseEventHandler<SVGSVGElement>;
+}
+
+function BurgerIcon({ onClick }: BurgerIconProps) {
   return (
     <svg 
       viewBox="0 0 20 20" 
@@ -22,6 +26,8 @@ function BurgerIcon() {
       fill="currentColor"
       width="24"
       height="24"
+      className="z-30 md:hidden cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
+      onClick={onClick}
     >
       <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
     </svg>
@@ -119,22 +125,19 @@ function NavBarContent({
             showMenu || showCart ? "text-primary" : "text-secondary"
           )}
         >
-          <button
+          <BurgerIcon
             onClick={() => {
               setShowMenu(!showMenu);
               setShowCart(false);
             }}
-            className="z-30 md:hidden cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
-          >
-            <BurgerIcon />
-          </button>
+          />
 
-          <Logo />
+          <Logo onClick={() => setShowMenu(false)} />
 
           <div className="hidden md:flex">
             <Navigation
               customerAccessToken={customerAccessToken}
-              setShowMenu={setShowMenu}
+              onClickLink={() => setShowMenu(false)}
             />
           </div>
         </div>
@@ -172,7 +175,7 @@ function NavBarContent({
           <div className="absolute top-20 left-4 text-2xl flex md:hidden">
             <Navigation
               customerAccessToken={customerAccessToken}
-              setShowMenu={setShowMenu}
+              onClickLink={() => setShowMenu(false)}
             />
           </div>
 
