@@ -120,11 +120,11 @@ export default function CartContent() {
             <div
               key={item.variantId}
               className={clsx(
-                "flex items-center space-x-4 border-ultra-light/20 p-2 backdrop-blur-md liquid-glass-backdrop bg-ultra-light/10",
+                "flex shadow-md items-center space-x-1 xs:space-x-2 sm:space-x-4 border-ultra-light/20 p-2 backdrop-blur-md liquid-glass-backdrop bg-ultra-light/10",
                 { "border-t": index !== 0 }
               )}
             >
-              <div className="relative w-24 h-24 shrink-0">
+              <div className="relative w-6 xs:w-12 sm:w-24 aspect-square shrink-0">
                 <Image
                   src={item.product.featuredImage.url}
                   alt={item.product.featuredImage.altText || item.product.title}
@@ -137,27 +137,29 @@ export default function CartContent() {
 
               <div className="flex-1">
                 <h2 className="font-semibold text-lg">{item.product.title}</h2>
-                <p className="text-dark">
+                <p className="text-accent">
                   {parseFloat(item.product.price).toFixed(2)}{" "}
                   {item.product.currencyCode}
                 </p>
               </div>
 
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-1 sm:space-x-2">
                 <button
                   onClick={() =>
                     handleQuantityChange(item.variantId, item.quantity - 1)
                   }
-                  className="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
+                  className="w-6 sm:w-8 h-6 sm:h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
                 >
                   -
                 </button>
-                <span className="w-8 text-center">{item.quantity}</span>
+                <span className="min-w-fit w-6 sm:w-8 text-center">
+                  {item.quantity}
+                </span>
                 <button
                   onClick={() =>
                     handleQuantityChange(item.variantId, item.quantity + 1)
                   }
-                  className="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
+                  className="w-6 sm:w-8 h-6 sm:h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
                 >
                   +
                 </button>
