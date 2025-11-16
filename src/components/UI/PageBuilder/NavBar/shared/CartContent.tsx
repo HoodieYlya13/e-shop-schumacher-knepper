@@ -111,16 +111,16 @@ export default function CartContent() {
   );
 
   return (
-    <div className="h-full w-full p-4 pt-0">
+    <div className="h-full w-full p-1 xs:p-2 sm:p-4 pt-0">
       <div className="relative h-full w-full flex flex-col gap-4">
-        <h1 className="text-4xl font-bold">{t("TITLE")}</h1>
+        <h1 className="text-3xl xs:text-4xl font-bold">{t("TITLE")}</h1>
 
         <div className="w-full grow flex flex-col overflow-y-auto px-1 border-y border-ultra-light">
           {cart.map((item, index) => (
             <div
               key={item.variantId}
               className={clsx(
-                "flex shadow-md items-center space-x-1 xs:space-x-2 sm:space-x-4 border-ultra-light/20 p-2 backdrop-blur-md liquid-glass-backdrop bg-ultra-light/10",
+                "flex shadow-md items-center space-x-2 sm:space-x-4 border-ultra-light/20 p-2 backdrop-blur-md liquid-glass-backdrop bg-ultra-light/10",
                 { "border-t": index !== 0 }
               )}
             >
@@ -175,20 +175,18 @@ export default function CartContent() {
           ))}
         </div>
 
-        <div className="w-full flex justify-end bottom-0 shadow-[0_-25px_50px_-12px_rgb(0_0_0/0.25)]">
-          <div className="w-full p-4 bg-secondary rounded-lg shadow-md">
-            <div className="flex justify-between font-bold text-xl mb-4">
-              <span>{t("SUBTOTAL")}:</span>
-              <span>{subtotal.toFixed(2)} EUR</span>
-            </div>
-            <button
-              onClick={handleCheckout}
-              className="w-full py-3 bg-accent font-semibold rounded-lg hover:bg-accent-dark transition-colors duration-300"
-              disabled={isCheckingOut || cart.length === 0}
-            >
-              {isCheckingOut ? t("CHECKOUT_LOADING") : t("CHECKOUT")}
-            </button>
+        <div className="w-full flex flex-col justify-end bottom-0 p-4 bg-secondary rounded-lg shadow-md">
+          <div className="flex justify-between font-bold text-xl mb-4">
+            <span>{t("SUBTOTAL")}:</span>
+            <span>{subtotal.toFixed(2)} EUR</span>
           </div>
+          <button
+            onClick={handleCheckout}
+            className="w-full py-3 bg-accent font-semibold rounded-lg hover:bg-accent-dark transition-colors duration-300"
+            disabled={isCheckingOut || cart.length === 0}
+          >
+            {isCheckingOut ? t("CHECKOUT_LOADING") : t("CHECKOUT")}
+          </button>
         </div>
       </div>
     </div>

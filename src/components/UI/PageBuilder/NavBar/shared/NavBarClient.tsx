@@ -112,7 +112,7 @@ function NavBarContent({
 
   return (
     <>
-      <div className="absolute h-16 items-center flex justify-between mx-auto w-full">
+      <div className="absolute h-16 items-center flex justify-between w-full">
         <div
           className={clsx(
             "ml-4 flex items-center align-middle gap-4",
@@ -176,7 +176,7 @@ function NavBarContent({
             />
           </div>
 
-          <div className="absolute bottom-4 items-center flex justify-between mx-auto px-4 w-full md:hidden">
+          <div className="absolute bottom-4 items-center flex justify-between px-4 w-full md:hidden">
             <Phone />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>
