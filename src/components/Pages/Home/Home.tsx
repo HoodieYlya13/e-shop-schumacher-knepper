@@ -31,12 +31,12 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   return (
     <>
       <section
-        className="h-screen w-full bg-cover bg-center relative shadow-2xl text-primary"
+        className="h-svh w-full bg-cover bg-center relative shadow-2xl text-primary"
         style={homeSectionStyle}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-ultra-dark to-dark opacity-30"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-ultra-dark to-dark opacity-30"></div>
 
-        <div className="flex flex-col gap-8 justify-center items-center text-8xl xs:text-9xl h-screen break-words">
+        <div className="flex flex-col gap-8 justify-center items-center text-8xl xs:text-9xl h-svh wrap-break-word">
           <div className="flex flex-col items-center">
             <p className="text-xl sm:text-5xl justify-center text-center">
               {t("WELCOME", { shopName })}
@@ -63,7 +63,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
       {products.length > 0 && (
         <section
           id="best-sellers"
-          className="bg-primary flex flex-col py-8 justify-center items-center min-h-screen gap-2"
+          className="bg-primary flex flex-col py-8 justify-center items-center min-h-svh gap-2"
           style={
             {
               "--carousel-duration": `${carouselDuration}s`,

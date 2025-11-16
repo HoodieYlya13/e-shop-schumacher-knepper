@@ -640,7 +640,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
         searchTerm={searchTerm}
       />
 
-      <section className="flex-grow">
+      <section className="grow">
         <TypeBanner
           handle={collectionHandleToPass}
           language={locale.toUpperCase() as LocaleLanguagesUpperCase}

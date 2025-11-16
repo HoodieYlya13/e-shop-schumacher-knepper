@@ -74,7 +74,7 @@ function CheckMarkIcon({ checkedValue, disabled }: CheckMarkIconProps) {
         viewBox="0 -960 960 960"
         width="24px"
         fill="currentColor"
-        className="w-full h-full"
+        className="size-full"
       >
         <path
           d="M382-240 154-468l57-57 171 171 367-367 57 57-424 424Z"
@@ -162,7 +162,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     const baseInputClassName = clsx(
       "items-center liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ease-in-out focus:border-accent placeholder:text-dark",
       type === "tel" && "inline-flex",
-      type === "checkbox" ? "rounded-lg w-6 h-6 peer-has-focus:border-accent" : "w-full px-2",
+      type === "checkbox" ? "rounded-lg size-6 peer-has-focus:border-accent" : "w-full px-2",
       type !== "checkbox" && type !== "tel" && "py-3",
       borderColor,
       rest.disabled || rest.checked !== undefined

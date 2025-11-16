@@ -98,21 +98,21 @@ export default function CartContent() {
   }, 0);
 
   if (loading) return (
-    <div className="flex justify-center items-center w-full h-full">
+    <div className="flex justify-center items-center size-full">
       <p>Loading cart...</p>
     </div>
   );
 
   if (cart.length === 0) return (
-    <div className="flex justify-center items-center w-full h-full flex-col space-y-4">
+    <div className="flex justify-center items-center size-full flex-col space-y-4">
       <p className="text-2xl font-semibold">{t("EMPTY")}</p>
       <p className="text-dark">{t("EMPTY_CART_MESSAGE")}</p>
     </div>
   );
 
   return (
-    <div className="h-full w-full p-1 xs:p-2 sm:p-4 pt-0">
-      <div className="relative h-full w-full flex flex-col gap-4">
+    <div className="size-full p-1 xs:p-2 sm:p-4 pt-0">
+      <div className="relative size-full flex flex-col gap-4">
         <h1 className="text-3xl xs:text-4xl font-bold">{t("TITLE")}</h1>
 
         <div className="w-full grow flex flex-col overflow-y-auto px-1 border-y border-ultra-light">
@@ -124,7 +124,7 @@ export default function CartContent() {
                 { "border-t": index !== 0 }
               )}
             >
-              <div className="relative w-6 xs:w-12 sm:w-24 aspect-square shrink-0">
+              <div className="relative size-6 xs:size-12 sm:size-24 shrink-0">
                 <Image
                   src={item.product.featuredImage.url}
                   alt={item.product.featuredImage.altText || item.product.title}
@@ -148,7 +148,7 @@ export default function CartContent() {
                   onClick={() =>
                     handleQuantityChange(item.variantId, item.quantity - 1)
                   }
-                  className="w-6 sm:w-8 h-6 sm:h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
+                  className="size-6 sm:size-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
                 >
                   -
                 </button>
@@ -159,7 +159,7 @@ export default function CartContent() {
                   onClick={() =>
                     handleQuantityChange(item.variantId, item.quantity + 1)
                   }
-                  className="w-6 sm:w-8 h-6 sm:h-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
+                  className="size-6 sm:size-8 flex items-center justify-center border rounded-md hover:bg-ultra-light"
                 >
                   +
                 </button>

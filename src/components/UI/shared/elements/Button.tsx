@@ -69,7 +69,16 @@ const Button = ({
     );
   }
 
-  const baseButtonClassName = `${disabled ? "cursor-not-allowed" : "cursor-pointer"} rounded-2xl font-black transition duration-300 px-6 py-3 text-base outline min-w-fit ${primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg"} ${!disabled && "hover:scale-105"} ${oneLiner && "whitespace-nowrap"}`;
+  const baseButtonClassName = clsx(
+    "rounded-2xl font-black transition duration-300 text-base outline min-w-fit",
+    disabled ? "cursor-not-allowed" : "cursor-pointer",
+    primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg",
+    {
+      "px-6 py-3": !child2,
+      "hover:scale-105": variant !== "starborder" && !disabled,
+      "whitespace-nowrap": oneLiner,
+    }
+  );
 
   const importanceClassName = disabled
     ? "bg-light text-dark outline-secondary/50 opacity-50 inset-shadow-sm inset-shadow-dark"
@@ -80,7 +89,7 @@ const Button = ({
   if (variant === "starborder")
     return (
       <button
-        className={`${baseButtonClassName} shadow-ultra-dark relative overflow-hidden outline-hidden`}
+        className={`${baseButtonClassName} hover:scale-105 shadow-ultra-dark relative overflow-hidden outline-hidden`}
         {...rest}
         style={{
           padding: `${thickness}px 0`,
@@ -102,7 +111,7 @@ const Button = ({
           }}
         ></div>
         <div
-          className={`${baseButtonClassName} ${importanceClassName} border-secondary outline-hidden relative z-1 border !scale-100 hover:!scale-100 ${className}`}
+          className={`${baseButtonClassName} ${importanceClassName} border-secondary outline-hidden relative z-1 border ${className}`}
         >
           {child}
         </div>
@@ -126,7 +135,7 @@ const Button = ({
   
     return (
       <div
-        className={`${baseButtonClassName} ${importanceClassName} ${className} outline-secondary/50 inline-flex justify-around !p-0`}
+        className={`${baseButtonClassName} ${importanceClassName} ${className} outline-secondary/50 inline-flex justify-around`}
         style={style}
       >
         <button {...rest} className={childClassName(true)}>

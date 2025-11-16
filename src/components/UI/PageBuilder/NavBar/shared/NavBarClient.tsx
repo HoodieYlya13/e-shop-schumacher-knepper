@@ -184,7 +184,7 @@ function NavBarContent({
       )}
 
       {showCart && (
-        <div className="w-full h-full p-4 pt-16">
+        <div className="size-full p-4 pt-16">
           <CartContent />
         </div>
       )}

@@ -23,11 +23,11 @@ export default function RecommendedCollection({ collection, areRecommendedProduc
         }
         width={1000}
         height={1000}
-        className="w-30 h-30 sm:w-40 sm:h-40 object-cover rounded-full"
+        className="size-30 sm:size-40 object-cover rounded-full"
         priority
       />
 
-      <div className="flex flex-col items-center text-center break-words">
+      <div className="flex flex-col items-center text-center wrap-break-word">
         <h1 className="text-xl sm:text-4xl">
           {areRecommendedProducts ? "Nos recommendations" : "Nos vins"}
         </h1>

@@ -100,7 +100,7 @@ const Thumbnail = ({ img, idx, isActive, product, setCurrentImageIndex }: { img:
     <div
       key={`${img.id}-${idx}`}
       ref={ref}
-      className={`relative w-20 h-20 shrink-0 rounded-lg overflow-hidden border cursor-pointer ${isActive ? "border-accent" : "border-light"}`}
+      className={`relative size-20 shrink-0 rounded-lg overflow-hidden border cursor-pointer ${isActive ? "border-accent" : "border-light"}`}
       onClick={() => setCurrentImageIndex(idx)}
     >
       <Image

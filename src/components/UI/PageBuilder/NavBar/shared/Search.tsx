@@ -78,14 +78,14 @@ export default function Search({
   return (
     <div
       className={clsx(
-        showSearch && "flex w-full h-full items-center justify-between gap-2"
+        showSearch && "flex size-full items-center justify-between gap-2"
       )}
     >
       {showSearch && (
         <input
           ref={inputRef}
           type="text"
-          className="outline-hidden pl-4 rounded-4xl w-full h-full"
+          className="outline-hidden pl-4 rounded-4xl size-full"
           placeholder={t("SEARCH")}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}

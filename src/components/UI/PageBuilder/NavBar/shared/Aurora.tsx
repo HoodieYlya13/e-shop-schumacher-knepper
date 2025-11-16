@@ -217,7 +217,7 @@ export default function Aurora(props: AuroraProps) {
   return (
     <div
       ref={ctnDom}
-      className="fixed w-(--size) aspect-square left-1/2 -translate-x-1/2 bg-ultra-dark"
+      className="fixed size-(--size) left-1/2 -translate-x-1/2 bg-ultra-dark"
     />
   );
 }
