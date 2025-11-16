@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import Button from "../../shared/elements/Button";
 import DomainNavigation from "./shared/DomainNavigation";
 import ContactUs from "./shared/ContactUs";
+import Maps from "./shared/Maps";
 
 export default async function Footer() {
   const locale = await getPreferredLocale();
@@ -30,7 +31,8 @@ export default async function Footer() {
               />
               <ContactUs />
             </div>
-            <div className="hidden md:flex border flex-1">map</div>
+            
+            <Maps />
           </div>
         </div>
 
