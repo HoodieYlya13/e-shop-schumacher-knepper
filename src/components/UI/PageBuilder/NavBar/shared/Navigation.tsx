@@ -61,7 +61,7 @@ export default function Navigation({ customerAccessToken, setShowMenu }: Navigat
             : normalizedPath.startsWith(href);
 
         return (
-          <div className="flex flex-row gap-4 itmes-center" key={href}>
+          <div className="flex flex-row gap-4" key={href}>
             <Link
               href={href}
               onClick={() => setShowMenu(false)}

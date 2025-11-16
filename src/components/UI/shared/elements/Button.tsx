@@ -5,11 +5,13 @@ import React from "react";
 type ButtonProps = {
   variant?: "default" | "starborder" | "link";
   className?: string;
+  children?: React.ReactNode;
   child?: React.ReactNode;
   child2?: React.ReactNode;
   onClick2?: React.MouseEventHandler<HTMLButtonElement>;
-  link?: string;
-  linkTarget?: string;
+  href?: string;
+  target?: string;
+  underline?: boolean;
   color?: string;
   speed?: React.CSSProperties["animationDuration"];
   thickness?: number;
@@ -25,11 +27,13 @@ const Button = ({
   color = "var(--accent-color)",
   speed = "3.5s",
   thickness = 2,
+  children,
   child,
   child2,
   onClick2,
-  link,
-  linkTarget = "_blank",
+  href,
+  target = "_self",
+  underline = false,
   style,
   primary = true,
   condition = false,
@@ -37,14 +41,17 @@ const Button = ({
   disabled = false,
   ...rest
 }: ButtonProps) => {
-  if (link || variant === "link") {
+  if (href || variant === "link") {
     const linkClassName = clsx(
-      "underline outline-none transition duration-300 px-0 py-0 min-w-fit",
-      disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer hover:scale-105",
+      "outline-none transition duration-300 px-0 py-0 min-w-fit inline-flex",
+      disabled
+        ? "cursor-not-allowed opacity-50"
+        : "cursor-pointer hover:scale-105",
+      { underline: underline, "whitespace-nowrap": oneLiner },
       className
     );
 
-    if (!link)
+    if (!href)
       return (
         <button
           className={linkClassName}
@@ -52,19 +59,19 @@ const Button = ({
           {...rest}
           style={style}
         >
-          {child}
+          {children || child}
         </button>
       );
 
     return (
       <Link
-        href={link}
-        target={linkTarget}
-        rel={linkTarget === "_blank" ? "noopener noreferrer" : undefined}
+        href={href}
+        target={target}
+        rel={target === "_blank" ? "noopener noreferrer" : undefined}
         className={linkClassName}
         style={style}
       >
-        {child}
+        {children || child}
       </Link>
     );
   }
@@ -73,8 +80,8 @@ const Button = ({
     "rounded-2xl font-black transition duration-300 text-base outline min-w-fit",
     disabled ? "cursor-not-allowed" : "cursor-pointer",
     primary || child2 || variant === "starborder" ? "shadow-2xl" : "shadow-lg",
+    child2 ? "inline-flex" : "px-6 py-3",
     {
-      "px-6 py-3": !child2,
       "hover:scale-105": variant !== "starborder" && !disabled,
       "whitespace-nowrap": oneLiner,
     }
@@ -113,7 +120,7 @@ const Button = ({
         <div
           className={`${baseButtonClassName} ${importanceClassName} border-secondary outline-hidden relative z-1 border ${className}`}
         >
-          {child}
+          {children || child}
         </div>
       </button>
     );
@@ -135,11 +142,11 @@ const Button = ({
   
     return (
       <div
-        className={`${baseButtonClassName} ${importanceClassName} ${className} outline-secondary/50 inline-flex justify-around`}
+        className={`${baseButtonClassName} ${importanceClassName} ${className}`}
         style={style}
       >
         <button {...rest} className={childClassName(true)}>
-          {child}
+          {children || child}
         </button>
         <button {...rest} onClick={onClick2} className={childClassName(false)}>
           {child2}
@@ -154,7 +161,7 @@ const Button = ({
       {...rest}
       style={style}
     >
-      {child}
+      {children || child}
     </button>
   );
 };

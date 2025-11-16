@@ -15,7 +15,8 @@
     "SINCE": "Since",
     "WELCOME": "{shopName} winery",
     "SEARCH": "Search...",
-    "ALL_RIGHTS_RESERVED": "All rights reserved."
+    "ALL_RIGHTS_RESERVED": "All rights reserved.",
+    "DEVELOPED_BY": "Developed by"
   },
   "PRODUCTS_PAGE": {
     "TITLE": "All our wines",
@@ -23,7 +24,10 @@
   },
   "NAV": {
     "HOME": "Schumacher-Knepper",
-    "PRODUCTS": "Products"
+    "PRODUCTS": "Products",
+    "DELIVERY": "Delivery",
+    "GENERAL_TERMS": "General terms",
+    "ABOUT_US": "About us"
   },
   "AUTH": {
     "LOGIN": "Sign in",

@@ -1,4 +1,4 @@
-import Footer from './Footer';
+import Footer from './Footer/Footer';
 import NavBar from './NavBar/NavBar';
 import CustomerGeoInfo from './CustomerGeoInfo/CustomerGeoInfo';
 import clsx from "clsx";
@@ -7,7 +7,6 @@ import Aurora from './NavBar/shared/Aurora';
 interface PageBuilderProps {
   children: React.ReactNode;
   padding?: boolean;
-  fullScreen?: boolean;
   showFooter?: boolean;
   auroraBackground?: boolean;
 }
@@ -15,7 +14,6 @@ interface PageBuilderProps {
 export default function PageBuilder({
   children,
   padding = true,
-  fullScreen = true,
   showFooter = true,
   auroraBackground = false,
 }: PageBuilderProps) {
@@ -27,13 +25,9 @@ export default function PageBuilder({
 
       <div className="flex flex-col min-h-dvh z-10">
         <main
-          className={clsx(
-            "grow text-secondary flex flex-col",
-            {
-              "p-5 md:p-10 pt-26 md:pt-36": padding,
-              "h-full": fullScreen,
-            }
-          )}
+          className={clsx("grow text-secondary flex flex-col", {
+            "p-5 md:p-10 pt-26 md:pt-36": padding,
+          })}
         >
           {children}
         </main>

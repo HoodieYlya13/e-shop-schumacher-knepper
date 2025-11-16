@@ -39,6 +39,7 @@ export default function SignIn({ register, errors, handleModeChange }: SignInPro
           onClick={() => handleModeChange("PASSWORD_RECOVERY")}
           child={t("FORGOT_PASSWORD")}
           variant="link"
+          underline
         />
       </div>
     </>

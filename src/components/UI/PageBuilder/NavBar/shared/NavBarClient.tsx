@@ -155,7 +155,7 @@ function NavBarContent({
           />
 
           <div className="hidden md:flex gap-4">
-            <Phone />
+            <Phone iconOnly />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>
 

@@ -61,7 +61,8 @@ export default function PasswordRecovery({
         <p className="text-sm text-dark mt-2">
           {t("CHECK_YOUR_EMAIL")}{" "}
           <Button
-            link={emailProviderLink.url}
+            href={emailProviderLink.url}
+            target="_blank"
             className="text-accent"
             child={emailProviderLink.name}
           />

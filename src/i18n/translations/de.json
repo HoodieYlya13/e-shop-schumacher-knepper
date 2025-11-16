@@ -15,7 +15,8 @@
     "SINCE": "Seit",
     "WELCOME": "Weingut {shopName}",
     "SEARCH": "Suchen...",
-    "ALL_RIGHTS_RESERVED": "Alle Rechte vorbehalten."
+    "ALL_RIGHTS_RESERVED": "Alle Rechte vorbehalten.",
+    "DEVELOPED_BY": "Entwickelt von"
   },
   "PRODUCTS_PAGE": {
     "TITLE": "All our wines",
@@ -23,7 +24,10 @@
   },
   "NAV": {
     "HOME": "Schumacher-Knepper",
-    "PRODUCTS": "Products"
+    "PRODUCTS": "Produkte",
+    "DELIVERY": "Lieferung",
+    "GENERAL_TERMS": "Allgemeine Geschäftsbedingungen",
+    "ABOUT_US": "Über uns"
   },
   "AUTH": {
     "LOGIN": "Anmelden",

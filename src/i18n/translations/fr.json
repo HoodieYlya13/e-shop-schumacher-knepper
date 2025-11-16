@@ -1,6 +1,6 @@
 {
   "COMMON": {
-    "OPTIONAL":"optional",
+    "OPTIONAL":"optionnel",
     "LOADING": "Chargement..."
   },
   "HOME_PAGE": {
@@ -15,7 +15,8 @@
     "SINCE": "Depuis",
     "WELCOME": "Domaine viticole {shopName}",
     "SEARCH": "Rechercher...",
-    "ALL_RIGHTS_RESERVED": "Tous droits réservés."
+    "ALL_RIGHTS_RESERVED": "Tous droits réservés.",
+    "DEVELOPED_BY": "Développé par"
   },
   "PRODUCTS_PAGE": {
     "TITLE": "Tous nos vins",
@@ -23,7 +24,10 @@
   },
   "NAV": {
     "HOME": "Schumacher-Knepper",
-    "PRODUCTS": "Produits"
+    "PRODUCTS": "Produits",
+    "DELIVERY": "Livraison",
+    "GENERAL_TERMS": "Conditions générales",
+    "ABOUT_US": "À propos de nous"
   },
   "AUTH": {
     "LOGIN": "Se connecter",
