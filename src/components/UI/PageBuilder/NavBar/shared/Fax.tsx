@@ -1,4 +1,5 @@
 import Button from "@/components/UI/shared/elements/Button";
+import { getShopFax } from "@/lib/services/store-front/shop";
 
 function FaxIcon() {
   return (
@@ -14,14 +15,16 @@ function FaxIcon() {
   );
 }
 
-export default function Fax() {
+export default async function Fax() {
+  const fax = await getShopFax();
+
   return (
     <Button
-      href="fax:+35223664803"
+      href={`fax:${fax.faxNumber}`}
       className="opacity-80 hover:opacity-100 text-primary gap-1 w-fit"
     >
       <FaxIcon />
-      +352 23 66 48 03
+      {fax.faxDisplayed}
     </Button>
   );
 }

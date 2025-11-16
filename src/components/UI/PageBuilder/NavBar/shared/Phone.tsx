@@ -1,4 +1,5 @@
 import Button from "@/components/UI/shared/elements/Button";
+import { ShopPhone } from "@/lib/services/store-front/shop";
 import clsx from "clsx";
 
 function PhoneIcon() {
@@ -16,19 +17,20 @@ function PhoneIcon() {
 }
 
 interface PhoneProps {
+  phone: ShopPhone;
   iconOnly?: boolean;
 }
 
-export default function Phone({ iconOnly }: PhoneProps) {
+export default function Phone({ phone, iconOnly }: PhoneProps) {
   return (
     <Button
-      href="tel:+352236045"
+      href={`tel:${phone.phoneNumber}`}
       className={clsx("opacity-80 hover:opacity-100 gap-1 w-fit", {
         "text-primary": !iconOnly,
       })}
     >
       <PhoneIcon />
-      {!iconOnly && "+352 23 60 45"}
+      {!iconOnly && phone.phoneDisplayed}
       {/* TODO Add a tooltip */}
     </Button>
   );

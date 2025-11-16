@@ -13,6 +13,7 @@ import clsx from "clsx";
 import { ProductSuggestion } from "@/utils/products/getProductsSearchSuggestions";
 import Link from "next/link";
 import CartContent from "./CartContent";
+import { ShopPhone } from "@/lib/services/store-front/shop";
 
 interface BurgerIconProps {
   onClick?: React.MouseEventHandler<SVGSVGElement>;
@@ -68,6 +69,7 @@ function SearchSuggestions({ searchSuggestions, storedLocale }: SearchSuggestion
 }
 
 interface NavBarContentProps {
+  phone: ShopPhone;
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
   showMenu: boolean;
@@ -81,6 +83,7 @@ interface NavBarContentProps {
 }
 
 function NavBarContent({
+  phone,
   showSearch,
   setShowSearch,
   showMenu,
@@ -158,7 +161,7 @@ function NavBarContent({
           />
 
           <div className="hidden md:flex gap-4">
-            <Phone iconOnly />
+            <Phone phone={phone} iconOnly />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>
 
@@ -180,7 +183,7 @@ function NavBarContent({
           </div>
 
           <div className="absolute bottom-4 items-center flex justify-between px-4 w-full md:hidden">
-            <Phone />
+            <Phone phone={phone} />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>
         </>
@@ -196,11 +199,12 @@ function NavBarContent({
 }
 
 interface NavBarClientProps {
+  phone: ShopPhone;
   customerAccessToken?: string;
   storedLocale?: LocaleLanguages;
 }
 
-export default function NavBarClient({ customerAccessToken, storedLocale = "en" }: NavBarClientProps) {
+export default function NavBarClient({ phone, customerAccessToken, storedLocale = "en" }: NavBarClientProps) {
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showCart, setShowCart] = useState(false);
@@ -253,6 +257,7 @@ export default function NavBarClient({ customerAccessToken, storedLocale = "en" 
       }}
     >
       <NavBarContent
+        phone={phone}
         showSearch={showSearch}
         setShowSearch={setShowSearch}
         showMenu={showMenu}

@@ -1,4 +1,5 @@
 import Button from "@/components/UI/shared/elements/Button";
+import { getShopLocation } from "@/lib/services/store-front/shop";
 
 function LocationIcon() {
   return (
@@ -14,7 +15,9 @@ function LocationIcon() {
   );
 }
 
-export default function Location() {
+export default async function Location() {
+  const location = await getShopLocation();
+
   return (
     <Button
       href="https://www.google.fr/maps/place/Domaine+viticole+Schumacher-Knepper/@49.5025,6.35322,1021m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4795155944acdcb7:0xc23fde4d449060d4!8m2!3d49.5025!4d6.35322!16s%2Fg%2F1td0lz28?entry=ttu&g_ep=EgoyMDI1MTExMi4wIKXMDSoASAFQAw%3D%3D"
@@ -23,10 +26,10 @@ export default function Location() {
     >
       <LocationIcon />
       <div className="flex flex-col">
-        <p>Domaine Viticole Schumacher-Knepper</p>
-        <p>28, Wäistrooss</p>
-        <p>L-5495 Wintrange</p>
-        <p>Luxemburg</p>
+        <p>{location.name}</p>
+        <p>{location.street}</p>
+        <p>{`${location.postalCode} ${location.city}`}</p>
+        <p>{location.country}</p>
       </div>
     </Button>
   );

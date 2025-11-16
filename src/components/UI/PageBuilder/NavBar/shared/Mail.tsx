@@ -1,4 +1,5 @@
 import Button from "@/components/UI/shared/elements/Button";
+import { getShopMail } from "@/lib/services/store-front/shop";
 
 function MailIcon() {
   return (
@@ -14,14 +15,16 @@ function MailIcon() {
   );
 }
 
-export default function Mail() {
+export default async function Mail() {
+  const mail = await getShopMail();
+
   return (
     <Button
-      href="mailto:contact@schumacher-knepper.lu"
+      href={`mailto:${mail}`}
       className="opacity-80 hover:opacity-100 text-primary gap-1 w-fit"
     >
       <MailIcon />
-      contact@schumacher-knepper.lu
+      {mail}
     </Button>
   );
 }

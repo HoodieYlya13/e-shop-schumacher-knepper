@@ -31,7 +31,7 @@ export default async function Footer() {
               />
               <ContactUs />
             </div>
-            
+
             <Maps />
           </div>
         </div>
@@ -43,7 +43,7 @@ export default async function Footer() {
               href="https://www.schumacher-knepper.lu"
               target="_blank"
               child={t("WELCOME", { shopName })}
-              className="opacity-100"
+              className="opacity-100 hover:scale-101!"
               underline
             />
             . {t("ALL_RIGHTS_RESERVED")}
