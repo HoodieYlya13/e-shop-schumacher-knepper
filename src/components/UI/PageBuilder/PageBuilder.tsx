@@ -27,6 +27,7 @@ export default function PageBuilder({
         <main
           className={clsx("grow text-secondary flex flex-col", {
             "p-5 md:p-10 pt-26 md:pt-36": padding,
+            "min-h-dvh": showFooter,
           })}
         >
           {children}

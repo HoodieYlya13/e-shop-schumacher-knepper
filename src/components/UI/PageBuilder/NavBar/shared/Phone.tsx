@@ -1,6 +1,5 @@
 import Button from "@/components/UI/shared/elements/Button";
 import { ShopPhone } from "@/lib/services/store-front/shop";
-import clsx from "clsx";
 
 function PhoneIcon() {
   return (
@@ -25,9 +24,7 @@ export default function Phone({ phone, iconOnly }: PhoneProps) {
   return (
     <Button
       href={`tel:${phone.phoneNumber}`}
-      className={clsx("opacity-80 hover:opacity-100 gap-1 w-fit", {
-        "text-primary": !iconOnly,
-      })}
+      className="opacity-80 hover:opacity-100 gap-1 w-fit"
     >
       <PhoneIcon />
       {!iconOnly && phone.phoneDisplayed}

@@ -21,7 +21,7 @@ export default async function Mail() {
   return (
     <Button
       href={`mailto:${mail}`}
-      className="opacity-80 hover:opacity-100 text-primary gap-1 w-fit"
+      className="opacity-80 hover:opacity-100 gap-1 w-fit"
     >
       <MailIcon />
       {mail}

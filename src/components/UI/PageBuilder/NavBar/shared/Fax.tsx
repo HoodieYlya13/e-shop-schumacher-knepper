@@ -21,7 +21,7 @@ export default async function Fax() {
   return (
     <Button
       href={`fax:${fax.faxNumber}`}
-      className="opacity-80 hover:opacity-100 text-primary gap-1 w-fit"
+      className="opacity-80 hover:opacity-100 gap-1 w-fit"
     >
       <FaxIcon />
       {fax.faxDisplayed}

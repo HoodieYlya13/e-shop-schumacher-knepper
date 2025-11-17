@@ -182,7 +182,7 @@ function NavBarContent({
             />
           </div>
 
-          <div className="absolute bottom-4 items-center flex justify-between px-4 w-full md:hidden">
+          <div className="absolute bottom-4 items-center flex justify-between px-4 w-full md:hidden text-primary">
             <Phone phone={phone} />
             <LanguageSwitcher storedLocale={storedLocale} />
           </div>

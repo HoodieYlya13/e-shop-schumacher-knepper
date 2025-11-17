@@ -22,7 +22,7 @@ export default async function Location() {
     <Button
       href="https://www.google.fr/maps/place/Domaine+viticole+Schumacher-Knepper/@49.5025,6.35322,1021m/data=!3m2!1e3!4b1!4m6!3m5!1s0x4795155944acdcb7:0xc23fde4d449060d4!8m2!3d49.5025!4d6.35322!16s%2Fg%2F1td0lz28?entry=ttu&g_ep=EgoyMDI1MTExMi4wIKXMDSoASAFQAw%3D%3D"
       target="_blank"
-      className="opacity-80 hover:opacity-100 text-primary gap-1 w-fit"
+      className="opacity-80 hover:opacity-100 gap-1 w-fit"
     >
       <LocationIcon />
       <div className="flex flex-col">
