@@ -36,7 +36,7 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
       >
         <div className="absolute inset-0 bg-linear-to-b from-ultra-dark to-dark opacity-30"></div>
 
-        <div className="min-h-svh flex flex-col gap-8 justify-center items-center text-7xl xs:text-8xl sm:text-9xl  wrap-break-word px-5 md:px-10 py-26 md:py-36">
+        <div className="min-h-svh flex flex-col gap-8 justify-center items-center text-7xl xs:text-8xl sm:text-9xl wrap-break-word px-5 md:px-10 py-26 md:py-36">
           <div className="flex flex-col items-center">
             <p className="text-xl sm:text-5xl justify-center text-center">
               {t("WELCOME", { shopName })}
