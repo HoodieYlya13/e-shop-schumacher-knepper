@@ -51,18 +51,19 @@ function getLimiter(path: string) {
 export async function middleware(req: NextRequest) {
   const pathname = req.nextUrl.pathname;
   const ip = getMiddlewareCookie(req, "customer_ip") || "127.0.0.1";
+  
+  let res: NextResponse = NextResponse.next();
 
   const isApiRoute = pathname.startsWith("/api/");
 
-  const limiter = getLimiter(pathname);
-  const key = `${pathname}-${ip}`;
-  const { success } = await limiter.limit(key);
-  if (!success)
-    return NextResponse.json({ error: "TOO_MANY_REQUESTS" }, { status: 429 });
+  if (isApiRoute) {
+    const limiter = getLimiter(pathname);
+    const key = `${pathname}-${ip}`;
+    const { success } = await limiter.limit(key);
 
-  let res: NextResponse = NextResponse.next();
-
-  if (!isApiRoute) {
+    if (!success)
+      return NextResponse.json({ error: "TOO_MANY_REQUESTS" }, { status: 429 });
+  } else {
     res = intlMiddleware(req);
 
     const isTesting = process.env.NEXT_PUBLIC_TESTING_MODE === "true";
@@ -80,8 +81,11 @@ export async function middleware(req: NextRequest) {
     if (!hasPreferredLocale) {
       const acceptLang = req.headers.get("accept-language");
       const browserLocale = acceptLang?.split(",")[0]?.split("-")[0]?.trim();
-      const isSupportedLocale = browserLocale && (SUPPORTED_LOCALES as readonly string[]).includes(browserLocale);
-      if (isSupportedLocale) setMiddlewareCookie(res, "preferred_locale", browserLocale);
+      const isSupportedLocale =
+        browserLocale &&
+        (SUPPORTED_LOCALES as readonly string[]).includes(browserLocale);
+      if (isSupportedLocale)
+        setMiddlewareCookie(res, "preferred_locale", browserLocale);
     }
 
     const url = new URL(req.url);
