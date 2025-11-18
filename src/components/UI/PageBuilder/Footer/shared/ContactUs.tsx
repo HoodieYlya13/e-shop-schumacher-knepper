@@ -8,7 +8,7 @@ export default async function ContactUs() {
   const phone = await getShopPhone();
   
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col gap-1 font-normal">
       <Location />
       <Phone phone={phone} />
       <Mail />

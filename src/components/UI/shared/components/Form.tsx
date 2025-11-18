@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import SubmitButton from "../elements/SubmitButton";
 import RootErrors from "@/components/UI/shared/elements/RootErrors";
 
@@ -24,14 +25,28 @@ export default function Form({
     buttonProps,
     errors
 }: FormProps) {
+  const [isCoolingDown, setIsCoolingDown] = useState(false);
+
+  const handleSubmitWithCooldown = (e: React.FormEvent<HTMLFormElement>) => {
+    if (isCoolingDown) {
+      e.preventDefault();
+      return;
+    }
+    setIsCoolingDown(true);
+    setTimeout(() => {
+      setIsCoolingDown(false);
+    }, 1000);
+    handleSubmit(e);
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmitWithCooldown} className="space-y-4">
       {children}
 
       <SubmitButton
         label={buttonProps.label}
         error={buttonProps.error}
-        disabled={buttonProps.disabled}
+        disabled={buttonProps.disabled || isCoolingDown}
       />
 
       {errors && <RootErrors errors={errors} />}

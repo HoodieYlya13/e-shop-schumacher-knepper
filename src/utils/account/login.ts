@@ -16,7 +16,5 @@ export async function login(customerAccessToken: string, tokenExpiry: string, re
 
   const data = await res.json();
 
-  if (data.redirectUrl) {
-    window.location.href = data.redirectUrl;
-  }
+  if (data.redirectUrl) window.location.href = data.redirectUrl;
 }

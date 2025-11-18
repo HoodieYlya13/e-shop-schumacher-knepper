@@ -73,7 +73,9 @@
       "TOKEN_INVALID": "Invalid token. Please request a new password reset.",
       "REQUIRED": "This field is required.",
       "TOO_MANY_CHAR": "Too many characters.",
-      "PASSWORD_INVALID": "Password is unsafe. Please use a stronger password."
+      "PASSWORD_INVALID": "Password is unsafe. Please use a stronger password.",
+      "PASSWORD_INCORRECT": "Incorrect password. Please try again.",
+      "TOO_MANY_REQUESTS": "Too many requests. Please try again later."
     }
   },
   "PRODUCT_PAGE": {

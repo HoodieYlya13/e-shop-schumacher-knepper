@@ -73,7 +73,9 @@
       "TOKEN_INVALID": "Jeton invalide. Veuillez demander une nouvelle réinitialisation de mot de passe.",
       "REQUIRED": "Ce champ est requis.",
       "TOO_MANY_CHAR": "Trop de caractères.",
-      "PASSWORD_INVALID": "Mot de passe non sécurisé. Veuillez utiliser un mot de passe plus fort."
+      "PASSWORD_INVALID": "Mot de passe non sécurisé. Veuillez utiliser un mot de passe plus fort.",
+      "PASSWORD_INCORRECT": "Mot de passe incorrect. Veuillez réessayer.",
+      "TOO_MANY_REQUESTS": "Trop de requêtes. Veuillez réessayer plus tard."
     }
   },
   "PRODUCT_PAGE": {

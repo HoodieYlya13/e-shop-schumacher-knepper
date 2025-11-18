@@ -13,7 +13,7 @@ export default function ProductTile({ locale, product }: ProductTileProps) {
       <Link
         href={`/products/${product.handle}`}
         tabIndex={0}
-        className="@container cursor-pointer text-start bg-ultra-light flex flex-col aspect-5/6 w-full min-w-40 max-w-80 rounded-2xl shadow-lg overflow-hidden relative transition-all duration-500 ease-in-out hover:scale-105 group"
+        className="@container cursor-pointer text-start bg-ultra-light flex flex-col aspect-5/6 w-full min-w-40 max-w-80 rounded-2xl overflow-hidden relative custom-shadow group"
       >
         <div className="w-full h-7/10 transition-all duration-500 ease-in-out group-hover:h-0 flex items-center justify-center">
           <div className="relative size-full transform transition-transform duration-700 group-hover:scale-120">

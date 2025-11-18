@@ -60,7 +60,7 @@ export default function DomainNavigation() {
   const t = useTranslations();
 
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-1 font-normal">
       {navDomain.map(({ href, labelKey, variant }) => {
         const localeRegex = /^\/[a-z]{2}(?=\/|$)/;
         const normalizedPath = pathname.replace(localeRegex, "") || "/";

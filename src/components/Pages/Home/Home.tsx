@@ -26,17 +26,17 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   if (!areRecommendedProducts) products = await getAllProducts(language);
   products = products.slice(0, 10);
 
-  const carouselDuration = products.length * 4;
+  const carouselDuration = products.length * 10;
 
   return (
     <>
       <section
-        className="h-svh w-full bg-cover bg-center relative shadow-2xl text-primary"
+        className="w-full bg-cover bg-center relative shadow-2xl text-primary"
         style={homeSectionStyle}
       >
         <div className="absolute inset-0 bg-linear-to-b from-ultra-dark to-dark opacity-30"></div>
 
-        <div className="flex flex-col gap-8 justify-center items-center text-7xl xs:text-8xl sm:text-9xl h-svh wrap-break-word">
+        <div className="min-h-svh flex flex-col gap-8 justify-center items-center text-7xl xs:text-8xl sm:text-9xl  wrap-break-word px-5 md:px-10 py-26 md:py-36">
           <div className="flex flex-col items-center">
             <p className="text-xl sm:text-5xl justify-center text-center">
               {t("WELCOME", { shopName })}

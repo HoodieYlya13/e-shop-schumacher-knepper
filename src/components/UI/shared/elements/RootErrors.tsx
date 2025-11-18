@@ -14,5 +14,5 @@ export default function RootErrors({ errors }: NonFieldErrorsProps) {
 
   if (!errors?.message) return null;
 
-  return <p className="text-invalid">{t(`ERRORS.${errors.message}`)}</p>;
+  return <p className="text-invalid text-shadow-md">{t(`ERRORS.${errors.message}`)}</p>;
 }

@@ -16,7 +16,7 @@
 
 :root {
   --size: max(100vw, 100vh);
-  --primary-color: #e8e8e8;
+  --primary-color: #F5F5F5;
   --secondary-color: #1e1e1e;
   --accent-color: #d4af37;
   --accent-dark-color: #b38c2d;
@@ -25,7 +25,7 @@
   --valid-color: #00a63e;
   --invalid-color: #e7000b;
   --ultra-dark-color: #030712;
-  --ultra-light-color: #f9fafb;
+  --ultra-light-color: #ffffff;
   --carousel-duration: 30s;
 }
 
@@ -86,4 +86,14 @@
 .liquid-glass-backdrop {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px); /* Safari support */
+}
+
+.custom-shadow {
+  box-shadow: 2px 4px 12px #00000014;
+  transition: all 0.3s cubic-bezier(0, 0, 0.5, 1);
+}
+
+.custom-shadow:hover {
+  box-shadow: 2px 4px 16px #00000029;
+  transform: scale3d(1.01, 1.01, 1.01);
 }

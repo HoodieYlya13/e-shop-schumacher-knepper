@@ -16,7 +16,7 @@ interface AuthProps {
   resetPasswordUrl?: string;
 };
 
-export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {  
+export default function Auth({ initialMode, resetPasswordUrl }: AuthProps) {
   const t = useTranslations('AUTH');
   const form = useAuthForm({ initialMode, resetPasswordUrl });
 

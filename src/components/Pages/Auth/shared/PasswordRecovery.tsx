@@ -65,6 +65,7 @@ export default function PasswordRecovery({
             target="_blank"
             className="text-accent"
             child={emailProviderLink.name}
+            underline
           />
         </p>
       )}

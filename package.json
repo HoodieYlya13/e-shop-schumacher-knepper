@@ -12,6 +12,8 @@
     "@hookform/resolvers": "^5.1.1",
     "@shopify/admin-api-client": "^1.1.1",
     "@shopify/hydrogen-react": "^2025.5.0",
+    "@upstash/ratelimit": "^2.0.7",
+    "@upstash/redis": "^1.35.6",
     "clsx": "^2.1.1",
     "cookie": "^1.0.2",
     "framer-motion": "^12.23.12",

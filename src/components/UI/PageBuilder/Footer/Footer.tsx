@@ -38,7 +38,7 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-col gap-1 text-center">
+        <div className="flex flex-col gap-1 text-center font-normal">
           <p className="text-sm text-dark">
             &copy; {new Date().getFullYear()}{" "}
             <Button
