@@ -56,17 +56,28 @@ export async function middleware(req: NextRequest) {
 
   const isApiRoute = pathname.startsWith("/api/");
 
-  if (isApiRoute) {
-    const limiter = getLimiter(pathname);
-    const key = `${pathname}-${ip}`;
-    const { success } = await limiter.limit(key);
+  const isTesting = process.env.NEXT_PUBLIC_TESTING_MODE === "true";
 
-    if (!success)
-      return NextResponse.json({ error: "TOO_MANY_REQUESTS" }, { status: 429 });
+  if (isApiRoute) {
+    const shouldLimit =
+      isTesting
+        ? pathname.startsWith("/api/auth/testing-mode")
+        : true;
+    
+    if (shouldLimit) {
+      const limiter = getLimiter(pathname);
+      const key = `${pathname}-${ip}`;
+      const { success } = await limiter.limit(key);
+
+      if (!success)
+        return NextResponse.json(
+          { error: "TOO_MANY_REQUESTS" },
+          { status: 429 }
+        );
+    }
   } else {
     res = intlMiddleware(req);
 
-    const isTesting = process.env.NEXT_PUBLIC_TESTING_MODE === "true";
     if (isTesting) {
       const isAuthorized = getMiddlewareCookie(req, "isAuthorized");
 
