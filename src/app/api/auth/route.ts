@@ -5,11 +5,20 @@ import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 import { LocaleLanguages } from '@/i18n/utils';
 
 export async function POST(req: NextRequest) {
-  const { mode, email, password, firstName, lastName, phone, acceptsMarketing, resetUrl } = await req.json();
+  const {
+    mode,
+    email,
+    password,
+    firstName,
+    lastName,
+    phone,
+    acceptsMarketing,
+    resetUrl,
+  } = await req.json();
 
+  if (!mode || !(mode as Mode)) return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
+  
   try {
-    if (!mode || !(mode as Mode)) return NextResponse.json({ error: 'Invalid mode' }, { status: 400 });
-    
     let response;
 
     switch (mode as Mode) {
@@ -47,8 +56,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(response);
   } catch (error: unknown) {
-    if (error instanceof Error) return NextResponse.json({ error: error.message }, { status: 500 });
-
-    return NextResponse.json({ error: 'Unknown error' }, { status: 500 });
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -6,29 +6,29 @@ import { getCustomerCountryServer } from '@/utils/shared/getters/getCustomerCoun
 import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
 
 export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const {
+    type,
+    variantId,
+    lineId,
+    lineIds,
+    quantity,
+  } = body;
+
+  const cartId = await getCheckoutId();
+
+  if (!cartId) return NextResponse.json({ cart: null });
+
+  if (!type)
+    return NextResponse.json(
+      { error: "Operation type" },
+      { status: 400 }
+    );
+
+  const country = await getCustomerCountryServer();
+  const language = await getPreferredLocale(true) as LocaleLanguagesUpperCase;
+
   try {
-    const body = await req.json();
-    const {
-      type,
-      variantId,
-      lineId,
-      lineIds,
-      quantity,
-    } = body;
-
-    const cartId = await getCheckoutId();
-
-    if (!cartId) return NextResponse.json({ success: true, cart: null });
-
-    if (!type)
-      return NextResponse.json(
-        { error: "Operation type" },
-        { status: 400 }
-      );
-
-    const country = await getCustomerCountryServer();
-    const language = await getPreferredLocale(true) as LocaleLanguagesUpperCase;
-
     let operation: CartOperation;
 
     switch (type) {
@@ -72,11 +72,9 @@ export async function POST(req: NextRequest) {
       language,
     });
 
-    return NextResponse.json({ success: true, cart: updatedCart });
-
+    return NextResponse.json({ cart: updatedCart });
   } catch (error: unknown) {
-    console.error('Cart Update API Error:', error);
-    const message = error instanceof Error ? error.message : 'Unknown error';
+    const message = error instanceof Error ? error.message : "Unknown error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }

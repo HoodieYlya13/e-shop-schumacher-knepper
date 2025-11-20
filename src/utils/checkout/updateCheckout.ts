@@ -21,3 +21,13 @@ export async function updateCartLinesClient(payload: {
   const data = await response.json();
   return data.cart;
 }
+
+export async function deleteCheckout() {
+  await fetch("/api/checkout/delete", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}

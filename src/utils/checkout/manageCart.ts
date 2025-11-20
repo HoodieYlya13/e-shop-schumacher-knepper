@@ -1,5 +1,5 @@
 import { Cart, Product } from "@shopify/hydrogen-react/storefront-api-types";
-import { updateCartLinesClient } from "./updateCheckout";
+import { updateCartLinesClient, deleteCheckout } from "./updateCheckout";
 import { CartItem } from "@/components/UI/PageBuilder/NavBar/shared/CartContent";
 
 export const addProductToCart = async (
@@ -145,6 +145,14 @@ export const deleteProductFromCart = async (variantId: string) => {
       });
     } catch (error) {
       console.error("Failed to remove item from Shopify:", error);
+    }
+  }
+
+  if (updatedCart.length === 0) {
+    try {
+      await deleteCheckout();
+    } catch (error) {
+      console.error("Failed to delete checkout:", error);
     }
   }
 };

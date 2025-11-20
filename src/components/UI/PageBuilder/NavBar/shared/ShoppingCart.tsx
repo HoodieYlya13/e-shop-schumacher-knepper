@@ -82,7 +82,7 @@ export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: Sho
       <ShoppingCartIcon />
 
       {cartCount > 0 && (
-        <div className="absolute -top-1/2 left-0 text-xs size-5 flex justify-center items-center">
+        <div className="absolute -top-1/2 left-0 text-xs size-5 flex justify-center items-center select-none">
           {cartCount > 9 ? "9+" : cartCount}
         </div>
       )}

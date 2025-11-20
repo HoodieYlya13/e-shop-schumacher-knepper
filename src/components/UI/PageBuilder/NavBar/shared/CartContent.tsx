@@ -140,14 +140,18 @@ export default function CartContent() {
               )}
             >
               <div className="relative size-6 xs:size-12 sm:size-24 shrink-0">
-                <Image
-                  src={item.product.featuredImage.url}
-                  alt={item.product.featuredImage.altText || item.product.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  style={{ objectFit: "cover" }}
-                  className="rounded-lg"
-                />
+                {item.product.featuredImage?.url && (
+                  <Image
+                    src={item.product.featuredImage.url}
+                    alt={
+                      item.product.featuredImage.altText || item.product.title
+                    }
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    style={{ objectFit: "cover" }}
+                    className="rounded-lg"
+                  />
+                )}
               </div>
 
               <div className="flex-1">
@@ -160,9 +164,7 @@ export default function CartContent() {
 
               <div className="flex items-center space-x-1 sm:space-x-2">
                 <Button
-                  onClick={() =>
-                    handleQuantityChange(item.variantId, -1)
-                  }
+                  onClick={() => handleQuantityChange(item.variantId, -1)}
                   disabled={item.quantity <= 1}
                   child="-"
                   className="p-0! rounded-md size-6 sm:size-8"
@@ -171,15 +173,15 @@ export default function CartContent() {
                   {item.quantity}
                 </span>
                 <Button
-                  onClick={() =>
-                    handleQuantityChange(item.variantId, 1)
-                  }
+                  onClick={() => handleQuantityChange(item.variantId, 1)}
                   child="+"
                   className="p-0! rounded-md size-6 sm:size-8"
                 />
               </div>
 
-              <TrashIconButton onClick={() => handleRemoveItem(item.variantId)} />
+              <TrashIconButton
+                onClick={() => handleRemoveItem(item.variantId)}
+              />
             </div>
           ))}
         </div>

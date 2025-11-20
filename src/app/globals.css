@@ -66,6 +66,10 @@
   }
 }
 
+html, body {
+  overscroll-behavior: none;
+}
+
 .input-focus-glow:focus-within::after {
   opacity: 1;
 }

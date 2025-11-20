@@ -11,9 +11,7 @@ interface ProductTileProps {
 
 export default function ProductTile({ locale, product }: ProductTileProps) {
   const mainVariant = product.variants.edges[0]?.node;
-  console.log(mainVariant);
   
-
   return (
     <Link
       href={`/products/${product.handle}`}

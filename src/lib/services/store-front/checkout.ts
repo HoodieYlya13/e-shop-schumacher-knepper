@@ -259,10 +259,10 @@ export async function updateCheckoutLines(
         lines: {
           edges: Array<{
             node: {
-              id: string; // THIS IS THE lineId
+              id: string;
               quantity: number;
               merchandise: {
-                id: string; // THIS IS THE variantId
+                id: string;
               };
             };
           }>;

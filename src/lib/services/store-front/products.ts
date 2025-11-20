@@ -314,6 +314,10 @@ const GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY = `
             title
             description
             handle
+            featuredImage {
+              url
+              altText
+            }
             images(first: 5) {
               edges {
                 node {
@@ -326,6 +330,7 @@ const GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY = `
               edges {
                 node {
                   id
+                  availableForSale
                   price {
                     amount
                     currencyCode
