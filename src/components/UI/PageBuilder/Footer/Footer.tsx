@@ -18,7 +18,12 @@ export default async function Footer() {
       <div className="w-full max-w-7xl flex flex-col gap-5 justify-center mx-auto">
         <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 md:gap-5 place-content-around">
           <div className="flex flex-col gap-4">
-            <Button href={"/"} className={titleClassName} child="Le domaine" />
+            <Button
+              href={"/"}
+              className={titleClassName}
+              child="Le domaine"
+              oneLiner
+            />
             <DomainNavigation />
           </div>
 
@@ -28,6 +33,7 @@ export default async function Footer() {
                 href={"/contact-us"}
                 className={titleClassName}
                 child="Nous contacter"
+                oneLiner
               />
               <ContactUs />
             </div>
@@ -45,7 +51,7 @@ export default async function Footer() {
               href="https://www.schumacher-knepper.lu"
               target="_blank"
               child={t("WELCOME", { shopName })}
-              className="opacity-100 hover:scale-101"
+              className="opacity-100 hover:scale-101!"
               underline
             />
             . {t("ALL_RIGHTS_RESERVED")}

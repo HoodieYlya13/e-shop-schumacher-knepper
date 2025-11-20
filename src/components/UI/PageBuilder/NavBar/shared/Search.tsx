@@ -69,9 +69,7 @@ export default function Search({
         setSearchSuggestions(products);
       };
 
-      const debounceTimeout = setTimeout(fetchProducts, 300);
-
-      return () => clearTimeout(debounceTimeout);
+      fetchProducts();
     } else setSearchSuggestions([]);
   }, [searchTerm, storedLocale, setSearchSuggestions]);
 

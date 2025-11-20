@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { openCheckout } from "@/utils/checkout/openCheckout";
 import clsx from 'clsx';
 import Button from '@/components/UI/shared/elements/Button';
+import { addProductToCart, deleteProductFromCart, removeProductQuantity } from '@/utils/checkout/manageCart';
 
 interface TrashIconButtonProps {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
@@ -35,7 +36,7 @@ function TrashIconButton({ onClick }: TrashIconButtonProps) {
   );
 }
 
-type CartItem = {
+export type CartItem = {
   variantId: string;
   quantity: number;
   product: {
@@ -45,6 +46,7 @@ type CartItem = {
     price: string;
     currencyCode: string;
   };
+  lineId: string | null;
 };
 
 export default function CartContent() {
@@ -52,11 +54,6 @@ export default function CartContent() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-
-  const updateCart = (newCart: CartItem[]) => {
-    localStorage.setItem('cart', JSON.stringify(newCart));
-    setCart(newCart);
-  };
 
   useEffect(() => {
     const storedCart = localStorage.getItem('cart');
@@ -69,15 +66,25 @@ export default function CartContent() {
 
   const handleRemoveItem = (variantId: string) => {
     const newCart = cart.filter(item => item.variantId !== variantId);
-    updateCart(newCart);
+    deleteProductFromCart(variantId);
+    setCart(newCart);
   };
 
-  const handleQuantityChange = (variantId: string, newQuantity: number) => {
-    if (newQuantity < 1) return;
-    const newCart = cart.map(item =>
-      item.variantId === variantId ? { ...item, quantity: newQuantity } : item
+  const handleQuantityChange = (variantId: string, variation: number) => {
+    const newCart = cart.map((cartItem) =>
+      cartItem.variantId === variantId
+        ? {
+            ...cartItem,
+            quantity:
+              cartItem.quantity + variation > 0
+                ? cartItem.quantity + variation
+                : 1,
+          }
+        : cartItem
     );
-    updateCart(newCart as CartItem[]);
+    setCart(newCart);
+    if (variation > 0) return addProductToCart(variantId);
+    removeProductQuantity(variantId);
   };
   
   const handleCheckout = async () => {
@@ -154,7 +161,7 @@ export default function CartContent() {
               <div className="flex items-center space-x-1 sm:space-x-2">
                 <Button
                   onClick={() =>
-                    handleQuantityChange(item.variantId, item.quantity - 1)
+                    handleQuantityChange(item.variantId, -1)
                   }
                   disabled={item.quantity <= 1}
                   child="-"
@@ -165,7 +172,7 @@ export default function CartContent() {
                 </span>
                 <Button
                   onClick={() =>
-                    handleQuantityChange(item.variantId, item.quantity + 1)
+                    handleQuantityChange(item.variantId, 1)
                   }
                   child="+"
                   className="p-0! rounded-md size-6 sm:size-8"

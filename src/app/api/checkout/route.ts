@@ -23,14 +23,14 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const { id, checkoutUrl } = await createCheckout({
+    const { id, checkoutUrl, lines } = await createCheckout({
       lineItems,
       customerAccessToken,
       country,
       language,
     });
 
-    const response = NextResponse.json({ url: checkoutUrl });
+    const response = NextResponse.json({ url: checkoutUrl, lines });
 
     setServerCookie({
       name: "checkout_id",

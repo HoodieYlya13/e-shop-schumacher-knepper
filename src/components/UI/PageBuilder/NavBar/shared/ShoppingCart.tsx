@@ -43,7 +43,7 @@ export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: Sho
   const [cartCount, setCartCount] = useState<number>(0);
 
   useEffect(() => {
-    const updateCartCount = () => {
+    const updateCart = () => {
       const storedCart = localStorage.getItem("cart");
       if (storedCart) {
         try {
@@ -60,14 +60,14 @@ export default function ShoppingCart({ showCart, setShowCart, setShowMenu }: Sho
       } else setCartCount(0);
     };
 
-    updateCartCount();
+    updateCart();
 
-    window.addEventListener("storage", updateCartCount);
-    window.addEventListener("cartUpdated", updateCartCount);
+    window.addEventListener("storage", updateCart);
+    window.addEventListener("cartUpdated", updateCart);
 
     return () => {
-      window.removeEventListener("storage", updateCartCount);
-      window.removeEventListener("cartUpdated", updateCartCount);
+      window.removeEventListener("storage", updateCart);
+      window.removeEventListener("cartUpdated", updateCart);
     };
   }, []);
 

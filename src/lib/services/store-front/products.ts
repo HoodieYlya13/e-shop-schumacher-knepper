@@ -15,6 +15,10 @@ const GET_ALL_PRODUCTS_QUERY = `
           title
           description
           handle
+          featuredImage {
+            url
+            altText
+          }
           images(first: 5) {
             edges {
               node {
@@ -27,6 +31,7 @@ const GET_ALL_PRODUCTS_QUERY = `
             edges {
               node {
                 id
+                availableForSale
                 price {
                   amount
                   currencyCode
@@ -183,6 +188,7 @@ const SEARCH_PRODUCTS_QUERY = `
         node {
           id
           title
+          description
           handle
           images(first: 1) {
             edges {

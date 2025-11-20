@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { LocaleLanguages } from '@/i18n/utils';
+import { addProductToCart } from '@/utils/checkout/manageCart';
 
 const ProductTree = ({
   product,
@@ -109,6 +110,7 @@ const Thumbnail = ({ img, idx, isActive, product, setCurrentImageIndex }: { img:
         fill
         sizes="(max-width: 768px) 100vw, 50vw"
         style={{ objectFit: "cover" }}
+        priority
       />
     </div>
   );
@@ -135,44 +137,6 @@ const Thumbnails = ({ product, currentImageIndex, setCurrentImageIndex }: { prod
   );
 }
 
-const addProductToCart = (
-  variantId: string,
-  quantity: number,
-  product: Product
-) => {
-  if (typeof window !== 'undefined' && quantity > 0) {
-    const storedCart = localStorage.getItem('cart');
-    const cart = storedCart ? JSON.parse(storedCart) : [];
-
-    const existingItemIndex = cart.findIndex(
-      (item: { variantId: string }) => item.variantId === variantId
-    );
-
-    const productData = {
-      id: product.id,
-      title: product.title,
-      featuredImage: product.featuredImage
-        ? {
-            url: product.featuredImage.url,
-            altText: product.featuredImage.altText,
-          }
-        : null,
-      price: product.variants.edges[0]?.node.price.amount,
-      currencyCode: product.variants.edges[0]?.node.price.currencyCode,
-    };
-
-    if (existingItemIndex > -1) cart[existingItemIndex].quantity += quantity;
-    else cart.push({
-      variantId,
-      quantity,
-      product: productData,
-    });
-
-    localStorage.setItem('cart', JSON.stringify(cart));
-    window.dispatchEvent(new Event("cartUpdated"));
-  }
-};
-
 export default function Product({
   locale,
   product,
@@ -182,7 +146,8 @@ export default function Product({
 }) {
   const t = useTranslations("PRODUCT_PAGE");
   const [quantity, setQuantity] = useState(1);
-  const mainVariant = product.variants.edges[0]?.node;
+  const mainVariant = product.variants.edges[0].node;
+  
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const typeCollection = product.collections.edges.find(({ node }) =>
@@ -193,11 +158,7 @@ export default function Product({
     : "";
   const typeQueryParam = typeCollection
     ? typeCollection.node.title.split("__")[0]?.replace(/_/g, "=") ?? ""
-    : ""; 
-
-  const handleAddToCart = () => {
-    if (mainVariant) addProductToCart(mainVariant.id, quantity, product);
-  };
+    : "";
 
   return (
     <section className="container mx-auto flex flex-col gap-2 md:gap-4">
@@ -260,11 +221,9 @@ export default function Product({
           <div className="flex items-center space-x-2">
             <span className="text-lg font-semibold">{t("AVAILABILITY")}:</span>
             <span
-              className={`text-lg font-bold ${mainVariant?.availableForSale ? "text-valid" : "text-invalid"}`}
+              className={`text-lg font-bold ${mainVariant.availableForSale ? "text-valid" : "text-invalid"}`}
             >
-              {mainVariant?.availableForSale
-                ? t("IN_STOCK")
-                : t("OUT_OF_STOCK")}
+              {mainVariant.availableForSale ? t("IN_STOCK") : t("OUT_OF_STOCK")}
             </span>
           </div>
 
@@ -295,11 +254,13 @@ export default function Product({
             </div>
 
             <button
-              onClick={handleAddToCart}
+              onClick={() =>
+                addProductToCart(mainVariant.id, product, quantity)
+              }
               className="flex-1 md:flex-none w-full md:w-auto px-6 py-3 bg-accent text-ultra-light rounded-lg font-semibold hover:bg-accent-dark transition-colors duration-300 cursor-pointer"
-              disabled={!mainVariant?.availableForSale || quantity < 1}
+              disabled={!mainVariant.availableForSale}
             >
-              {mainVariant?.availableForSale ? t("ADD_TO_CART") : t("SOLD_OUT")}
+              {mainVariant.availableForSale ? t("ADD_TO_CART") : t("SOLD_OUT")}
             </button>
           </div>
         </div>
