@@ -1,5 +1,5 @@
 import Button from "@/components/UI/shared/elements/Button";
-import { getShopMail } from "@/lib/services/store-front/shop";
+import { getShopEmail } from "@/lib/services/store-front/shop";
 
 function MailIcon() {
   return (
@@ -16,7 +16,7 @@ function MailIcon() {
 }
 
 export default async function Mail() {
-  const mail = await getShopMail();
+  const mail = await getShopEmail();
 
   return (
     <Button

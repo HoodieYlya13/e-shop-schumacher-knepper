@@ -2,6 +2,50 @@ import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from '@/i18n/utils';
 import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
 import { Collection, Product } from '@shopify/hydrogen-react/storefront-api-types';
 
+const PRODUCT_FIELDS = `
+  id
+  title
+  description
+  handle
+  featuredImage {
+    url
+    altText
+  }
+  images(first: 20) {
+    edges {
+      node {
+        url
+        altText
+      }
+    }
+  }
+  variants(first: 1) {
+    edges {
+      node {
+        id
+        title
+        availableForSale
+        price {
+          amount
+          currencyCode
+        }
+        compareAtPrice {
+          amount
+          currencyCode
+        }
+      }
+    }
+  }
+  collections(first: 10) {
+    edges {
+      node {
+        title
+        handle
+      }
+    }
+  }
+`;
+
 const GET_ALL_PRODUCTS_QUERY = `
   query AllProducts($language: LanguageCode, $after: String, $sortKey: ProductSortKeys, $reverse: Boolean) @inContext(language: $language) {
     products(first: 250, after: $after, sortKey: $sortKey, reverse: $reverse) {
@@ -11,46 +55,7 @@ const GET_ALL_PRODUCTS_QUERY = `
       }
       edges {
         node {
-          id
-          title
-          description
-          handle
-          featuredImage {
-            url
-            altText
-          }
-          images(first: 5) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                id
-                availableForSale
-                price {
-                  amount
-                  currencyCode
-                }
-                compareAtPrice {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-          collections(first: 10) {
-            edges {
-              node {
-                title
-                handle
-              }
-            }
-          }
+          ${PRODUCT_FIELDS}
         }
       }
     }
@@ -102,61 +107,7 @@ export async function getAllProducts(
 const GET_SINGLE_PRODUCT_QUERY = `
   query SingleProduct($handle: String!, $language: LanguageCode) @inContext(language: $language) {
     product(handle: $handle) {
-      id
-      title
-      description
-      handle
-      tags
-      seo {
-        title
-        description
-      }
-      featuredImage {
-        url
-        altText
-      }
-      images(first: 20) {
-        edges {
-          node {
-            url
-            altText
-          }
-        }
-      }
-      variants(first: 20) {
-        edges {
-          node {
-            id
-            title
-            availableForSale
-            sku
-            price {
-              amount
-              currencyCode
-            }
-            compareAtPrice {
-              amount
-              currencyCode
-            }
-            selectedOptions {
-              name
-              value
-            }
-            image {
-              url
-              altText
-            }
-          }
-        }
-      }
-      collections(first: 10) {
-        edges {
-          node {
-            title
-            handle
-          }
-        }
-      }
+      ${PRODUCT_FIELDS}
     }
   }
 `;
@@ -186,37 +137,7 @@ const SEARCH_PRODUCTS_QUERY = `
       }
       edges {
         node {
-          id
-          title
-          description
-          handle
-          images(first: 1) {
-            edges {
-              node {
-                url
-                altText
-              }
-            }
-          }
-          variants(first: 1) {
-            edges {
-              node {
-                id
-                price {
-                  amount
-                  currencyCode
-                }
-              }
-            }
-          }
-          collections(first: 10) {
-            edges {
-              node {
-                title
-                handle
-              }
-            }
-          }
+          ${PRODUCT_FIELDS}
         }
       }
     }
@@ -310,38 +231,7 @@ const GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY = `
         }
         edges {
           node {
-            id
-            title
-            description
-            handle
-            featuredImage {
-              url
-              altText
-            }
-            images(first: 5) {
-              edges {
-                node {
-                  url
-                  altText
-                }
-              }
-            }
-            variants(first: 1) {
-              edges {
-                node {
-                  id
-                  availableForSale
-                  price {
-                    amount
-                    currencyCode
-                  }
-                  compareAtPrice {
-                    amount
-                    currencyCode
-                  }
-                }
-              }
-            }
+            ${PRODUCT_FIELDS}
           }
         }
       }

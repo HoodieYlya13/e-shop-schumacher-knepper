@@ -210,7 +210,12 @@ const Filters = ({
         )}
       </div>
 
-      <div className={clsx("flex justify-between", { "mb-4": !searchTerm })}>
+      <div
+        className={clsx(
+          "flex justify-between",
+          searchTerm ? "mb-0 lg:mb-4" : "mb-4"
+        )}
+      >
         {!searchTerm && (
           <select
             className="px-1 py-2 bg-ultra-light rounded-md shadow-md font-semibold w-full sm:w-96 transform transition-transform duration-300 hover:scale-105"

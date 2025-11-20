@@ -6,9 +6,9 @@ export default async function GeneralTermsPage() {
   
   return (
     <PageBuilder>
-      <h1 className='mb-5 text-2xl'>{generalTerms.title}</h1>
+      <h1 className='mb-5 text-2xl'>{generalTerms?.title}</h1>
       <div className="space-y-8">
-        {generalTerms.articles.map((article, index) => (
+        {generalTerms?.articles.map((article, index) => (
           <section key={index} className="space-y-4">
             <h2 className="text-xl font-semibold">
               {article.title}

@@ -20,8 +20,6 @@ export default async function ProductsPage({
   if (searchTerm) products = await getProductsForFullSearch(searchTerm, language);
   else products = await getAllProducts(language);
 
-  console.log('Products:', products);
-
   return (
     <PageBuilder>
       <AllProducts locale={locale} products={products} searchTerm={searchTerm} />
