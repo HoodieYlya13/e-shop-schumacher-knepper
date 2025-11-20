@@ -11,7 +11,7 @@ export default async function DeliveryPage() {
           {deliveryPolicies?.articles?.map((article, index) => (
             <section key={index} className="space-y-4">
               <h2 className="text-xl font-semibold">
-                {article.title}
+                {article?.title}
               </h2>
   
               {article?.paragraphs?.map((p: string, index: number) => (
