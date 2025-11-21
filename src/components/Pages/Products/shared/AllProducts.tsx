@@ -3,7 +3,7 @@
 import { Collection, Product } from '@shopify/hydrogen-react/storefront-api-types';
 import Image from 'next/image';
 import { useTranslations } from 'next-intl';
-import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
+import { LocaleLanguages } from '@/i18n/utils';
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React from 'react';
@@ -25,7 +25,6 @@ interface Filter {
 
 interface TypeBannerProps {
   handle?: string;
-  language: LocaleLanguagesUpperCase;
   title?: string;
 }
 
@@ -295,7 +294,7 @@ const Filters = ({
   );
 };
 
-const TypeBanner = ({ handle, language, title }: TypeBannerProps) => {
+const TypeBanner = ({ handle, title }: TypeBannerProps) => {
   const [collection, setCollection] = useState<Collection | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -305,7 +304,7 @@ const TypeBanner = ({ handle, language, title }: TypeBannerProps) => {
     const fetchCollection = async () => {
       try {
         setLoading(true);
-        const data = await getCollection(handle, language);
+        const data = await getCollection(handle);
         setCollection(data);
       } catch (err) {
         console.error("Failed to load collection:", err);
@@ -315,7 +314,7 @@ const TypeBanner = ({ handle, language, title }: TypeBannerProps) => {
     };
 
     fetchCollection();
-  }, [handle, language]);
+  }, [handle]);
 
   if (!handle) return null;
 
@@ -648,7 +647,6 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
       <section className="grow">
         <TypeBanner
           handle={collectionHandleToPass}
-          language={locale.toUpperCase() as LocaleLanguagesUpperCase}
           title={collectionTitleToPass}
         />
 

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
-import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
+import { LocaleLanguages } from '@/i18n/utils';
 import { getProductsSearchSuggestions, ProductSuggestion } from '@/utils/products/getProductsSearchSuggestions';
 import { useRouter } from 'next/navigation';
 import { useCallback } from 'react';
@@ -62,10 +62,7 @@ export default function Search({
   useEffect(() => {
     if (searchTerm.length > 0) {
       const fetchProducts = async () => {
-        const products = await getProductsSearchSuggestions(
-          searchTerm,
-          storedLocale?.toUpperCase() as LocaleLanguagesUpperCase
-        );
+        const products = await getProductsSearchSuggestions(searchTerm);
         setSearchSuggestions(products);
       };
 

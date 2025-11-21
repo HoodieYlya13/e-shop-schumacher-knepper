@@ -2,6 +2,7 @@ import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
 import {
   Collection,
+  CountryCode,
   Product,
 } from "@shopify/hydrogen-react/storefront-api-types";
 
@@ -50,7 +51,7 @@ const PRODUCT_FIELDS = `
 `;
 
 const GET_ALL_PRODUCTS_QUERY = `
-  query AllProducts($language: LanguageCode, $after: String, $sortKey: ProductSortKeys, $reverse: Boolean) @inContext(language: $language) {
+  query AllProducts($language: LanguageCode, $country: CountryCode, $after: String, $sortKey: ProductSortKeys, $reverse: Boolean) @inContext(language: $language, country: $country) {
     products(first: 250, after: $after, sortKey: $sortKey, reverse: $reverse) {
       pageInfo {
         hasNextPage
@@ -79,6 +80,7 @@ interface ShopifySearchProductsResponse {
 
 export async function getAllProducts(
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  country: CountryCode = "LU",
   sortKey: string = "TITLE",
   reverse: boolean = false
 ): Promise<Product[]> {
@@ -93,6 +95,7 @@ export async function getAllProducts(
           GET_ALL_PRODUCTS_QUERY,
           {
             language,
+            country,
             after: cursor,
             sortKey,
             reverse,
@@ -118,7 +121,7 @@ export async function getAllProducts(
 }
 
 const GET_SINGLE_PRODUCT_QUERY = `
-  query SingleProduct($handle: String!, $language: LanguageCode) @inContext(language: $language) {
+  query SingleProduct($handle: String!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     product(handle: $handle) {
       ${PRODUCT_FIELDS}
     }
@@ -131,7 +134,8 @@ interface ShopifySingleProductResponse {
 
 export async function getSingleProduct(
   handle: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  country: CountryCode = "LU"
 ): Promise<Product | null> {
   try {
     const response = await shopifyServerFetch<ShopifySingleProductResponse>(
@@ -139,6 +143,7 @@ export async function getSingleProduct(
       {
         handle,
         language,
+        country,
       }
     );
 
@@ -155,7 +160,7 @@ export async function getSingleProduct(
 }
 
 const SEARCH_PRODUCTS_QUERY = `
-  query SearchProducts($query: String!, $language: LanguageCode, $first: Int!, $after: String) @inContext(language: $language) {
+  query SearchProducts($query: String!, $language: LanguageCode, $country: CountryCode, $first: Int!, $after: String) @inContext(language: $language, country: $country) {
     products(first: $first, query: $query, after: $after) {
       pageInfo {
         hasNextPage
@@ -172,7 +177,8 @@ const SEARCH_PRODUCTS_QUERY = `
 
 export async function getProductsForLiveSearch(
   title: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  country: CountryCode = "LU"
 ): Promise<Product[]> {
   try {
     const query = `title:*${title}*`;
@@ -181,6 +187,7 @@ export async function getProductsForLiveSearch(
       {
         query,
         language,
+        country,
         first: 3,
       }
     );
@@ -199,7 +206,8 @@ export async function getProductsForLiveSearch(
 
 export async function getProductsForFullSearch(
   title: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  country: CountryCode = "LU"
 ): Promise<Product[]> {
   const allProducts: Product[] = [];
   const query = `title:*${title}*`;
@@ -214,6 +222,7 @@ export async function getProductsForFullSearch(
           {
             query,
             language,
+            country,
             first: 250,
             after: cursor,
           }
@@ -238,7 +247,7 @@ export async function getProductsForFullSearch(
 }
 
 const GET_COLLECTION_BY_HANDLE_QUERY = `
-  query CollectionByHandle($handle: String!, $language: LanguageCode) @inContext(language: $language) {
+  query CollectionByHandle($handle: String!, $language: LanguageCode, $country: CountryCode) @inContext(language: $language, country: $country) {
     collection(handle: $handle) {
       title
       description
@@ -256,13 +265,14 @@ interface ShopifyCollectionResponse {
 
 export async function getCollectionByHandle(
   handle: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  country: CountryCode = "LU"
 ): Promise<Collection | null> {
   try {
     const response: ShopifyCollectionResponse =
       await shopifyServerFetch<ShopifyCollectionResponse>(
         GET_COLLECTION_BY_HANDLE_QUERY,
-        { handle, language }
+        { handle, language, country }
       );
 
     if (!response?.collection) {
@@ -278,7 +288,7 @@ export async function getCollectionByHandle(
 }
 
 const GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY = `
-  query ProductsByCollectionHandle($handle: String!, $language: LanguageCode, $after: String) @inContext(language: $language) {
+  query ProductsByCollectionHandle($handle: String!, $language: LanguageCode, $country: CountryCode, $after: String) @inContext(language: $language, country: $country) {
     collection(handle: $handle) {
       products(first: 250, after: $after) {
         pageInfo {
@@ -311,7 +321,8 @@ interface ShopifyProductsByCollectionResponse {
 
 export async function getProductsByCollectionHandle(
   handle: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  country: CountryCode = "LU"
 ): Promise<Product[]> {
   const allProducts: Product[] = [];
   let hasNextPage = true;
@@ -325,6 +336,7 @@ export async function getProductsByCollectionHandle(
           {
             handle,
             language,
+            country,
             after: cursor,
           }
         );

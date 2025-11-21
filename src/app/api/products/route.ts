@@ -1,10 +1,15 @@
+import { LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { getProductsForLiveSearch } from "@/lib/services/store-front/products";
 import { ProductSuggestion } from "@/utils/products/getProductsSearchSuggestions";
+import { getCustomerCountryServer } from "@/utils/shared/getters/getCustomerCountryServer";
+import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
 import { Product } from "@shopify/hydrogen-react/storefront-api-types";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
-  const { title, language } = await req.json();
+  const { title } = await req.json();
+  const language = (await getPreferredLocale(true)) as LocaleLanguagesUpperCase;
+  const country = await getCustomerCountryServer();
 
   try {
     if (!title)
@@ -13,7 +18,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const products: Product[] = await getProductsForLiveSearch(title, language);
+    const products: Product[] = await getProductsForLiveSearch(title, language, country);
 
     const simplifiedProducts: ProductSuggestion[] = products.map((product) => ({
       handle: product.handle,

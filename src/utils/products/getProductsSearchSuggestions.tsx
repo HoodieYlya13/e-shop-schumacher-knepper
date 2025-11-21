@@ -1,5 +1,3 @@
-import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from "@/i18n/utils";
-
 export interface ProductSuggestion {
   handle: string;
   title: string;
@@ -10,15 +8,14 @@ export interface ProductSuggestion {
 }
 
 export async function getProductsSearchSuggestions(
-  title: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
+  title: string
 ): Promise<ProductSuggestion[]> {
   const response = await fetch("/api/products", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title, language }),
+    body: JSON.stringify({ title }),
   });
 
   if (!response.ok) throw new Error("Failed to fetch product suggestions.");

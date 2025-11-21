@@ -7,6 +7,7 @@ import { getAllProducts, getCollectionByHandle, getProductsByCollectionHandle } 
 import RecommendedProducts from "./shared/RecommendedProducts";
 import RecommendedCollection from "./shared/RecommendedCollection";
 import SeeAllProductsButton from "./shared/SeeAllProductsButton";
+import { getCustomerCountryServer } from "@/utils/shared/getters/getCustomerCountryServer";
 
 export default async function Home({ locale }: { locale: LocaleLanguages }) {
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
@@ -18,12 +19,13 @@ export default async function Home({ locale }: { locale: LocaleLanguages }) {
   };
 
   const language = locale.toUpperCase() as LocaleLanguagesUpperCase;
+  const country = await getCustomerCountryServer();
   
   // FIXME: all the calls with language
-  const collection = await getCollectionByHandle("supertype_recommandations__Supertype_Recommandations", language);
-  let products = await getProductsByCollectionHandle("supertype_recommandations__Supertype_Recommandations", language); // FIXME: temporary solution
+  const collection = await getCollectionByHandle("supertype_recommandations__Supertype_Recommandations", language, country);
+  let products = await getProductsByCollectionHandle("supertype_recommandations__Supertype_Recommandations", language, country); // FIXME: maybe fixed idk
   const areRecommendedProducts = products && products.length > 0;
-  if (!areRecommendedProducts) products = await getAllProducts(language);
+  if (!areRecommendedProducts) products = await getAllProducts(language, country);
   products = products.slice(0, 10);
 
   const carouselDuration = products.length * 10;
