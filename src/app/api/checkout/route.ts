@@ -1,20 +1,20 @@
-import { createCheckout } from '@/lib/services/store-front/checkout';
-import { getCustomerAccessToken } from '@/utils/shared/getters/getCustomerAccessToken';
-import { getCheckoutUrl } from '@/utils/shared/getters/getCheckoutUrl';
-import { NextRequest, NextResponse } from 'next/server';
-import { setServerCookie } from '@/utils/shared/setters/shared/setServerCookie';
-import { getCustomerCountryServer } from '@/utils/shared/getters/getCustomerCountryServer';
-import { getPreferredLocale } from '@/utils/shared/getters/getPreferredLocale';
-import { LocaleLanguagesUpperCase } from '@/i18n/utils';
+import { createCheckout } from "@/lib/services/store-front/checkout";
+import { getCustomerAccessToken } from "@/utils/shared/getters/getCustomerAccessToken";
+import { getCheckoutUrl } from "@/utils/shared/getters/getCheckoutUrl";
+import { NextRequest, NextResponse } from "next/server";
+import { setServerCookie } from "@/utils/shared/setters/shared/setServerCookie";
+import { getCustomerCountryServer } from "@/utils/shared/getters/getCustomerCountryServer";
+import { getPreferredLocale } from "@/utils/shared/getters/getPreferredLocale";
+import { LocaleLanguagesUpperCase } from "@/i18n/utils";
 
 export async function POST(req: NextRequest) {
   const checkoutUrl = await getCheckoutUrl();
   if (checkoutUrl) return NextResponse.json({ url: checkoutUrl });
-  
+
   const { lineItems } = await req.json();
   const customerAccessToken = await getCustomerAccessToken();
   const country = await getCustomerCountryServer();
-  const language = await getPreferredLocale(true) as LocaleLanguagesUpperCase;
+  const language = (await getPreferredLocale(true)) as LocaleLanguagesUpperCase;
 
   try {
     if (!lineItems || !Array.isArray(lineItems) || lineItems.length === 0)
@@ -23,12 +23,21 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
 
-    const { id, checkoutUrl, lines } = await createCheckout({
+    const cart = await createCheckout({
       lineItems,
       customerAccessToken,
       country,
       language,
     });
+
+    if (!cart) {
+      return NextResponse.json(
+        { error: "Failed to create checkout" },
+        { status: 500 }
+      );
+    }
+
+    const { id, checkoutUrl, lines } = cart;
 
     const response = NextResponse.json({ url: checkoutUrl, lines });
 

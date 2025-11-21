@@ -70,7 +70,7 @@ export async function createCheckout(options: {
   customerAccessToken?: string;
   country?: CountryCode;
   language?: LanguageCode;
-}) {
+}): Promise<CartCreateResponse["cartCreate"]["cart"] | null> {
   const countryCode = options.country || "LU";
   const languageCode = options.language || "EN";
 
@@ -145,7 +145,7 @@ export async function updateCustomerIdentity(
     phone?: string;
     countryCode?: CountryCode;
   }
-) {
+): Promise<string | null> {
   const buyerIdentity: Record<string, unknown> = {
     email: null,
     customerAccessToken: "",
@@ -219,7 +219,7 @@ export async function updateCartLocalization(
     country?: CountryCode;
     language?: LocaleLanguagesUpperCase;
   }
-) {
+): Promise<string | null> {
   const countryCode = options.country || "LU";
   const languageCode = options.language || "EN";
 
@@ -341,7 +341,7 @@ export async function updateCheckoutLines(
     country?: CountryCode;
     language?: LanguageCode;
   } = {}
-) {
+): Promise<CartLinesAddResponse[string]["cart"] | null> {
   const country = options.country || "LU";
   const language = options.language || "EN";
 

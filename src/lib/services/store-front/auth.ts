@@ -44,7 +44,7 @@ export async function createCustomerAccount(
     acceptsMarketing?: boolean;
   },
   locale: LocaleLanguages = defaultLocale
-) {
+): Promise<CustomerCreateResponse | null> {
   try {
     const response = await shopifyServerFetch<CustomerCreateResponse>(REGISTER_MUTATION, {
       input,
@@ -99,7 +99,7 @@ export interface CustomerAccessTokenCreateResponse {
 export async function createCustomerAccessToken(input: {
   email: string;
   password: string;
-}) {
+}): Promise<CustomerAccessTokenCreateResponse | null> {
   try {
     const response = await shopifyServerFetch<CustomerAccessTokenCreateResponse>(LOGIN_MUTATION, {
       input,
@@ -145,11 +145,16 @@ export interface CustomerRecoverResponse {
   };
 }
 
-export async function recoverCustomerAccount(email: string) {
+export async function recoverCustomerAccount(
+  email: string
+): Promise<CustomerRecoverResponse | null> {
   try {
-    const response = await shopifyServerFetch<CustomerRecoverResponse>(PASSWORD_RECOVERY_MUTATION, {
-      email,
-    });
+    const response = await shopifyServerFetch<CustomerRecoverResponse>(
+      PASSWORD_RECOVERY_MUTATION,
+      {
+        email,
+      }
+    );
 
     if (!response || response.customerRecover?.customerUserErrors?.length > 0) {
       console.error(
@@ -217,7 +222,7 @@ export interface CustomerResetByUrlResponse {
 export async function resetCustomerPasswordByUrl(input: {
   password: string;
   resetUrl: string;
-}) {
+}): Promise<CustomerResetByUrlResponse | null> {
   try {
     const response = await shopifyServerFetch<CustomerResetByUrlResponse>(PASSWORD_RESET_BY_URL_MUTATION, {
       input,
@@ -265,7 +270,9 @@ interface CustomerDeleteAccessToken {
   };
 }
 
-export async function deleteCustomerAccessToken(customerAccessToken: string) {
+export async function deleteCustomerAccessToken(
+  customerAccessToken: string
+): Promise<CustomerDeleteAccessToken | null> {
   try {
     const response = await shopifyServerFetch<CustomerDeleteAccessToken>(
       CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION,

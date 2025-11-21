@@ -9,7 +9,7 @@ const GET_SHOP_NAME_QUERY = `
   }
 `;
 
-export async function getShopName() {
+export async function getShopName(): Promise<string> {
   try {
     const response = await shopifyServerFetch<{ shop: { name: string } }>(
       GET_SHOP_NAME_QUERY,
@@ -97,7 +97,7 @@ interface GetImageUrlResponse {
   };
 }
 
-export async function getImageUrl(key: string) {
+export async function getImageUrl(key: string): Promise<string | null> {
   try {
     const response = await shopifyServerFetch<GetImageUrlResponse>(
       GET_IMAGE_URL_QUERY,

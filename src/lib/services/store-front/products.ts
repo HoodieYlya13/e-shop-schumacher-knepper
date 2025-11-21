@@ -257,7 +257,7 @@ interface ShopifyCollectionResponse {
 export async function getCollectionByHandle(
   handle: string,
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
-) {
+): Promise<Collection | null> {
   try {
     const response: ShopifyCollectionResponse =
       await shopifyServerFetch<ShopifyCollectionResponse>(
