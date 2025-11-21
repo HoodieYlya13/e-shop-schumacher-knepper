@@ -1,14 +1,17 @@
-'use client';
+"use client";
 
-import { Collection } from '@shopify/hydrogen-react/storefront-api-types';
-import Image from 'next/image';
+import { Collection } from "@shopify/hydrogen-react/storefront-api-types";
+import Image from "next/image";
 
 interface RecommendedCollectionProps {
-  collection: Collection;
+  collection: Collection | null | undefined;
   areRecommendedProducts?: boolean;
 }
 
-export default function RecommendedCollection({ collection, areRecommendedProducts }: RecommendedCollectionProps) {
+export default function RecommendedCollection({
+  collection,
+  areRecommendedProducts,
+}: RecommendedCollectionProps) {
   return (
     <div className="flex flex-col w-full items-center justify-center gap-4">
       <Image

@@ -1,17 +1,12 @@
-import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
-import { customerUpdateLocale } from '../admin/customer';
-import { CustomerCreateResponse } from '@/utils/auth/handlers/shared/registerHandler';
-import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
+import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
+import { customerUpdateLocale } from "../admin/customer";
+import { defaultLocale, LocaleLanguages } from "@/i18n/utils";
 
 const REGISTER_MUTATION = `
   mutation createCustomerAccount($input: CustomerCreateInput!) {
     customerCreate(input: $input) {
       customer {
         id
-        email
-        firstName
-        lastName
-        phone
       }
       customerUserErrors {
         code
@@ -21,6 +16,23 @@ const REGISTER_MUTATION = `
     }
   }
 `;
+
+export interface CustomerCreateResponse {
+  customerCreate: {
+    customer?: {
+      id?: string;
+      email?: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      phone?: string | null;
+    };
+    customerUserErrors: {
+      code?: string;
+      field?: string[];
+      message?: string;
+    }[];
+  };
+}
 
 export async function createCustomerAccount(
   input: {
@@ -33,12 +45,27 @@ export async function createCustomerAccount(
   },
   locale: LocaleLanguages = defaultLocale
 ) {
-  const response = await shopifyServerFetch(REGISTER_MUTATION, { input }) as CustomerCreateResponse;
+  try {
+    const response = await shopifyServerFetch<CustomerCreateResponse>(REGISTER_MUTATION, {
+      input,
+    });
 
-  const id = response.customerCreate?.customer?.id;
-  if (id) await customerUpdateLocale(id, locale);
-  
-  return response;
+    if (!response || response.customerCreate?.customerUserErrors?.length > 0) {
+      console.error(
+        "Error creating customer:",
+        response.customerCreate?.customerUserErrors
+      );
+      return null;
+    }
+
+    const id = response.customerCreate?.customer?.id;
+    if (id) await customerUpdateLocale(id, locale);
+
+    return response;
+  } catch (error) {
+    console.error("Error creating customer account:", error);
+    return null;
+  }
 }
 
 const LOGIN_MUTATION = `
@@ -56,13 +83,44 @@ const LOGIN_MUTATION = `
   }
 `;
 
-export async function createCustomerAccessToken(
-  input: {
-    email: string;
-    password: string;
+export interface CustomerAccessTokenCreateResponse {
+  customerAccessTokenCreate: {
+    customerAccessToken?: {
+      accessToken?: string;
+      expiresAt?: string;
+    },
+    customerUserErrors: {
+      field?: string[];
+      message?: string;
+    }[];
+  };
+}
+
+export async function createCustomerAccessToken(input: {
+  email: string;
+  password: string;
+}) {
+  try {
+    const response = await shopifyServerFetch<CustomerAccessTokenCreateResponse>(LOGIN_MUTATION, {
+      input,
+    });
+
+    if (
+      !response ||
+      response.customerAccessTokenCreate?.customerUserErrors?.length > 0
+    ) {
+      console.error(
+        "Error creating customer access token:",
+        response.customerAccessTokenCreate?.customerUserErrors
+      );
+      return null;
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error creating customer access token:", error);
+    return null;
   }
-) {
-  return shopifyServerFetch(LOGIN_MUTATION, { input });
 }
 
 const PASSWORD_RECOVERY_MUTATION = `
@@ -77,8 +135,35 @@ const PASSWORD_RECOVERY_MUTATION = `
   }
 `;
 
+export interface CustomerRecoverResponse {
+  customerRecover: {
+    customerUserErrors: {
+      code?: string;
+      field?: string[];
+      message?: string;
+    }[];
+  };
+}
+
 export async function recoverCustomerAccount(email: string) {
-  return shopifyServerFetch(PASSWORD_RECOVERY_MUTATION, { email });
+  try {
+    const response = await shopifyServerFetch<CustomerRecoverResponse>(PASSWORD_RECOVERY_MUTATION, {
+      email,
+    });
+
+    if (!response || response.customerRecover?.customerUserErrors?.length > 0) {
+      console.error(
+        "Error recovering customer account:",
+        response.customerRecover?.customerUserErrors
+      );
+      return null;
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error recovering customer account:", error);
+    return null;
+  }
 }
 
 const PASSWORD_RESET_BY_URL_MUTATION = `
@@ -108,13 +193,52 @@ const PASSWORD_RESET_BY_URL_MUTATION = `
   }
 `;
 
-export async function resetCustomerPasswordByUrl(
-  input: {
-    password: string;
-    resetUrl: string;
+export interface CustomerResetByUrlResponse {
+  customerResetByUrl: {
+    customer?: {
+      id?: string;
+      email?: string;
+      firstName?: string | null;
+      lastName?: string | null;
+      phone?: string | null;
+    };
+    customerAccessToken?: {
+      accessToken?: string;
+      expiresAt?: string;
+    };
+    customerUserErrors: {
+      code?: string;
+      field?: string[];
+      message?: string;
+    }[];
+  };
+}
+
+export async function resetCustomerPasswordByUrl(input: {
+  password: string;
+  resetUrl: string;
+}) {
+  try {
+    const response = await shopifyServerFetch<CustomerResetByUrlResponse>(PASSWORD_RESET_BY_URL_MUTATION, {
+      input,
+    });
+
+    if (
+      !response ||
+      response.customerResetByUrl?.customerUserErrors?.length > 0
+    ) {
+      console.error(
+        "Error recovering customer account:",
+        response.customerResetByUrl?.customerUserErrors
+      );
+      return null;
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error resetting customer password by URL:", error);
+    return null;
   }
-) {
-  return shopifyServerFetch(PASSWORD_RESET_BY_URL_MUTATION, { input });
 }
 
 const CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION = `
@@ -130,8 +254,40 @@ const CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION = `
   }
 `;
 
+interface CustomerDeleteAccessToken {
+  customerAccessTokenDelete: {
+    deletedAccessToken?: string;
+    deletedCustomerAccessTokenId?: string;
+    userErrors: Array<{
+      field: string[];
+      message: string;
+    }>;
+  };
+}
+
 export async function deleteCustomerAccessToken(customerAccessToken: string) {
-  return shopifyServerFetch(CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION, { customerAccessToken });
+  try {
+    const response = await shopifyServerFetch<CustomerDeleteAccessToken>(
+      CUSTOMER_ACCESS_TOKEN_DELETE_MUTATION,
+      { customerAccessToken }
+    );
+
+    if (
+      !response ||
+      response.customerAccessTokenDelete?.userErrors?.length > 0
+    ) {
+      console.error(
+        "Error deleting customer access token:",
+        response.customerAccessTokenDelete?.userErrors
+      );
+      return null;
+    }
+
+    return response;
+  } catch (error) {
+    console.error("Error deleting customer access token:", error);
+    return null;
+  }
 }
 
 const CUSTOMER_ACCESS_TOKEN_VERIFICATION_QUERY = `
@@ -142,10 +298,24 @@ const CUSTOMER_ACCESS_TOKEN_VERIFICATION_QUERY = `
   }
 `;
 
-export async function isCustomerAccessTokenValid(token: string): Promise<boolean> {
-  const data = await shopifyServerFetch<{
-    customer: { id: string } | null;
-  }>(CUSTOMER_ACCESS_TOKEN_VERIFICATION_QUERY, { customerAccessToken: token });
+export async function isCustomerAccessTokenValid(
+  token: string
+): Promise<boolean> {
+  try {
+    const response = await shopifyServerFetch<{
+      customer: { id: string } | null;
+    }>(CUSTOMER_ACCESS_TOKEN_VERIFICATION_QUERY, {
+      customerAccessToken: token,
+    });
 
-  return !!data.customer;
+    if (!response) {
+      console.error("Error validating customer access token validity");
+      return false;
+    }
+
+    return !!response.customer;
+  } catch (error) {
+    console.error("Error validating customer access token:", error);
+    return false;
+  }
 }

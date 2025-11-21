@@ -68,6 +68,7 @@
 
 html, body {
   overscroll-behavior: none;
+  background-color: black;
 }
 
 .input-focus-glow:focus-within::after {

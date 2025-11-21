@@ -1,5 +1,9 @@
 import { LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
+import {
+  CountryCode,
+  LanguageCode,
+} from "@shopify/hydrogen-react/storefront-api-types";
 
 const CART_LINES_FRAGMENT = `
   lines(first: 100) {
@@ -34,23 +38,45 @@ const CREATE_CART_MUTATION = `
   }
 `;
 
-export async function createCheckout(
-  options: {
-    lineItems: Array<{
-      variantId: string;
-      quantity: number;
+interface CartCreateResponse {
+  cartCreate: {
+    cart: {
+      id: string;
+      checkoutUrl: string;
+      lines: {
+        edges: Array<{
+          node: {
+            id: string;
+            quantity: number;
+            merchandise: {
+              id: string;
+            };
+          };
+        }>;
+      };
+    };
+    userErrors: Array<{
+      code: string;
+      message: string;
     }>;
-    customerAccessToken?: string;
-    country?: LocaleLanguagesUpperCase;
-    language?: LocaleLanguagesUpperCase;
-  }
-) {
+  };
+}
+
+export async function createCheckout(options: {
+  lineItems: Array<{
+    variantId: string;
+    quantity: number;
+  }>;
+  customerAccessToken?: string;
+  country?: CountryCode;
+  language?: LanguageCode;
+}) {
   const countryCode = options.country || "LU";
   const languageCode = options.language || "EN";
 
   const variables = {
     cartInput: {
-      lines: options.lineItems.map(item => ({
+      lines: options.lineItems.map((item) => ({
         quantity: item.quantity,
         merchandiseId: item.variantId,
       })),
@@ -64,32 +90,23 @@ export async function createCheckout(
     language: languageCode,
   };
 
-  const data = await shopifyServerFetch<{
-    cartCreate: {
-      cart: {
-        id: string;
-        checkoutUrl: string;
-        lines: {
-          edges: Array<{
-            node: {
-              id: string;
-              quantity: number;
-              merchandise: {
-                id: string;
-              };
-            };
-          }>;
-        };
-      };
-      userErrors: Array<{
-        code: string;
-        message: string;
-      }>;
-    };
-  }>(CREATE_CART_MUTATION, variables);
+  try {
+    const response = await shopifyServerFetch<CartCreateResponse>(
+      CREATE_CART_MUTATION,
+      variables
+    );
 
-  const cart = data.cartCreate.cart;
-  return cart;
+    if (!response?.cartCreate?.cart) {
+      console.error("Failed to create cart:", response?.cartCreate?.userErrors);
+      return null;
+    }
+
+    const cart = response.cartCreate.cart;
+    return cart;
+  } catch (error) {
+    console.error("Error creating checkout:", error);
+    return null;
+  }
 }
 
 const UPDATE_CUSTOMER_IDENTITY_MUTATION = `
@@ -107,13 +124,26 @@ const UPDATE_CUSTOMER_IDENTITY_MUTATION = `
   }
 `;
 
+interface UpdateCustomerIdentityResponse {
+  cartBuyerIdentityUpdate: {
+    cart: {
+      id: string;
+      checkoutUrl: string;
+    };
+    userErrors: Array<{
+      code: string;
+      message: string;
+    }>;
+  };
+}
+
 export async function updateCustomerIdentity(
   cartId: string,
   options: {
     email?: string;
     customerAccessToken?: string;
     phone?: string;
-    countryCode?: string;
+    countryCode?: CountryCode;
   }
 ) {
   const buyerIdentity: Record<string, unknown> = {
@@ -123,7 +153,8 @@ export async function updateCustomerIdentity(
     countryCode: null,
   };
   if (options.email) buyerIdentity.email = options.email;
-  if (options.customerAccessToken) buyerIdentity.customerAccessToken = options.customerAccessToken;
+  if (options.customerAccessToken)
+    buyerIdentity.customerAccessToken = options.customerAccessToken;
   if (options.phone) buyerIdentity.phone = options.phone;
   if (options.countryCode) buyerIdentity.countryCode = options.countryCode;
 
@@ -132,20 +163,95 @@ export async function updateCustomerIdentity(
     buyerIdentity,
   };
 
-  const data = await shopifyServerFetch<{
-    cartBuyerIdentityUpdate: {
-      cart: {
-        id: string;
-        checkoutUrl: string;
-      };
-      userErrors: Array<{
-        code: string;
-        message: string;
-      }>;
-    };
-  }>(UPDATE_CUSTOMER_IDENTITY_MUTATION, variables);
+  try {
+    const response = await shopifyServerFetch<UpdateCustomerIdentityResponse>(
+      UPDATE_CUSTOMER_IDENTITY_MUTATION,
+      variables
+    );
 
-  return data.cartBuyerIdentityUpdate.cart.checkoutUrl;
+    if (!response?.cartBuyerIdentityUpdate?.cart) {
+      console.error(
+        "Failed to update customer identity:",
+        response?.cartBuyerIdentityUpdate?.userErrors
+      );
+      return null;
+    }
+
+    return response.cartBuyerIdentityUpdate.cart.checkoutUrl;
+  } catch (error) {
+    console.error("Error updating customer identity:", error);
+    return null;
+  }
+}
+
+const UPDATE_CART_LOCALIZATION_MUTATION = `
+  mutation cartLocalizationUpdate($cartId: ID!, $buyerIdentity: CartBuyerIdentityInput!, $country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    cartBuyerIdentityUpdate(cartId: $cartId, buyerIdentity: $buyerIdentity) {
+      cart {
+        id
+        checkoutUrl
+      }
+      userErrors {
+        code
+        message
+      }
+    }
+  }
+`;
+
+interface UpdateCartLocalizationResponse {
+  cartBuyerIdentityUpdate: {
+    cart: {
+      id: string;
+      checkoutUrl: string;
+    };
+    userErrors: Array<{
+      code: string;
+      message: string;
+    }>;
+  };
+}
+
+export async function updateCartLocalization(
+  cartId: string,
+  options: {
+    country?: CountryCode;
+    language?: LocaleLanguagesUpperCase;
+  }
+) {
+  const countryCode = options.country || "LU";
+  const languageCode = options.language || "EN";
+
+  const buyerIdentity: Record<string, unknown> = {};
+  if (options.country) buyerIdentity.countryCode = options.country;
+
+  const variables = {
+    cartId,
+    buyerIdentity,
+    country: countryCode,
+    language: languageCode,
+  };
+
+  try {
+    const response = await shopifyServerFetch<UpdateCartLocalizationResponse>(
+      UPDATE_CART_LOCALIZATION_MUTATION,
+      variables
+    );
+
+    if (!response?.cartBuyerIdentityUpdate?.cart) {
+      console.error(
+        "Failed to update cart localization:",
+        response?.cartBuyerIdentityUpdate?.userErrors
+      );
+      return null;
+    }
+
+    return response.cartBuyerIdentityUpdate.cart.checkoutUrl;
+  } catch (error) {
+    console.error("Error updating cart localization:", error);
+    return null;
+  }
 }
 
 const CART_LINES_ADD_MUTATION = `
@@ -199,27 +305,51 @@ const CART_LINES_REMOVE_MUTATION = `
   }
 `;
 
+interface CartLinesAddResponse {
+  [key: string]: {
+    cart: {
+      id: string;
+      checkoutUrl: string;
+      lines: {
+        edges: Array<{
+          node: {
+            id: string;
+            quantity: number;
+            merchandise: {
+              id: string;
+            };
+          };
+        }>;
+      };
+    };
+    userErrors: Array<{
+      code: string;
+      message: string;
+    }>;
+  };
+}
+
 export type CartOperation =
-  | { type: 'add'; variantId: string; quantity: number }
-  | { type: 'update'; lineId: string; quantity: number }
-  | { type: 'remove'; lineIds: string[] };
+  | { type: "add"; variantId: string; quantity: number }
+  | { type: "update"; lineId: string; quantity: number }
+  | { type: "remove"; lineIds: string[] };
 
 export async function updateCheckoutLines(
   cartId: string,
   operation: CartOperation,
   options: {
-    country?: LocaleLanguagesUpperCase;
-    language?: LocaleLanguagesUpperCase;
+    country?: CountryCode;
+    language?: LanguageCode;
   } = {}
 ) {
   const country = options.country || "LU";
   const language = options.language || "EN";
 
-  let mutation = '';
+  let mutation = "";
   const variables: {
     cartId: string;
-    country: LocaleLanguagesUpperCase | "LU";
-    language: LocaleLanguagesUpperCase;
+    country: CountryCode | "LU";
+    language: LanguageCode | "EN";
     lines?: Array<Record<string, unknown>>;
     lineIds?: string[];
   } = {
@@ -229,56 +359,47 @@ export async function updateCheckoutLines(
   };
 
   switch (operation.type) {
-    case 'add':
+    case "add":
       mutation = CART_LINES_ADD_MUTATION;
-      variables.lines = [{
-        merchandiseId: operation.variantId,
-        quantity: operation.quantity
-      }];
+      variables.lines = [
+        {
+          merchandiseId: operation.variantId,
+          quantity: operation.quantity,
+        },
+      ];
       break;
 
-    case 'update':
+    case "update":
       mutation = CART_LINES_UPDATE_MUTATION;
-      variables.lines = [{
-        id: operation.lineId,
-        quantity: operation.quantity
-      }];
+      variables.lines = [
+        {
+          id: operation.lineId,
+          quantity: operation.quantity,
+        },
+      ];
       break;
 
-    case 'remove':
+    case "remove":
       mutation = CART_LINES_REMOVE_MUTATION;
       variables.lineIds = operation.lineIds;
       break;
   }
 
-  const data = await shopifyServerFetch<{
-    [key: string]: {
-      cart: {
-        id: string;
-        checkoutUrl: string;
-        lines: {
-          edges: Array<{
-            node: {
-              id: string;
-              quantity: number;
-              merchandise: {
-                id: string;
-              };
-            };
-          }>;
-        };
-      };
-      userErrors: Array<{
-        code: string;
-        message: string;
-      }>;
-    };
-  }>(mutation, variables);
+  try {
+    const response = await shopifyServerFetch<CartLinesAddResponse>(
+      mutation,
+      variables
+    );
 
-  const responseKey = Object.keys(data)[0]; 
-  const result = data[responseKey as keyof typeof data];
+    const responseKey = Object.keys(response)[0];
+    const result = response[responseKey as keyof typeof response];
 
-  if (result.userErrors.length > 0) console.error("Cart Update Error:", result.userErrors);
+    if (result.userErrors.length > 0)
+      console.error("Cart Update Error:", result.userErrors);
 
-  return result.cart;
+    return result.cart;
+  } catch (error) {
+    console.error("Error updating checkout lines:", error);
+    return null;
+  }
 }

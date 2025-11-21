@@ -1,5 +1,5 @@
-import { shopifyAdminFetch } from '@/lib/shopify/admin/server';
-import { defaultLocale, LocaleLanguages } from '@/i18n/utils';
+import { shopifyAdminFetch } from "@/lib/shopify/admin/server";
+import { defaultLocale, LocaleLanguages } from "@/i18n/utils";
 
 type AdminCustomer = {
   id: string;
@@ -21,19 +21,44 @@ const CUSTOMER_UPDATE_LOCALE_MUTATION = `
   }
 `;
 
-export async function customerUpdateLocale(id: string, locale: LocaleLanguages = defaultLocale): Promise<AdminCustomer> {
-  const variables = {
-    input: {
-      id,
-      locale
-    },
-  };
-
-  const data = await shopifyAdminFetch<{
-    customerUpdate: {
-      customer: AdminCustomer;
+export async function customerUpdateLocale(
+  id: string,
+  locale: LocaleLanguages = defaultLocale
+): Promise<AdminCustomer | null> {
+  try {
+    const variables = {
+      input: {
+        id,
+        locale,
+      },
     };
-  }>(CUSTOMER_UPDATE_LOCALE_MUTATION, variables);
 
-  return data.customerUpdate.customer;
+    const response = await shopifyAdminFetch<{
+      customerUpdate: {
+        customer: AdminCustomer;
+        userErrors: Array<{
+          field: string[];
+          message: string;
+        }>;
+      };
+    }>(CUSTOMER_UPDATE_LOCALE_MUTATION, variables);
+
+    if (response.customerUpdate?.userErrors?.length > 0) {
+      console.error(
+        "Error updating customer locale:",
+        response.customerUpdate.userErrors
+      );
+      return null;
+    }
+
+    if (!response.customerUpdate?.customer) {
+      console.error("Failed to update customer locale: No customer returned");
+      return null;
+    }
+
+    return response.customerUpdate.customer;
+  } catch (error) {
+    console.error("Error updating customer locale:", error);
+    return null;
+  }
 }

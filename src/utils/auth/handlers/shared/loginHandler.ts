@@ -1,19 +1,7 @@
 import { FormValues } from "@/hooks/auth/useAuthForm";
+import { CustomerAccessTokenCreateResponse } from "@/lib/services/store-front/auth";
 import { login } from "@/utils/account/login";
 import { UseFormSetError } from "react-hook-form";
-
-interface CustomerAccessTokenCreateResponse {
-  customerAccessTokenCreate: {
-    customerAccessToken?: {
-      accessToken?: string;
-      expiresAt?: string;
-    },
-    customerUserErrors: {
-      field?: string[];
-      message?: string;
-    }[];
-  };
-}
 
 export async function loginHandler(
   setError: UseFormSetError<FormValues>,

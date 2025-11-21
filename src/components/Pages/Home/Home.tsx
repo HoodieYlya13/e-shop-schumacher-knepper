@@ -1,6 +1,6 @@
 import CountUp from "@/components/UI/shared/elements/CountUp";
 import RecommendedProductsButton from "./shared/RecommendedProductsButton";
-import { getHomeImageUrl, getShopName } from "@/lib/services/store-front/shop";
+import { getImageUrl, getShopName } from "@/lib/services/store-front/shop";
 import { getTranslations } from "next-intl/server";
 import { LocaleLanguages, LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { getAllProducts, getCollectionByHandle, getProductsByCollectionHandle } from "@/lib/services/store-front/products";
@@ -11,7 +11,7 @@ import SeeAllProductsButton from "./shared/SeeAllProductsButton";
 export default async function Home({ locale }: { locale: LocaleLanguages }) {
   const t = await getTranslations({ locale, namespace: 'HOME_PAGE' });
   const shopName = await getShopName();
-  const homeImageUrl = await getHomeImageUrl();
+  const homeImageUrl = await getImageUrl("home_image");
 
   const homeSectionStyle = {
     backgroundImage: `url('${homeImageUrl || "/img/barrel.jpg"}')`,

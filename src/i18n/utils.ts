@@ -36,3 +36,13 @@ export function getPreferredLocaleClientSide(toUpperCase = false): LocaleLanguag
     ? (locale.toUpperCase() as LocaleLanguagesUpperCase)
     : locale;
 }
+
+export async function updateCartLocalization() {
+  await fetch("/api/checkout/localization", {
+    method: "POST",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    }
+  });
+}

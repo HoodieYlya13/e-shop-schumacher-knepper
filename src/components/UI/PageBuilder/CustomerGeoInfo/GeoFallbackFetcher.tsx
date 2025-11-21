@@ -10,8 +10,11 @@ export default function GeoFallbackFetcher() {
       .then((res) => res.json())
       .then((geo) => {
         if (geo?.ip) setCustomerIp(geo.ip);
-        if (geo?.country)
-          setClientCookie("customer_country", geo.country ?? "unknown", {
+        let country = "unknown";
+        if (typeof geo?.country === "string" && geo.country.length === 2)
+          country = geo.country.toUpperCase();
+
+          setClientCookie("customer_country", country, {
             path: "/",
             maxAge: 60 * 60 * 24,
             sameSite: "Lax",

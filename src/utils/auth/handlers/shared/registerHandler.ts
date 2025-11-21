@@ -2,23 +2,7 @@ import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
 import { RegisterValues } from "@/schemas/authSchema";
 import { UseFormSetError } from "react-hook-form";
 import { authSubmitHandler } from "../authSubmitHandler";
-
-export interface CustomerCreateResponse {
-  customerCreate: {
-    customer?: {
-      id?: string;
-      email?: string;
-      firstName?: string | null;
-      lastName?: string | null;
-      phone?: string | null;
-    };
-    customerUserErrors: {
-      code?: string;
-      field?: string[];
-      message?: string;
-    }[];
-  };
-}
+import { CustomerCreateResponse } from "@/lib/services/store-front/auth";
 
 export async function registerHandler(
   data: FormValues,

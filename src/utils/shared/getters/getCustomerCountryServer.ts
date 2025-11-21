@@ -1,6 +1,10 @@
-import { LocaleLanguagesUpperCase } from "@/i18n/utils";
 import { getServerCookie } from "./shared/getServerCookie";
+import { CountryCode } from "@shopify/hydrogen-react/storefront-api-types";
 
 export async function getCustomerCountryServer() {
-  return (await getServerCookie("customer_country")) as LocaleLanguagesUpperCase | undefined;
+  const country = await getServerCookie("customer_country");
+
+  if (!country || country === "unknown") return undefined;
+
+  return country as CountryCode;
 }

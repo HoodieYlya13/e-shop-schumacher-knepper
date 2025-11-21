@@ -1,15 +1,6 @@
 import { FormValues } from "@/hooks/auth/useAuthForm";
+import { CustomerRecoverResponse } from "@/lib/services/store-front/auth";
 import { UseFormSetError } from "react-hook-form";
-
-interface CustomerRecoverResponse {
-  customerRecover: {
-    customerUserErrors: {
-      code?: string;
-      field?: string[];
-      message?: string;
-    }[];
-  };
-}
 
 export async function passwordRecoveryHandler(
   setError: UseFormSetError<FormValues>,

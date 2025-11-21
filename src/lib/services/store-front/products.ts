@@ -1,6 +1,9 @@
-import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from '@/i18n/utils';
-import { shopifyServerFetch } from '@/lib/shopify/store-front/server';
-import { Collection, Product } from '@shopify/hydrogen-react/storefront-api-types';
+import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from "@/i18n/utils";
+import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
+import {
+  Collection,
+  Product,
+} from "@shopify/hydrogen-react/storefront-api-types";
 
 const PRODUCT_FIELDS = `
   id
@@ -76,7 +79,7 @@ interface ShopifySearchProductsResponse {
 
 export async function getAllProducts(
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
-  sortKey: string = 'TITLE',
+  sortKey: string = "TITLE",
   reverse: boolean = false
 ): Promise<Product[]> {
   const allProducts: Product[] = [];
@@ -84,21 +87,31 @@ export async function getAllProducts(
   let cursor: string | null = null;
 
   while (hasNextPage) {
-    const data: ShopifySearchProductsResponse =
-      await shopifyServerFetch<ShopifySearchProductsResponse>(
-        GET_ALL_PRODUCTS_QUERY,
-        {
-          language,
-          after: cursor,
-          sortKey,
-          reverse,
-        }
-      );
+    try {
+      const response: ShopifySearchProductsResponse =
+        await shopifyServerFetch<ShopifySearchProductsResponse>(
+          GET_ALL_PRODUCTS_QUERY,
+          {
+            language,
+            after: cursor,
+            sortKey,
+            reverse,
+          }
+        );
 
-    allProducts.push(...data.products.edges.map((edge) => edge.node));
+      if (!response?.products) {
+        console.error("Failed to fetch products");
+        break;
+      }
 
-    hasNextPage = data.products.pageInfo.hasNextPage;
-    cursor = data.products.pageInfo.endCursor;
+      allProducts.push(...response.products.edges.map((edge) => edge.node));
+
+      hasNextPage = response.products.pageInfo.hasNextPage;
+      cursor = response.products.pageInfo.endCursor;
+    } catch (error) {
+      console.error("Error fetching all products:", error);
+      break;
+    }
   }
 
   return allProducts;
@@ -119,13 +132,26 @@ interface ShopifySingleProductResponse {
 export async function getSingleProduct(
   handle: string,
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
-): Promise<Product | undefined> {
-  const data = await shopifyServerFetch<ShopifySingleProductResponse>(GET_SINGLE_PRODUCT_QUERY, {
-    handle,
-    language,
-  });
+): Promise<Product | null> {
+  try {
+    const response = await shopifyServerFetch<ShopifySingleProductResponse>(
+      GET_SINGLE_PRODUCT_QUERY,
+      {
+        handle,
+        language,
+      }
+    );
 
-  return data.product;
+    if (!response?.product) {
+      console.error(`Product not found for handle: ${handle}`);
+      return null;
+    }
+
+    return response.product;
+  } catch (error) {
+    console.error(`Error fetching product ${handle}:`, error);
+    return null;
+  }
 }
 
 const SEARCH_PRODUCTS_QUERY = `
@@ -148,17 +174,27 @@ export async function getProductsForLiveSearch(
   title: string,
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
 ): Promise<Product[]> {
-  const query = `title:*${title}*`;
-  const data = await shopifyServerFetch<ShopifySearchProductsResponse>(
-    SEARCH_PRODUCTS_QUERY,
-    {
-      query,
-      language,
-      first: 3,
-    }
-  );
+  try {
+    const query = `title:*${title}*`;
+    const response = await shopifyServerFetch<ShopifySearchProductsResponse>(
+      SEARCH_PRODUCTS_QUERY,
+      {
+        query,
+        language,
+        first: 3,
+      }
+    );
 
-  return data.products.edges.map((edge) => edge.node);
+    if (!response?.products) {
+      console.error("Failed to fetch products for live search");
+      return [];
+    }
+
+    return response.products.edges.map((edge) => edge.node);
+  } catch (error) {
+    console.error("Error fetching products for live search:", error);
+    return [];
+  }
 }
 
 export async function getProductsForFullSearch(
@@ -171,21 +207,31 @@ export async function getProductsForFullSearch(
   let cursor: string | null = null;
 
   while (hasNextPage) {
-    const data: ShopifySearchProductsResponse =
-      await shopifyServerFetch<ShopifySearchProductsResponse>(
-        SEARCH_PRODUCTS_QUERY,
-        {
-          query,
-          language,
-          first: 250,
-          after: cursor,
-        }
-      );
+    try {
+      const response: ShopifySearchProductsResponse =
+        await shopifyServerFetch<ShopifySearchProductsResponse>(
+          SEARCH_PRODUCTS_QUERY,
+          {
+            query,
+            language,
+            first: 250,
+            after: cursor,
+          }
+        );
 
-    allProducts.push(...data.products.edges.map((edge) => edge.node));
+      if (!response?.products) {
+        console.error("Failed to fetch products for full search");
+        break;
+      }
 
-    hasNextPage = data.products.pageInfo.hasNextPage;
-    cursor = data.products.pageInfo.endCursor;
+      allProducts.push(...response.products.edges.map((edge) => edge.node));
+
+      hasNextPage = response.products.pageInfo.hasNextPage;
+      cursor = response.products.pageInfo.endCursor;
+    } catch (error) {
+      console.error("Error fetching products for full search:", error);
+      break;
+    }
   }
 
   return allProducts;
@@ -212,13 +258,23 @@ export async function getCollectionByHandle(
   handle: string,
   language: LocaleLanguagesUpperCase = defaultLocaleUpperCase
 ) {
-  const data: ShopifyCollectionResponse =
-    await shopifyServerFetch<ShopifyCollectionResponse>(
-      GET_COLLECTION_BY_HANDLE_QUERY,
-      { handle, language }
-    );
+  try {
+    const response: ShopifyCollectionResponse =
+      await shopifyServerFetch<ShopifyCollectionResponse>(
+        GET_COLLECTION_BY_HANDLE_QUERY,
+        { handle, language }
+      );
 
-  return data.collection || null;
+    if (!response?.collection) {
+      console.error("Collection not available", handle);
+      return null;
+    }
+
+    return response.collection;
+  } catch (error) {
+    console.error(`Error fetching collection ${handle}:`, error);
+    return null;
+  }
 }
 
 const GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY = `
@@ -262,23 +318,31 @@ export async function getProductsByCollectionHandle(
   let cursor: string | null = null;
 
   while (hasNextPage) {
-    const data: ShopifyProductsByCollectionResponse =
-      await shopifyServerFetch<ShopifyProductsByCollectionResponse>(
-        GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY,
-        {
-          handle,
-          language,
-          after: cursor,
-        }
+    try {
+      const response: ShopifyProductsByCollectionResponse =
+        await shopifyServerFetch<ShopifyProductsByCollectionResponse>(
+          GET_PRODUCTS_BY_COLLECTION_HANDLE_QUERY,
+          {
+            handle,
+            language,
+            after: cursor,
+          }
+        );
+
+      if (!response?.collection?.products) {
+        console.error(`Failed to fetch products for collection: ${handle}`);
+        break;
+      }
+
+      allProducts.push(
+        ...response.collection.products.edges.map((edge) => edge.node)
       );
-
-    if (!data.collection?.products) break;
-
-    allProducts.push(
-      ...data.collection.products.edges.map((edge) => edge.node)
-    );
-    hasNextPage = data.collection.products.pageInfo.hasNextPage;
-    cursor = data.collection.products.pageInfo.endCursor;
+      hasNextPage = response.collection.products.pageInfo.hasNextPage;
+      cursor = response.collection.products.pageInfo.endCursor;
+    } catch (error) {
+      console.error(`Error fetching products for collection ${handle}:`, error);
+      break;
+    }
   }
 
   return allProducts;

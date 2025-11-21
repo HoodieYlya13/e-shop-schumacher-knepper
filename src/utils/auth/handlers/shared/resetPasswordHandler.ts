@@ -1,28 +1,8 @@
 import { FormValues, Mode } from "@/hooks/auth/useAuthForm";
+import { CustomerResetByUrlResponse } from "@/lib/services/store-front/auth";
 import { ResetPasswordValues } from "@/schemas/authSchema";
 import { login } from "@/utils/account/login";
 import { UseFormSetError, UseFormSetValue } from "react-hook-form";
-
-interface CustomerResetByUrlResponse {
-  customerResetByUrl: {
-    customer?: {
-      id?: string;
-      email?: string;
-      firstName?: string | null;
-      lastName?: string | null;
-      phone?: string | null;
-    };
-    customerAccessToken?: {
-      accessToken?: string;
-      expiresAt?: string;
-    };
-    customerUserErrors: {
-      code?: string;
-      field?: string[];
-      message?: string;
-    }[];
-  };
-}
 
 export async function resetPasswordHandler(
   setError: UseFormSetError<FormValues>,

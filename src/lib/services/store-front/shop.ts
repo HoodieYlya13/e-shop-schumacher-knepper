@@ -11,11 +11,15 @@ const GET_SHOP_NAME_QUERY = `
 
 export async function getShopName() {
   try {
-    const data = await shopifyServerFetch<{ shop: { name: string } }>(
+    const response = await shopifyServerFetch<{ shop: { name: string } }>(
       GET_SHOP_NAME_QUERY,
       undefined
     );
-    return data?.shop?.name || "Schumacher-Knepper";
+    if (!response?.shop?.name) {
+      console.error("Failed to fetch shop name");
+      return "Schumacher-Knepper";
+    }
+    return response?.shop?.name;
   } catch (error) {
     console.error("Failed to fetch shop name:", error);
     return "Schumacher-Knepper";
@@ -33,11 +37,19 @@ const GET_SHOP_METAFIELD_QUERY = `
 `;
 
 async function getShopMetafieldValue(key: string): Promise<string | null> {
-  const data = await shopifyServerFetch<{
-    shop: { metafield?: { value: string } | null };
-  }>(GET_SHOP_METAFIELD_QUERY, { key });
-
-  return data?.shop?.metafield?.value || null;
+  try {
+    const response = await shopifyServerFetch<{
+      shop: { metafield?: { value: string } | null };
+    }>(GET_SHOP_METAFIELD_QUERY, { key });
+    if (!response?.shop?.metafield?.value) {
+      console.error(`Failed to fetch metafield ${key}`);
+      return null;
+    }
+    return response?.shop?.metafield?.value;
+  } catch (error) {
+    console.error(`Failed to fetch metafield ${key}:`, error);
+    return null;
+  }
 }
 
 async function getShopMetafieldJson<T>(key: string): Promise<T | null> {
@@ -56,10 +68,10 @@ export async function getColorsConfig() {
   return getShopMetafieldJson<string[]>("colors");
 }
 
-const GET_HOME_IMAGE_URL_QUERY = `
-  query GetHomeImage {
+const GET_IMAGE_URL_QUERY = `
+  query GetImage($key: String!) {
     shop {
-      metafield(namespace: "custom", key: "home_image") {
+      metafield(namespace: "custom", key: $key) {
         reference {
           ... on MediaImage {
             id
@@ -73,54 +85,34 @@ const GET_HOME_IMAGE_URL_QUERY = `
   }
 `;
 
-export async function getHomeImageUrl() {
-  const data = await shopifyServerFetch<{
-    shop: {
-      metafield?: {
-        reference?: {
-          image?: {
-            url: string;
-          };
+interface GetImageUrlResponse {
+  shop: {
+    metafield?: {
+      reference?: {
+        image?: {
+          url: string;
         };
       };
     };
-  }>(GET_HOME_IMAGE_URL_QUERY, undefined);
-
-  return data?.shop?.metafield?.reference?.image?.url;
+  };
 }
 
-// TODO: Replace 'XXXXXX' with the actual metafield key for the XXXXXX image
-const GET_IMAGE_URL_QUERY = `
-  query GetXXXXXXImage {
-    shop {
-      metafield(namespace: "custom", key: "XXXXXX") {
-        reference {
-          ... on MediaImage {
-            id
-            image {
-              url
-            }
-          }
-        }
-      }
+export async function getImageUrl(key: string) {
+  try {
+    const response = await shopifyServerFetch<GetImageUrlResponse>(
+      GET_IMAGE_URL_QUERY,
+      { key }
+    );
+
+    if (!response?.shop?.metafield?.reference?.image?.url) {
+      console.error(`Failed to fetch image URL for key: ${key}`);
+      return null;
     }
+    return response?.shop?.metafield?.reference?.image?.url;
+  } catch (error) {
+    console.error(`Failed to fetch image URL for key: ${key}`, error);
+    return null;
   }
-`;
-
-export async function getImageUrl() {
-  const data = await shopifyServerFetch<{
-    shop: {
-      metafield?: {
-        reference?: {
-          image?: {
-            url: string;
-          };
-        };
-      };
-    };
-  }>(GET_IMAGE_URL_QUERY, undefined);
-
-  return data?.shop?.metafield?.reference?.image?.url;
 }
 
 export async function getShopLocationUrl(): Promise<string> {
@@ -163,7 +155,7 @@ interface ShopLocation {
   country: string;
 }
 
-const parsedDefaultLocation: ShopLocation = {
+const defaultLocation: ShopLocation = {
   name: "Domaine Viticole Schumacher-Knepper",
   street: "28, Wäistrooss",
   postalCode: "L-5495",
@@ -176,7 +168,7 @@ export async function getShopLocation(): Promise<ShopLocation> {
 
   if (!parsed) {
     console.error("Shop location metafield missing or invalid.");
-    return parsedDefaultLocation;
+    return defaultLocation;
   }
 
   if (
@@ -187,7 +179,7 @@ export async function getShopLocation(): Promise<ShopLocation> {
     !parsed.country
   ) {
     console.error("Shop location metafield missing required fields.");
-    return parsedDefaultLocation;
+    return defaultLocation;
   }
 
   return parsed;
@@ -198,7 +190,7 @@ export interface ShopPhone {
   phoneDisplayed: string;
 }
 
-const parsedDefaultPhone: ShopPhone = {
+const defaultPhone: ShopPhone = {
   phoneNumber: "+352236045",
   phoneDisplayed: "+352 23 60 45",
 };
@@ -208,12 +200,12 @@ export async function getShopPhone(): Promise<ShopPhone> {
 
   if (!parsed) {
     console.error("Shop phone metafield missing or invalid.");
-    return parsedDefaultPhone;
+    return defaultPhone;
   }
 
   if (!parsed.phoneNumber || !parsed.phoneDisplayed) {
     console.error("Shop phone metafield missing required fields.");
-    return parsedDefaultPhone;
+    return defaultPhone;
   }
 
   return parsed;
@@ -235,7 +227,7 @@ interface ShopFax {
   faxDisplayed: string;
 }
 
-const parsedDefaultFax: ShopFax = {
+const defaultFax: ShopFax = {
   faxNumber: "+35223664803",
   faxDisplayed: "+352 23 66 48 03",
 };
@@ -245,12 +237,12 @@ export async function getShopFax(): Promise<ShopFax> {
 
   if (!parsed) {
     console.error("Shop fax metafield missing or invalid.");
-    return parsedDefaultFax;
+    return defaultFax;
   }
 
   if (!parsed.faxNumber || !parsed.faxDisplayed) {
     console.error("Shop fax metafield missing required fields.");
-    return parsedDefaultFax;
+    return defaultFax;
   }
 
   return parsed;
@@ -264,7 +256,7 @@ interface ShopPageContent {
   }[];
 }
 
-const parsedDefaultDeliveryPolicies: ShopPageContent = {
+const defaultDeliveryPolicies: ShopPageContent = {
   title: "Expéditions et retours",
   articles: [
     {
@@ -284,18 +276,18 @@ export async function getShopDeliveryPolicies(): Promise<ShopPageContent> {
 
   if (!parsed) {
     console.error("Delivery policies metafield missing or invalid.");
-    return parsedDefaultDeliveryPolicies;
+    return defaultDeliveryPolicies;
   }
 
   if (!parsed.title || !Array.isArray(parsed.articles)) {
     console.error("Invalid delivery policies format.");
-    return parsedDefaultDeliveryPolicies;
+    return defaultDeliveryPolicies;
   }
 
   return parsed;
 }
 
-const parsedDefaultGeneralPolicies: ShopPageContent = {
+const defaultGeneralPolicies: ShopPageContent = {
   title: "Conditions Générales de Vente",
   articles: [
     {
@@ -410,7 +402,7 @@ export async function getShopGeneralPolicies(): Promise<ShopPageContent> {
 
   if (!parsed) {
     console.error("General policies metafield missing or invalid.");
-    return parsedDefaultGeneralPolicies;
+    return defaultGeneralPolicies;
   }
 
   if (
@@ -421,13 +413,13 @@ export async function getShopGeneralPolicies(): Promise<ShopPageContent> {
     )
   ) {
     console.error("Invalid general policies format.");
-    return parsedDefaultGeneralPolicies;
+    return defaultGeneralPolicies;
   }
 
   return parsed;
 }
 
-const parsedDefaultAboutUs = {
+const defaultAboutUs = {
   title: "À propos de nous",
   articles: [
     {
@@ -444,7 +436,7 @@ export async function getShopAboutUs(): Promise<ShopPageContent> {
 
   if (!parsed) {
     console.error("About us metafield missing or invalid.");
-    return parsedDefaultAboutUs;
+    return defaultAboutUs;
   }
 
   if (
@@ -455,7 +447,7 @@ export async function getShopAboutUs(): Promise<ShopPageContent> {
     )
   ) {
     console.error("Invalid about us format.");
-    return parsedDefaultAboutUs;
+    return defaultAboutUs;
   }
 
   return parsed;
