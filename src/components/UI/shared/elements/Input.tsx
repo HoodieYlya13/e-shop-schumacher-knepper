@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import React, { useEffect, useRef, useState } from "react";
-import 'react-phone-number-input/style.css'
+import "react-phone-number-input/style.css";
 import { CountryCode } from "libphonenumber-js/core";
-import { getCountryCallingCode } from 'libphonenumber-js';
+import { getCountryCallingCode } from "libphonenumber-js";
 import { useTranslations } from "next-intl";
 import { getCountries } from "libphonenumber-js";
 import Image from "next/image";
@@ -15,7 +15,11 @@ interface VisibilityButtonProps {
   inputRef: React.RefObject<HTMLInputElement | null>;
 }
 
-function VisibilityButton({ showPassword, setShowPassword, inputRef }: VisibilityButtonProps) {
+function VisibilityButton({
+  showPassword,
+  setShowPassword,
+  inputRef,
+}: VisibilityButtonProps) {
   return (
     <button
       type="button"
@@ -54,14 +58,14 @@ function VisibilityButton({ showPassword, setShowPassword, inputRef }: Visibilit
 interface CheckMarkIconProps {
   checkedValue?: boolean;
   disabled?: boolean;
-};
+}
 
 function CheckMarkIcon({ checkedValue, disabled }: CheckMarkIconProps) {
   const [checked, setChecked] = useState(false);
   useEffect(() => {
     if (checkedValue !== undefined) setChecked(checkedValue);
   }, [checkedValue]);
-  
+
   return (
     <div
       onClick={() => {
@@ -161,9 +165,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     );
     const baseInputClassName = clsx(
       "items-center liquid-glass-backdrop bg-ultra-light/10 border rounded-2xl outline-none transition-all duration-300 ease-in-out focus:border-accent placeholder:text-dark",
-      type === "tel" && "inline-flex",
-      type === "checkbox" ? "rounded-lg size-6 peer-has-focus:border-accent" : "w-full px-2",
-      type !== "checkbox" && type !== "tel" && "py-3",
+      type === "checkbox"
+        ? "rounded-lg size-6 peer-has-focus:border-accent"
+        : "w-full px-2",
+      {
+        "inline-flex": type === "tel",
+        "py-3": type !== "checkbox" && type !== "tel",
+        "pr-10": type === "password",
+      },
       borderColor,
       rest.disabled || rest.checked !== undefined
         ? "cursor-not-allowed inset-shadow-sm inset-shadow-dark"
@@ -226,10 +235,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             />
           </label>
 
-          <label
-            htmlFor={rest.id}
-            className={baseInputClassName}
-          >
+          <label htmlFor={rest.id} className={baseInputClassName}>
             <CheckMarkIcon
               checkedValue={checked}
               disabled={rest.disabled || rest.checked !== undefined}
@@ -295,7 +301,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
                 placeholder={combinedPlaceholder}
                 required={required}
                 disabled={rest.disabled}
-                className={clsx("grow py-3 border-none outline-hidden placeholder:text-dark w-full",
+                className={clsx(
+                  "grow py-3 border-none outline-hidden placeholder:text-dark w-full",
                   rest.disabled && "cursor-not-allowed"
                 )}
                 ref={combinedRef}

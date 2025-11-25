@@ -16,7 +16,7 @@ export default async function Footer() {
   return (
     <footer className="w-full p-5 md:px-10 shadow-[0_-25px_50px_-12px_rgb(0_0_0/0.25)] bg-secondary">
       <div className="w-full max-w-7xl flex flex-col gap-5 justify-center mx-auto">
-        <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 md:gap-5 place-content-around">
+        <div className="flex flex-col sm:flex-row gap-5 sm:gap-0 lg:gap-5 place-content-around">
           <div className="flex flex-col gap-4">
             <Button
               href={"/"}
@@ -27,7 +27,7 @@ export default async function Footer() {
             <DomainNavigation />
           </div>
 
-          <div className="inline-flex gap-4 md:w-full md:max-w-3xl">
+          <div className="inline-flex gap-4 lg:w-full lg:max-w-3xl">
             <div className="flex flex-col gap-4 text-primary">
               <Button
                 href={"/contact-us"}
@@ -38,7 +38,7 @@ export default async function Footer() {
               <ContactUs />
             </div>
 
-            <div className="hidden md:flex flex-1">
+            <div className="hidden lg:flex flex-1">
               <Maps />
             </div>
           </div>

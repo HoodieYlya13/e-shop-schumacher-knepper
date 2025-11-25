@@ -23,9 +23,15 @@
     "ALL_RIGHTS_RESERVED": "Tous droits réservés.",
     "DEVELOPED_BY": "Développé par"
   },
-  "PRODUCTS_PAGE": {
-    "TITLE": "Tous nos vins",
-    "DESCRIPTION": "Nous sommes passionnés par le bon vin et la tradition locale."
+  "PRODUCTS": {
+    "ALL_WINES": "Tous les vins",
+    "FILTERS": "Filtres",
+    "SORT_BY": "Trier par :",
+    "NAME_ASC": "Nom (A-Z)",
+    "NAME_DESC": "Nom (Z-A)",
+    "PRICE_ASC": "Prix (-/+)",
+    "PRICE_DESC": "Prix (+/-)",
+    "SEARCH": "Recherche"
   },
   "NAV": {
     "HOME": "Schumacher-Knepper",

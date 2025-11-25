@@ -53,6 +53,7 @@ const Filters = ({
   setSortOrder,
   searchTerm,
 }: FiltersProps) => {
+  const t = useTranslations("PRODUCTS");
   const [expandedFilters, setExpandedFilters] = useState<Record<string, boolean>>({});
   const [isFilterPanelOpen, setIsFilterPanelOpen] = useState(false);
   
@@ -123,30 +124,30 @@ const Filters = ({
     };
 
   const sortOptions = [
-    { value: "name-asc", label: "Name (A-Z)" },
-    { value: "name-desc", label: "Name (Z-A)" },
-    { value: "price-asc", label: "Price (Low to High)" },
-    { value: "price-desc", label: "Price (High to Low)" },
+    { value: "name-asc", label: t("NAME_ASC") },
+    { value: "name-desc", label: t("NAME_DESC") },
+    { value: "price-asc", label: t("PRICE_ASC") },
+    { value: "price-desc", label: t("PRICE_DESC") },
   ];
 
   return (
     <>
       <div className="lg:hidden mb-4">
-        <div className="flex justify-between">
+        <div className="flex flex-wrap justify-between">
           <button
             onClick={() => setIsFilterPanelOpen(!isFilterPanelOpen)}
             className="px-2 py-1 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
             aria-expanded={isFilterPanelOpen}
             aria-controls="mobile-filter-panel"
           >
-            Filters
+            {t("FILTERS")}
           </button>
 
           <div className="flex items-center">
-            <span className="mr-2 font-bold">Sort by:</span>
+            <span className="mr-2 font-bold xs:whitespace-nowrap">{t("SORT_BY")}</span>
 
             <select
-              className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
+              className="grow px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value)}
             >
@@ -248,7 +249,7 @@ const Filters = ({
           >
             <option value="all">
               {filters.find((f) => f.queryKey === "supertype")?.values?.[0]
-                ?.localized || "All wines"}
+                ?.localized || t("ALL_WINES")}
             </option>
 
             {(() => {
@@ -275,7 +276,7 @@ const Filters = ({
         )}
 
         <div className="hidden lg:flex items-center">
-          <span className="mr-2 font-bold">Sort by:</span>
+          <span className="mr-2 font-bold xs:whitespace-nowrap">{t("SORT_BY")}</span>
 
           <select
             className="px-4 py-2 bg-ultra-light rounded-md shadow-md font-semibold transform transition-transform duration-300 hover:scale-105"
@@ -354,6 +355,7 @@ const FiltersRecap = ({
   filters: Filter[];
   searchTerm?: string;
 }) => {
+  const t = useTranslations("PRODUCTS");
   const removeFilter = (filterKey: string, value?: string) => {
     if (filterKey === "search") {
       const newHref = "/products" + window.location.search
@@ -376,7 +378,7 @@ const FiltersRecap = ({
       key: "search",
       value: searchTerm,
       label: searchTerm,
-      filterName: "Search", // TODO add trad
+      filterName: t("SEARCH"),
     }] : []),
     ...Object.entries(selectedFilters).flatMap(([key, values]) => {
       const filterDef = filters.find((f) => f.queryKey === key);
@@ -668,7 +670,7 @@ export default function AllProducts({ locale, products, searchTerm }: AllProduct
 
         {otherProducts.length === 0 && <p>{t("NO_PRODUCTS")}</p>}
 
-        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4 justify-items-center mx-auto">
+        <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-3 justify-items-center mx-auto">
           {finalProducts.map((product) => (
             <ProductTile key={product.id} product={product} locale={locale} />
           ))}
