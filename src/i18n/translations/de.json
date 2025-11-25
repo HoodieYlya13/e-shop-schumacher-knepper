@@ -9,6 +9,11 @@
       "DESCRIPTION": "Willkommen im Online-Shop von {shopName}! Entdecken Sie unsere Weine oder schenken Sie Ihren Liebsten einen Geschenkgutschein."
     },
     "BEST_SELLERS": "Unsere empfohlenen Produkte ansehen",
+    "ALL_PRODUCTS": "Alle Produkte ansehen",
+    "OUR_RECOMMENDATIONS": "Unsere empfohlenen Produkte",
+    "OUR_WINES": "Unsere Weine",
+    "OUR_WINES_DESCRIPTION": "Entdecken Sie alle unsere Weine",
+    "OUR_RECOMMENDATIONS_DESCRIPTION": "Entdecken Sie unsere besten Empfehlungen",
     "NO_PRODUCTS": "Zurzeit sind keine Produkte verfügbar.",
     "CART": "Warenkorb",
     "CHECKOUT": "Zur Kasse",

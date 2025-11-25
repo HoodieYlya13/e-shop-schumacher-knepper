@@ -9,6 +9,11 @@
       "DESCRIPTION": "Bienvenue dans la boutique en ligne de {shopName} ! Découvrez nos vins ou offrez une carte cadeau à vos proches."
     },
     "BEST_SELLERS": "Voir nos produits recommandés",
+    "ALL_PRODUCTS": "Voir tous nos produits",
+    "OUR_RECOMMENDATIONS": "Nos recommandations",
+    "OUR_WINES": "Nos vins",
+    "OUR_WINES_DESCRIPTION": "Retrouvez tous nos vins",
+    "OUR_RECOMMENDATIONS_DESCRIPTION": "Retrouvez nos meilleures recommendations",
     "NO_PRODUCTS": "Aucun produit disponible pour le moment.",
     "CART": "Panier",
     "CHECKOUT": "Commander",

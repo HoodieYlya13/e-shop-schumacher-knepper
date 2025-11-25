@@ -1,6 +1,7 @@
 "use client";
 
 import { Collection } from "@shopify/hydrogen-react/storefront-api-types";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 interface RecommendedCollectionProps {
@@ -12,6 +13,8 @@ export default function RecommendedCollection({
   collection,
   areRecommendedProducts,
 }: RecommendedCollectionProps) {
+  const t = useTranslations("HOME_PAGE");
+
   return (
     <div className="flex flex-col w-full items-center justify-center gap-4">
       <Image
@@ -32,13 +35,13 @@ export default function RecommendedCollection({
 
       <div className="flex flex-col items-center text-center wrap-break-word">
         <h1 className="text-xl sm:text-4xl">
-          {areRecommendedProducts ? "Nos recommendations" : "Nos vins"}
+          {areRecommendedProducts ? t("OUR_RECOMMENDATIONS") : t("OUR_WINES")}
         </h1>
         <h2 className="sm:text-2xl font-light">
           {areRecommendedProducts
             ? collection?.description ||
-              "Retrouvez nos meilleures recommendations"
-            : "Retrouvez tous nos vins"}
+              t("OUR_RECOMMENDATIONS_DESCRIPTION")
+            : t("OUR_WINES_DESCRIPTION")}
         </h2>
       </div>
     </div>

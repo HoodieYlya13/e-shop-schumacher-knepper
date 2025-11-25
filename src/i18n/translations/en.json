@@ -9,6 +9,11 @@
       "DESCRIPTION": "Welcome to {shopName}'s online shop! Explore all our wines or get your loved ones a gift card."
     },
     "BEST_SELLERS": "See our recommended products",
+    "ALL_PRODUCTS": "See all products",
+    "OUR_RECOMMENDATIONS": "Our recommendations",
+    "OUR_WINES": "Our wines",
+    "OUR_WINES_DESCRIPTION": "Discover all our wines",
+    "OUR_RECOMMENDATIONS_DESCRIPTION": "Discover our best recommendations",
     "NO_PRODUCTS": "No products available at the moment.",
     "CART": "Cart",
     "CHECKOUT": "Checkout",

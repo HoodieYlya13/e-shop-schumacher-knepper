@@ -20,7 +20,7 @@ export default function RecommendedProductsButton({
           behavior: "smooth",
         });
       }}
-      child={areRecommendedProducts ? t("BEST_SELLERS") : "See our products"}
+      child={areRecommendedProducts ? t("BEST_SELLERS") : t("ALL_PRODUCTS")}
       primary={false}
     />
   );
