@@ -1,4 +1,4 @@
-import PageBuilder from "@/components/UI/PageBuilder/PageBuilder";
+import PageLayout from "@/components/UI/PageLayout/PageLayout";
 import Account from "@/components/Pages/Account/Account";
 import { getCustomerAccessToken } from "@/utils/shared/getters/getCustomerAccessToken";
 import { redirect } from "next/navigation";
@@ -11,8 +11,8 @@ export default async function AccountPage() {
   const customer = await fetchCustomerData(customerAccessToken);
   if (!customer) redirect("/auth");
   return (
-    <PageBuilder>
+    <PageLayout>
       <Account customer={customer} />
-    </PageBuilder>
+    </PageLayout>
   );
 }

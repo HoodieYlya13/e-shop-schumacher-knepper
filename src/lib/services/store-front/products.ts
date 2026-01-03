@@ -1,4 +1,7 @@
-import { defaultLocaleUpperCase, LocaleLanguagesUpperCase } from "@/i18n/utils";
+import {
+  DEFAULT_LOCALE_UPPERCASE,
+  LocaleLanguagesUpperCase,
+} from "@/i18n/utils";
 import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
 import {
   Collection,
@@ -79,7 +82,7 @@ interface ShopifySearchProductsResponse {
 }
 
 export async function getAllProducts(
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  language: LocaleLanguagesUpperCase = DEFAULT_LOCALE_UPPERCASE,
   country: CountryCode = "LU",
   sortKey: string = "TITLE",
   reverse: boolean = false
@@ -134,7 +137,7 @@ interface ShopifySingleProductResponse {
 
 export async function getSingleProduct(
   handle: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  language: LocaleLanguagesUpperCase = DEFAULT_LOCALE_UPPERCASE,
   country: CountryCode = "LU"
 ): Promise<Product | null> {
   try {
@@ -177,7 +180,7 @@ const SEARCH_PRODUCTS_QUERY = `
 
 export async function getProductsForLiveSearch(
   title: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  language: LocaleLanguagesUpperCase = DEFAULT_LOCALE_UPPERCASE,
   country: CountryCode = "LU"
 ): Promise<Product[]> {
   try {
@@ -206,7 +209,7 @@ export async function getProductsForLiveSearch(
 
 export async function getProductsForFullSearch(
   title: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  language: LocaleLanguagesUpperCase = DEFAULT_LOCALE_UPPERCASE,
   country: CountryCode = "LU"
 ): Promise<Product[]> {
   const allProducts: Product[] = [];
@@ -265,7 +268,7 @@ interface ShopifyCollectionResponse {
 
 export async function getCollectionByHandle(
   handle: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  language: LocaleLanguagesUpperCase = DEFAULT_LOCALE_UPPERCASE,
   country: CountryCode = "LU"
 ): Promise<Collection | null> {
   try {
@@ -321,7 +324,7 @@ interface ShopifyProductsByCollectionResponse {
 
 export async function getProductsByCollectionHandle(
   handle: string,
-  language: LocaleLanguagesUpperCase = defaultLocaleUpperCase,
+  language: LocaleLanguagesUpperCase = DEFAULT_LOCALE_UPPERCASE,
   country: CountryCode = "LU"
 ): Promise<Product[]> {
   const allProducts: Product[] = [];

@@ -1,6 +1,6 @@
 import { Cart, Product } from "@shopify/hydrogen-react/storefront-api-types";
 import { updateCartLinesClient, deleteCheckout } from "./updateCheckout";
-import { CartItem } from "@/components/UI/PageBuilder/NavBar/shared/CartContent";
+import { CartItem } from "@/components/UI/PageLayout/NavBar/shared/CartContent";
 
 export const addProductToCart = async (
   variantId: string,
@@ -75,7 +75,10 @@ export const addProductToCart = async (
   }
 };
 
-export const removeProductQuantity = async (variantId: string, quantity?: number) => {
+export const removeProductQuantity = async (
+  variantId: string,
+  quantity?: number
+) => {
   if (typeof window === "undefined") return;
 
   const storedCart = localStorage.getItem("cart");

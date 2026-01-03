@@ -1,5 +1,5 @@
 import { shopifyAdminFetch } from "@/lib/shopify/admin/server";
-import { defaultLocale, LocaleLanguages } from "@/i18n/utils";
+import { DEFAULT_LOCALE, LocaleLanguages } from "@/i18n/utils";
 
 type AdminCustomer = {
   id: string;
@@ -23,7 +23,7 @@ const CUSTOMER_UPDATE_LOCALE_MUTATION = `
 
 export async function customerUpdateLocale(
   id: string,
-  locale: LocaleLanguages = defaultLocale
+  locale: LocaleLanguages = DEFAULT_LOCALE
 ): Promise<AdminCustomer | null> {
   try {
     const variables = {

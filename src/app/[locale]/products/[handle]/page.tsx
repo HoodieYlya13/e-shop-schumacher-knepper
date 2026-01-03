@@ -1,8 +1,8 @@
-import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
-import { LocaleLanguages, LocaleLanguagesUpperCase } from '@/i18n/utils';
-import Product from '@/components/Pages/Products/Product';
-import { getSingleProduct } from '@/lib/services/store-front/products';
-import { getCustomerCountryServer } from '@/utils/shared/getters/getCustomerCountryServer';
+import PageLayout from "@/components/UI/PageLayout/PageLayout";
+import { LocaleLanguages, LocaleLanguagesUpperCase } from "@/i18n/utils";
+import Product from "@/components/Pages/Products/Product";
+import { getSingleProduct } from "@/lib/services/store-front/products";
+import { getCustomerCountryServer } from "@/utils/shared/getters/getCustomerCountryServer";
 
 export default async function ProductPage({
   params,
@@ -17,14 +17,14 @@ export default async function ProductPage({
 
   if (!product)
     return (
-      <PageBuilder>
+      <PageLayout>
         <p>Product not found.</p>
-      </PageBuilder>
+      </PageLayout>
     );
 
   return (
-    <PageBuilder>
+    <PageLayout>
       <Product locale={locale} product={product} />
-    </PageBuilder>
+    </PageLayout>
   );
 }

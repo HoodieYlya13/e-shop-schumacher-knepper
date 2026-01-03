@@ -1,10 +1,10 @@
-import ContactUs from '@/components/UI/PageBuilder/Footer/shared/ContactUs';
-import Maps from '@/components/UI/PageBuilder/Footer/shared/Maps';
-import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
+import ContactUs from "@/components/UI/PageLayout/Footer/shared/ContactUs";
+import Maps from "@/components/UI/PageLayout/Footer/shared/Maps";
+import PageLayout from "@/components/UI/PageLayout/PageLayout";
 
 export default async function ContactUsPage() {
   return (
-    <PageBuilder>
+    <PageLayout>
       <div className="flex flex-col gap-4 grow w-full max-w-5xl mx-auto">
         <div className="text-secondary">
           <ContactUs />
@@ -14,6 +14,6 @@ export default async function ContactUsPage() {
 
         <Maps />
       </div>
-    </PageBuilder>
+    </PageLayout>
   );
 }

@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Search from "./Search";
 import Navigation from "./Navigation";
 import Phone from "./Phone";
-import LanguageSwitcher from "./LanguageSwitcher";
+import LocaleSwitcher from "./LocaleSwitcher";
 import ShoppingCart from "./ShoppingCart";
 import { LocaleLanguages } from "@/i18n/utils";
 import Image from "next/image";
@@ -21,8 +21,8 @@ interface BurgerIconProps {
 
 function BurgerIcon({ onClick }: BurgerIconProps) {
   return (
-    <svg 
-      viewBox="0 0 20 20" 
+    <svg
+      viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
       fill="currentColor"
       width="24"
@@ -30,7 +30,11 @@ function BurgerIcon({ onClick }: BurgerIconProps) {
       className="z-30 md:hidden cursor-pointer opacity-80 hover:opacity-100 transition hover:scale-110 duration-300"
       onClick={onClick}
     >
-      <path fillRule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clipRule="evenodd"></path>
+      <path
+        fillRule="evenodd"
+        d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
+        clipRule="evenodd"
+      ></path>
     </svg>
   );
 }
@@ -40,7 +44,10 @@ interface SearchSuggestionsProps {
   storedLocale: LocaleLanguages;
 }
 
-function SearchSuggestions({ searchSuggestions, storedLocale }: SearchSuggestionsProps) {
+function SearchSuggestions({
+  searchSuggestions,
+  storedLocale,
+}: SearchSuggestionsProps) {
   return (
     <div className="w-full h-fit p-4 pt-20 gap-2 flex flex-col">
       {searchSuggestions.map((suggestion) => (
@@ -77,8 +84,11 @@ interface NavBarContentProps {
   showCart: boolean;
   setShowCart: React.Dispatch<React.SetStateAction<boolean>>;
   searchSuggestions: ProductSuggestion[];
-  setSearchSuggestions: React.Dispatch<React.SetStateAction<ProductSuggestion[]>>;
+  setSearchSuggestions: React.Dispatch<
+    React.SetStateAction<ProductSuggestion[]>
+  >;
   storedLocale: LocaleLanguages;
+  localeMismatch?: LocaleLanguages;
   customerAccessToken?: string;
 }
 
@@ -93,6 +103,7 @@ function NavBarContent({
   searchSuggestions,
   setSearchSuggestions,
   storedLocale,
+  localeMismatch,
   customerAccessToken,
 }: NavBarContentProps) {
   if (showSearch)
@@ -162,7 +173,10 @@ function NavBarContent({
 
           <div className="hidden md:flex gap-4">
             <Phone phone={phone} iconOnly />
-            <LanguageSwitcher storedLocale={storedLocale} />
+            <LocaleSwitcher
+              storedLocale={storedLocale}
+              localeMismatch={localeMismatch}
+            />
           </div>
 
           <ShoppingCart
@@ -184,7 +198,10 @@ function NavBarContent({
 
           <div className="absolute bottom-4 items-center flex justify-between px-4 w-full md:hidden text-primary">
             <Phone phone={phone} />
-            <LanguageSwitcher storedLocale={storedLocale} />
+            <LocaleSwitcher
+              storedLocale={storedLocale}
+              localeMismatch={localeMismatch}
+            />
           </div>
         </>
       )}
@@ -200,15 +217,23 @@ function NavBarContent({
 
 interface NavBarClientProps {
   phone: ShopPhone;
+  storedLocale: LocaleLanguages;
+  localeMismatch?: LocaleLanguages;
   customerAccessToken?: string;
-  storedLocale?: LocaleLanguages;
 }
 
-export default function NavBarClient({ phone, customerAccessToken, storedLocale = "en" }: NavBarClientProps) {
+export default function NavBarClient({
+  phone,
+  storedLocale,
+  localeMismatch,
+  customerAccessToken,
+}: NavBarClientProps) {
   const [showSearch, setShowSearch] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [showCart, setShowCart] = useState(false);
-  const [searchSuggestions, setSearchSuggestions] = useState<ProductSuggestion[]>([]);
+  const [searchSuggestions, setSearchSuggestions] = useState<
+    ProductSuggestion[]
+  >([]);
 
   const navBarRef = useRef<HTMLDivElement>(null);
 
@@ -224,9 +249,9 @@ export default function NavBarClient({ phone, customerAccessToken, storedLocale 
         setShowSearch(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showMenu, showCart, showSearch]);
 
@@ -235,7 +260,7 @@ export default function NavBarClient({ phone, customerAccessToken, storedLocale 
     : 4;
 
   const dynamicHeight = showSearch ? `${suggestionsHeight}rem` : undefined;
-  
+
   const navBarClasses = clsx(
     "relative backdrop-blur-md flex mx-auto outline outline-accent/50 rounded-4xl shadow-lg shadow-accent/30 transition-all duration-300 ease-in-out",
     {
@@ -267,6 +292,7 @@ export default function NavBarClient({ phone, customerAccessToken, storedLocale 
         searchSuggestions={searchSuggestions}
         setSearchSuggestions={setSearchSuggestions}
         storedLocale={storedLocale}
+        localeMismatch={localeMismatch}
         customerAccessToken={customerAccessToken}
       />
     </div>

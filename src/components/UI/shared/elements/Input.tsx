@@ -20,6 +20,23 @@ function VisibilityButton({
   setShowPassword,
   inputRef,
 }: VisibilityButtonProps) {
+  const restoreCursorPosition = () => {
+    const input = inputRef.current;
+    if (!input) return setShowPassword(false);
+
+    const position = input.selectionStart;
+
+    setShowPassword(false);
+    setTimeout(() => {
+      try {
+        if (position !== null) input.setSelectionRange(position, position);
+        input.focus();
+      } catch (e) {
+        console.error(e);
+      }
+    }, 0);
+  };
+
   return (
     <button
       type="button"
@@ -28,12 +45,12 @@ function VisibilityButton({
         setShowPassword(true);
         inputRef.current?.focus();
       }}
-      onMouseUp={() => setShowPassword(false)}
+      onMouseUp={restoreCursorPosition}
       onTouchStart={() => {
         setShowPassword(true);
         inputRef.current?.focus();
       }}
-      onTouchEnd={() => setShowPassword(false)}
+      onTouchEnd={restoreCursorPosition}
       onContextMenu={(e) => e.preventDefault()}
       className="absolute right-2 top-1/2 transform -translate-y-1/2 text-accent-dark opacity-80 hover:opacity-100 transition hover:scale-110 duration-300 cursor-pointer"
       tabIndex={-1}

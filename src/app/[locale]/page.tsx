@@ -1,6 +1,6 @@
-import PageBuilder from '@/components/UI/PageBuilder/PageBuilder';
-import Home from '@/components/Pages/Home/Home';
-import { LocaleLanguages } from '@/i18n/utils';
+import PageLayout from "@/components/UI/PageLayout/PageLayout";
+import Home from "@/components/Pages/Home/Home";
+import { LocaleLanguages } from "@/i18n/utils";
 
 export default async function HomePage(props: {
   params: Promise<{ locale: LocaleLanguages }>;
@@ -8,8 +8,8 @@ export default async function HomePage(props: {
   const { locale } = await props.params;
 
   return (
-    <PageBuilder padding={false}>
+    <PageLayout padding={false}>
       <Home locale={locale} />
-    </PageBuilder>
+    </PageLayout>
   );
 }

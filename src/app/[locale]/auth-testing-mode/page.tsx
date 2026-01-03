@@ -1,10 +1,15 @@
 import AuthTestingMode from "@/components/Pages/AuthTest/AuthTestingMode";
-import PageBuilder from "@/components/UI/PageBuilder/PageBuilder";
+import PageLayout from "@/components/UI/PageLayout/PageLayout";
 
 export default function AuthTestingModePage() {
   return (
-    <PageBuilder padding={false} showNavBar={false} showFooter={false} auroraBackground={true}>
+    <PageLayout
+      padding={false}
+      showNavBar={false}
+      showFooter={false}
+      auroraBackground={true}
+    >
       <AuthTestingMode />
-    </PageBuilder>
+    </PageLayout>
   );
 }

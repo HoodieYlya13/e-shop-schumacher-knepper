@@ -1,6 +1,6 @@
 import { shopifyServerFetch } from "@/lib/shopify/store-front/server";
 import { customerUpdateLocale } from "../admin/customer";
-import { defaultLocale, LocaleLanguages } from "@/i18n/utils";
+import { DEFAULT_LOCALE, LocaleLanguages } from "@/i18n/utils";
 
 const REGISTER_MUTATION = `
   mutation createCustomerAccount($input: CustomerCreateInput!) {
@@ -43,12 +43,15 @@ export async function createCustomerAccount(
     phone?: string;
     acceptsMarketing?: boolean;
   },
-  locale: LocaleLanguages = defaultLocale
+  locale: LocaleLanguages = DEFAULT_LOCALE
 ): Promise<CustomerCreateResponse | null> {
   try {
-    const response = await shopifyServerFetch<CustomerCreateResponse>(REGISTER_MUTATION, {
-      input,
-    });
+    const response = await shopifyServerFetch<CustomerCreateResponse>(
+      REGISTER_MUTATION,
+      {
+        input,
+      }
+    );
 
     if (!response || response.customerCreate?.customerUserErrors?.length > 0) {
       console.error(
@@ -88,7 +91,7 @@ export interface CustomerAccessTokenCreateResponse {
     customerAccessToken?: {
       accessToken?: string;
       expiresAt?: string;
-    },
+    };
     customerUserErrors: {
       field?: string[];
       message?: string;
@@ -101,9 +104,13 @@ export async function createCustomerAccessToken(input: {
   password: string;
 }): Promise<CustomerAccessTokenCreateResponse | null> {
   try {
-    const response = await shopifyServerFetch<CustomerAccessTokenCreateResponse>(LOGIN_MUTATION, {
-      input,
-    });
+    const response =
+      await shopifyServerFetch<CustomerAccessTokenCreateResponse>(
+        LOGIN_MUTATION,
+        {
+          input,
+        }
+      );
 
     if (
       !response ||
@@ -224,9 +231,12 @@ export async function resetCustomerPasswordByUrl(input: {
   resetUrl: string;
 }): Promise<CustomerResetByUrlResponse | null> {
   try {
-    const response = await shopifyServerFetch<CustomerResetByUrlResponse>(PASSWORD_RESET_BY_URL_MUTATION, {
-      input,
-    });
+    const response = await shopifyServerFetch<CustomerResetByUrlResponse>(
+      PASSWORD_RESET_BY_URL_MUTATION,
+      {
+        input,
+      }
+    );
 
     if (
       !response ||

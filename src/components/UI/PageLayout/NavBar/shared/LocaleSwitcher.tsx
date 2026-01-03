@@ -1,22 +1,20 @@
 "use client";
 
-import {
-  defaultLocale,
-  LocaleLanguages,
-  updateCartLocalization,
-} from "@/i18n/utils";
+import { LocaleLanguages, updateCartLocalization } from "@/i18n/utils";
 import { setClientCookie } from "@/utils/shared/setters/shared/setClientCookie";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useRef } from "react";
 
-interface LanguageSwitcherProps {
-  storedLocale?: LocaleLanguages;
+interface LocaleSwitcherProps {
+  storedLocale: LocaleLanguages;
+  localeMismatch?: LocaleLanguages;
 }
 
-export default function LanguageSwitcher({
-  storedLocale = defaultLocale,
-}: LanguageSwitcherProps) {
+export default function LocaleSwitcher({
+  storedLocale,
+  localeMismatch,
+}: LocaleSwitcherProps) {
   const router = useRouter();
   const [showAll, setShowAll] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -31,9 +29,12 @@ export default function LanguageSwitcher({
     await updateCartLocalization();
 
     const pathname = window.location.pathname;
+    const search = window.location.search;
+    const hash = window.location.hash;
+
     const segments = pathname.split("/");
     segments[1] = locale;
-    const newPath = segments.join("/");
+    const newPath = segments.join("/") + search + hash;
     router.push(newPath);
   };
 
@@ -41,12 +42,12 @@ export default function LanguageSwitcher({
     const pathname = window.location.pathname;
     const currentLocale = pathname.split("/")[1];
 
-    if (storedLocale && storedLocale !== currentLocale) {
+    if (!localeMismatch && storedLocale && storedLocale !== currentLocale) {
       const segments = pathname.split("/");
       segments[1] = storedLocale;
       router.replace(segments.join("/"));
     }
-  }, [router, storedLocale]);
+  }, [router, storedLocale, localeMismatch]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
